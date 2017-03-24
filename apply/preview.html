@@ -1,0 +1,554 @@
+<?php
+require_once dirname($_SERVER['DOCUMENT_ROOT']). '/libs/inc.php';
+
+$_ = array();
+foreach(array(
+"prefectures"     => array(),
+"err"             => array(),
+"data"            => array(),
+"value"           => array(),
+"field"           => array(),
+"today"           => date("Y-m-d H:i:s"),
+) as $k => $v){
+    $_[$k] = $v;
+}
+
+$_["data"] = array(
+"family_name",
+"first_name",
+"family_name_kana",
+"first_name_kana",
+"sex",
+"birth_year",
+"birth_month",
+"birth_day",
+"prefecture",
+"tel1",
+"tel2",
+"tel3",
+"mail",
+"message",
+"agree",
+"recruit_id",
+);
+
+if(!empty($_REQUEST["cmf_btn_x"])){
+    foreach($_["data"] as $v){
+        $_["data"][$v] = $_REQUEST[$v];
+        $_SESSION["kaigoi"]["entry"]["data"][$v] = $_REQUEST[$v];
+    }
+} else {
+     $_["data"] = $_SESSION["kaigoi"]["entry"]["data"];
+}
+
+
+//求人処理
+if(empty($_["data"]["recruit_id"])){
+
+    header("Location: /callcenter/search/");
+    exit;
+
+} else {
+
+    DataCcRec::recruits(array(
+        'id'=> $_["data"]["recruit_id"],
+        'w_status'=> 'OPEN',
+        'w_startdate'=> $_["today"]));
+
+    if(empty(DataCcRec::$dataTotal)){
+        header("Location: /callcenter/search/");
+        exit;
+    }
+}
+
+
+//電話番号
+if(
+!empty($_["data"]["tel1"])
+){
+
+    $_["data"]["tel1"] = str_replace(array(" ", "　"), "", $_["data"]["tel1"]);
+
+    $teldf = $_["data"]["tel1"];
+    $tel = format_phone_number($_["data"]["tel1"]);
+    $telLi = explode("-",$tel);
+
+    if(array_key_exists('1',$telLi)){
+
+        $_["data"]["tel1"] = $telLi[0];
+        $_["data"]["tel2"] = $telLi[1];
+        $_["data"]["tel3"] = $telLi[2];
+
+    } else {
+
+        $_["data"]["tel1"] = substr($teldf, 0, 3);
+        $_["data"]["tel2"] = substr($teldf, 3, 4);
+        $_["data"]["tel3"] = substr($teldf, 7, strlen($teldf));
+
+    }
+
+}
+if(
+!empty($_["data"]["family_name_kana"])
+){
+    $_["data"]["family_name_kana"] = str_replace(array(" ", "　"), "", $_["data"]["family_name_kana"]);
+}
+if(
+!empty($_["data"]["mail"])
+){
+    $_["data"]["mail"] = str_replace(array(" ", "　"), "", $_["data"]["mail"]);
+}
+
+//エラー
+/*
+if(
+empty($_["data"]["family_name"]) ||
+empty($_["data"]["first_name"]) ||
+mb_strlen($_["data"]["family_name"], "utf8") > 20 ||
+mb_strlen($_["data"]["first_name"], "utf8") > 20
+){
+    $_["err"]["name"] = '<p class="er">氏名（漢字）をそれぞれ20文字以内で入力してください。</p>';
+}
+*/
+
+if(
+empty($_["data"]["family_name_kana"]) ||
+mb_strlen($_["data"]["family_name_kana"], "utf8") > 20
+){
+    $_["err"]["name_kana"] = '<p class="er">氏名を20文字以内で入力してください。</p>';
+
+} elseif (!preg_match("/^[ぁ-んァ-ヶ・ー]+$/u", $_["data"]["family_name_kana"])) {
+
+    $_["err"]["name_kana"] = '<p class="er">氏名をひらがなで入力してください。</p>';
+}
+
+if(
+empty($_["data"]["sex"])
+){
+    $_["err"]["sex"] = '<p class="er">性別を選択してください。</p>';
+}
+
+if(
+empty($_["data"]["birth_year"]) ||
+empty($_["data"]["birth_month"]) ||
+empty($_["data"]["birth_day"])
+){
+    $_["err"]["birthday"] = '<p class="er">生年月日を選択してください。</p>';
+}
+
+if(
+!preg_match("/^[-0-9]+$/", $teldf) ||
+mb_strlen($_["data"]["tel1"], "utf8") > 5 ||
+mb_strlen($_["data"]["tel2"], "utf8") > 4 ||
+mb_strlen($_["data"]["tel3"], "utf8") > 4
+){
+    $_["err"]["tel"] = '<p class="er">電話番号を正確に入力してください。</p>';
+}
+
+$reg = "/^[a-z0-9-+._]+@[-a-z0-9]+(\.[-a-z0-9]+)*\.[a-z]+$/iu";
+if(
+!preg_match($reg, $_["data"]["mail"])
+){
+    $_["err"]["mail"] = '<p class="er">メールアドレスを入力してください。</p>';
+}
+
+if(
+empty($_["data"]["agree"])
+){
+    $_["err"]["agree"] = '<p class="er">上記規約に同意後、チェックしてください。</p>';
+}
+
+
+if(!empty($_["err"])){
+    $_SESSION["kaigoi"]["entry"]["err"] = $_["err"];
+
+    header("Location: index.html?bk=1#form_fm");
+    exit;
+}
+
+
+unset($_SESSION["kaigoi"]["entry"]["err"]);
+
+
+if(!empty($_["data"]["recruit_id"])){
+    $_["jobid"] = sprintf('%06d', $_["data"]["recruit_id"]);
+}
+
+$_["jobdata"] = DataCcRec::recruits(array(
+    'id'=> $_["data"]["recruit_id"],
+    'w_status'=> 'OPEN',
+    'w_startdate'=> $_["today"]));
+
+
+//都道府県
+$_["prefectures"] = Data::prefectures(array('s'=>'1','w_status'=>'1'));
+
+//募集職種
+$_["jobCategories"] = Data::jobCategories_CC(array('s'=>'1','w_status'=>'1'));
+
+//業種
+$_["jobIndustries"] = Data::jobIndustry_CC(array('s'=>'1','w_status'=>'1'));
+
+//雇用形態
+$_["jobTypes"] = Data::jobtypes(array('s'=>'1','w_status'=>'1'));
+
+if(
+isset($_POST["end_btn_x"])
+){
+
+    if(!Token::valid()){
+        header("Location: index.html");
+        exit;
+    }
+
+//スマホ判別
+if ($GLOBALS["DEVICE"]=="sp") {
+    $DEVICE = "スマートフォン";
+} else {
+    $DEVICE = "PC";
+}
+
+    foreach($_["data"] as $key => $val){
+        if($key=="agree"){
+        } else {
+            if($key=="family_name_kana"){
+                $val = mb_convert_kana($val,"C","UTF-8");
+            }
+            $_["value"][] = DB::quote($val);
+            $_["field"][] = $key;
+        }
+    }
+
+    $_["field"][] = "created";
+    $_["value"][] = DB::quote($_["today"]);
+
+    $_["field"][] = "device";
+    $_["value"][] = DB::quote($DEVICE);
+
+    $_["field"][] = "site_id";
+    $_["value"][] = '3';
+
+    $_["field"] = implode(",", $_["field"]);
+    $_["value"] = implode(",", $_["value"]);
+    $sql = "insert into apply ({$_["field"]}) values({$_["value"]})";
+
+    DB::query($sql);
+    $ID = DB::$cn->lastInsertId();
+    $_SESSION["kaigoi"]["entry"]["data"]["apply_id"] = $ID;
+    $_SESSION["kaigoi"]["entry"]["data"]["device"] = $DEVICE;
+
+    $sex = Data::sex($_["data"]["sex"]);
+    $pre = $_["prefectures"][$_["data"]["prefecture"]]["name"];
+
+    //サイト設定
+    $_["siteset"] = Data::siteSet();
+
+
+    //部署
+    foreach(Data::jobSections(array('w_status'=>'1')) as $val){
+        $_["sections"][$val["id"]] = $val;
+    }
+
+    //mail
+    $body = "
+お仕事のご応募がありました。
+{$_["siteset"]["apply_sign_pc"]}
+    ";
+
+    /*
+    //管理者
+    $subj = "お仕事の応募がありました";
+
+    Mail::send(array(
+    "to"  => $_["siteset"]["apply_address"],
+    "from"=>$_["siteset"]["apply_address"],
+    "from_nama"=>$_["siteset"]["apply_fromname"],
+    "subj"=>$subj,
+    "body"=>$body
+    ));
+    */
+
+    //ユーザ
+    $subj = "【セントメディア】求人ご応募ありがとうございます。";
+
+    $body = "
+{$_["data"]["family_name_kana"]} 様
+
+株式会社セントメディアでございます。
+この度はご応募頂きましてありがとうございます。
+
+
+今後の選考につきましては、２日以内に【メール】又は【電話番号】にて
+連絡させて頂きます。
+
+
+-----------------------------------------------------------------
+◆応募内容
+
+【応募求人名】{$_["jobdata"]["title"]}
+【求人ＵＲＬ】http://g-career.jp/callcenter/details/{$_["jobdata"]["id"]}/
+-----------------------------------------------------------------
+
+
+※ご注意
+このメールは、株式会社セントメディアより自動的に送信されています。
+上記内容に覚えのない方は、恐れ入りますが、その旨を記入してご返信ください。
+
+{$_["sections"][$_["jobdata"]["section2"]]["sign"]}
+    ";
+
+    $sectionFrom = "";
+    if(!empty($_["sections"][$_["jobdata"]["section1"]]["frommail"])){
+        $sectionFrom = $_["sections"][$_["jobdata"]["section1"]]["frommail"];
+    }
+    if(!empty($_["sections"][$_["jobdata"]["section2"]]["frommail"])){
+        $sectionFrom = $_["sections"][$_["jobdata"]["section2"]]["frommail"];
+    }
+
+    $sectionMailName = "";
+    if(!empty($_["sections"][$_["jobdata"]["section1"]]["mailname"])){
+        $sectionMailName = $_["sections"][$_["jobdata"]["section1"]]["mailname"];
+    }
+    if(!empty($_["sections"][$_["jobdata"]["section2"]]["mailname"])){
+        $sectionMailName = $_["sections"][$_["jobdata"]["section2"]]["mailname"];
+    }
+
+    Mail::send(array(
+    "to"  =>$_["data"]["mail"],
+    "from"=>$sectionFrom,
+    "from_nama"=>$sectionMailName,
+    "subj"=>$subj,
+    "body"=>$body
+    ));
+
+
+    //雇用形態
+    $recruit_jobtype = "";
+    $jobtypeCodeLI = explode(",", $_["jobdata"]["jobtype_codes"]);
+    foreach($jobtypeCodeLI as $k => $v){
+        if(!empty($_["jobTypes"][$v]["name"])){
+            $recruit_jobtype .= ($k!=0)?"/":"";
+            $recruit_jobtype .= ($_["jobTypes"][$v]["name"]);
+        }
+    }
+
+
+    if(!empty($_["sections"][$_["jobdata"]["section2"]]) || !empty($_["sections"][$_["jobdata"]["section1"]])){
+
+        $body = "
+コールセンター求人ナビに求人応募がありました。
+
+【応募内容】
+----------------------------------------------------------------
+応募者ID： job{$ID}
+求人タイトル: {$_["jobdata"]["title"]}
+求人管轄部署: {$_["sections"][$_["jobdata"]["section1"]]["name"]} {$_["sections"][$_["jobdata"]["section2"]]["name"]}
+求人URL: http://g-career.jp/callcenter/details/{$_["jobdata"]["id"]}/
+サイト名: コールセンター求人ナビ
+雇用形態: {$recruit_jobtype}
+デバイス: {$DEVICE}
+----------------------------------------------------------------
+
+━応募情報の確認方法━━━━━━━━━━━━━━━━━━━━━━━━
+
+1)下記の応募情報確認用URLにアクセスします。
+　　http://www.saintmedia.co.jp/manage/
+
+2)ID・パスワードを入力します。
+
+3)応募者情報管理を確認します。
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        ";
+
+        $sectionMail = "";
+        if(!empty($_["sections"][$_["jobdata"]["section1"]]["mail"])){
+            $sectionMail = $_["sections"][$_["jobdata"]["section1"]]["mail"];
+        }
+
+        $sectionMail = $_["sections"][$_["jobdata"]["section2"]]["mail"];
+
+        //管理者
+        $subj = "【コールセンター求人ナビ】求人応募内容確認";
+        Mail::send(array(
+        "to"  => $sectionMail,
+        //"to"  => "moribe@kipply.jp",
+        "from"=>"entry@saintmedia.co.jp ",
+        "from_nama"=>"株式会社セントメディア",
+        "subj"=>$subj,
+        "body"=>$body
+        ));
+
+    }
+
+    $_SESSION["kaigoi"]["entry"]["data"]["complete"] = 1;
+
+    header("Location: complete.html");
+    exit;
+}
+
+
+?><!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>入力内容確認｜お仕事のご応募｜<?php echo h($GLOBALS["PAGETITLE"]);?></title>
+<meta name="description" content="お仕事のご応募のページです。<?php echo h($GLOBALS["PAGDESCRIPTION"]);?>">
+<meta name="keywords" content="<?php echo h($GLOBALS["PAGEKEYWORDS"]);?>">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="robots" content="noindex,follow">
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/head.html'; ?>
+<script type="text/javascript">
+var subbtn=0;
+</script>
+<!-- Gyro-n (共通) tag-->
+<script type="text/javascript">
+  var __gyr = {
+    "config": {
+      "clientToken": "RDTV09I35N",
+      "site": "www.saintmedia.co.jp"
+    }
+  };
+  (function() {
+    var ub = document.createElement('script');
+    ub.type = 'text/javascript'; ub.async = true;
+    ub.src = location.protocol + "//cmn.gyro-n.com/js/gyr.min.js";
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(ub, s);
+  })();
+</script>
+<!-- Gyro-n (共通) tag END-->
+</head>
+<body>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/header_short.html'; ?>
+<article id="Contents">
+	<section class="com_pnkzbox m_b10">
+		<ul class="clearfix" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+			<li><a href="<?php echo h($GLOBALS["PNKZURL"]);?>" itemprop="url"><span itemprop="title"><?php echo h($GLOBALS["PNKZTITLE"]);?></span></a></li>
+			<li itemprop="title"><span class="clr_gr">&gt;</span>&nbsp;&nbsp;お仕事のご応募</li>
+		</ul>
+	</section>
+	<section id="FMBX">
+		<section id="Clmbox" class="com_wid clearfix">
+			<section id="Mainbox">
+				<div class="formbox">
+					<div class="ttlbx">
+						<h2 class="ttl"><img src="/callcenter/images/rec_form_ttl.png" alt="お仕事のご応募"></h2>
+						<h2 class="ttl_sp"><img src="/callcenter/images/sp_ttl_apply.png" height="26" alt="お仕事のご応募"></h2>
+					</div>
+					<div class="stpbx ap">
+						<p class="step com_pc"><img src="/callcenter/images/form_step02.png" alt="STEP2 入力内容確認"></p>
+						<p class="step com_sp"><img src="/callcenter/images/form_step02_sp.png" alt="STEP2 入力内容確認"></p>
+					</div>
+					<div class="recbox">
+						<div class="recin clearfix">
+							<?php echo (!empty($_["jobServices"][$_["jobdata"]["service_code"]]["name"]))? '<p class="comp">'.h($_["jobServices"][$_["jobdata"]["service_code"]]["name"]).'</p>':""; ?>
+							<p class="num">[<?php
+						    $jobtypeCodesLi = explode(",", $_["jobdata"]["jobtype_codes"]);
+						    foreach($jobtypeCodesLi as $k => $t){
+						        if(!empty($_["jobTypes"][$t]["name"])){
+						            $jobTypesName = $_["jobTypes"][$t]["name"];
+						        }
+						    }
+						    echo h($jobTypesName);
+							?>] <?php
+
+						    if(!empty($_["jobdata"]["industry_code"])){
+							    echo h($_["jobIndustries"][$_["jobdata"]["industry_code"]]["name"]);
+
+								if(!empty($_["jobdata"]["cate_codes"])){
+								    $_["jobdata"]["cate_codes"] = explode(",", $_["jobdata"]["cate_codes"]);
+								    foreach($_["jobdata"]["cate_codes"] as $k => $r){
+								        if(!empty($_["jobCategories"][$r]["name"])){
+								            echo " / ";
+								            echo h($_["jobCategories"][$r]["name"]);
+								        }
+								    }
+								}
+						    }
+
+							?></p>
+						</div>
+						<p class="name"><?php echo (!empty($_["jobdata"]["title"]))? h($_["jobdata"]["title"]) :""; ?></p>
+					</div>
+					<p class="tx">ご確認後、送信ボタンを押してください。</p>
+					<form action="preview.html" method="post" name="form_fm" id="form_fm">
+					<div class="formin">
+						<div class="tblbox">
+							<div class="tblin">
+								<p class="th">氏名（ひらがな）<span><img src="/callcenter/images/icn_his.png" alt="必須"></span></p>
+							</div>
+							<div class="tblct"><?php echo h($_["data"]["family_name_kana"]); ?></div>
+						</div>
+						<div class="tblbox">
+							<div class="tblin">
+								<p class="th">性別<span><img src="/callcenter/images/icn_his.png" alt="必須"></span></p>
+							</div>
+							<div class="tblct"><?php echo h(Data::sex($_["data"]["sex"])); ?></div>
+						</div>
+						<div class="tblbox">
+							<div class="tblin">
+								<p class="th">生年月日<span><img src="/callcenter/images/icn_his.png" alt="必須"></span></p>
+							</div>
+							<div class="tblct"><?php echo h($_["data"]["birth_year"])."年".h($_["data"]["birth_month"])."月".h($_["data"]["birth_day"])."日"; ?></div>
+						</div>
+						<div class="tblbox">
+							<div class="tblin dwl">
+								<p class="th">お住まいの都道府県</p>
+							</div>
+							<div class="tblct2">
+								<div class="tlbx">
+									<div class="tbx"><?php echo h($_["prefectures"][$_["data"]["prefecture"]]["name"]); ?></div>
+								</div>
+							</div>
+						</div>
+						<div class="tblbox">
+							<div class="tblin">
+								<p class="th">電話番号(携帯でも可)<span><img src="/callcenter/images/icn_his.png" alt="必須"></span></p>
+							</div>
+							<div class="tblct"><?php echo h($teldf); ?></div>
+						</div>
+						<div class="tblbox">
+							<div class="tblin">
+								<p class="th">メールアドレス<span><img src="/callcenter/images/icn_his.png" alt="必須"></span></p>
+							</div>
+							<div class="tblct"><?php echo h($_["data"]["mail"]); ?></div>
+						</div>
+						<?php
+						/*
+						<div class="tblbox">
+							<div class="tblin">
+								<p class="th">その他</p>
+							</div>
+							<div class="tblct"><?php echo nl2br(h($_["data"]["message"])); ?></div>
+						</div>
+						*/
+						?>
+					</div>
+					<p class="etx">上記にお間違いがなければ、<br class="com_pcblk" />「送信する」ボタンを押してください。</p>
+					<div class="btnbox">
+						<ul class="clearfix">
+							<li class="lbt"><a href="index.html?bk=1#form_fm"><img src="/callcenter/images/btn_back_off.png" alt="修正する"><span>修正する</span></a></li>
+							<li class="rbt"><a href="javascript:void(0)" onclick="if(!subbtn){document.form_fm.submit();subbtn=1;}return false;"><img src="/callcenter/images/btn_send_off.png" alt="送信する"><span>送信する</span></a></li>
+						</ul>
+					</div>
+					<input type="hidden" name="end_btn_x" value="1" >
+                    <input type="hidden" name="token" value="<?php echo h(Token::val()); ?>" >
+					</form>
+				</div>
+			</section>
+			<section id="Sidebox">
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/sidebox_entry.html'; ?>
+			</section>
+		</section>
+	</section>
+</article>
+<?php
+require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/footer.html';
+require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/template/tag/preview.html';
+?>
+
+
+
+</body>
+</html>

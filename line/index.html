@@ -1,0 +1,197 @@
+<?php
+require_once dirname($_SERVER['DOCUMENT_ROOT']). '/libs/inc.php';
+
+$_ = array();
+foreach(array(
+"error"                   => "0",
+"prefCode"                => array(),
+"prefData"                => array(),
+"stcmpRec"                => array(),
+"lineRec"                 => array(),
+"prefRec"                 => array(),
+"stationStcmpData"        => array(),
+"stationLineData"         => array(),
+"stationGpDate"           => array(),
+"stationGpDatePt"         => array(),
+"lineData"                => array(),
+"today"                   => date("Y-m-d"),
+) as $k => $v){
+    $_[$k] = $v;
+}
+
+
+if(!empty($_REQUEST["id"])){
+   $_["prefCode"][] = $_REQUEST["id"];
+} else {
+   $_["error"] = 1;
+}
+
+//都道府県
+$_["prefData"] = Data::prefectures(array('ids'=>$_["prefCode"],'s'=>'1','w_status'=>'1'));
+
+//駅
+foreach(Data::stations(array('w_pref'=>$_["prefData"][$_["prefCode"][0]]["id"])) as $v){
+    $_["stcmpData"][$v["cmp_id"]] = $v["cmp_name"];
+    $_["lineData"][$v["cmp_id"]][$v["line_id"]] = $v["line_name"];
+    $_["stationStcmpData"][$v["id"]][$v["cmp_id"]] = $v["cmp_id"];
+    $_["stationStcmpData"][$v["idg"]][$v["cmp_id"]] = $v["cmp_id"];
+    $_["stationLineData"][$v["id"]][$v["cmp_id"]][$v["line_id"]] = $v["line_id"];
+    $_["stationLineData"][$v["idg"]][$v["cmp_id"]][$v["line_id"]] = $v["line_id"];
+
+    $_["stationGpDate"][$v["id"]][] = $v["idg"];
+}
+
+
+//求人
+foreach(DataCcRec::recruits(array('s'=> '1','w_status'=> 'OPEN','w_startdate'=> $_["today"],'w_pref'=> $_["prefData"][$_["prefCode"][0]]["id"])) as $v){
+
+    for($i=1;$i<=5;$i++){
+        if(!empty($_["stationGpDate"][$v["st{$i}_code"]])){
+            $_["stationGpDatePt"][$v["id"]] = $_["stationGpDate"][$v["st{$i}_code"]];
+
+            if(!empty($_["stationGpDatePt"][$v["id"]])){
+                
+                foreach($_["stationGpDatePt"][$v["id"]] as $v2){
+                
+
+                    if(!empty($_["stationStcmpData"][$v2])){
+                        foreach($_["stationStcmpData"][$v2] as $st){
+                            $_["stcmpRec"][$st][] = $st;
+                        }
+                    }
+
+                    if(!empty($_["stationLineData"][$v2])){
+                        foreach($_["stationLineData"][$v2] as $st){
+                            foreach($st as $st2){
+                            $_["lineRec"][$st2][] = $st2;
+                            }
+                        }
+                    }
+                    
+
+
+                }
+            }
+    
+        }
+    }
+
+
+    $_["prefRec"][$v["pref_code"]][] = $v["id"];
+}
+
+if(count($_["prefRec"][$_["prefCode"][0]])==0){
+//   $_["error"] = 1;
+}
+
+
+if(!empty($_["error"])){
+    header("Location: /callcenter/search/");
+    exit;
+}
+
+?><!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title><?php echo h($_["prefData"][$_["prefCode"][0]]["name"]);?>の駅・路線から探す｜<?php echo h($GLOBALS["PAGETITLE"]);?></title>
+<meta name="description" content="<?php echo h($_["prefData"][$_["prefCode"][0]]["name"]);?>の駅・路線から探すページです。<?php echo h($GLOBALS["PAGDESCRIPTION"]);?>">
+<meta name="keywords" content="<?php echo h($_["prefData"][$_["prefCode"][0]]["name"]);?>,<?php echo h($GLOBALS["PAGEKEYWORDS"]);?>">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/head.html'; ?>
+<script type="text/javascript" src="/callcenter/common/js/line.js"></script>
+</head>
+<body>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/header.html'; ?>
+<article id="Contents">
+	<section class="com_pnkzbox m_b10">
+		<ul class="clearfix" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+			<li><a href="<?php echo h($GLOBALS["PNKZURL"]);?>" itemprop="url"><span itemprop="title"><?php echo h($GLOBALS["PNKZTITLE"]);?></span></a></li>
+			<li itemprop="title"><span class="clr_gr">&gt;</span>&nbsp;&nbsp;<?php echo h($_["prefData"][$_["prefCode"][0]]["name"]);?>の駅・路線から探す</li>
+		</ul>
+	</section>
+	<section id="SRCBX">
+		<section id="Clmbox" class="com_wid clearfix">
+			<section id="Mainbox">
+				<div class="searchbox">
+					<div class="srclistbox">
+						<div class="ttlbox stn">
+							<h2 class="com_sp"><span><?php echo h($_["prefData"][$_["prefCode"][0]]["name"]);?></span>の路線・駅から探す</h2>
+						</div>
+						<h2 class="com_tlx m_b30 stn"><span><?php echo h($_["prefData"][$_["prefCode"][0]]["name"]);?></span>の路線・駅から探す</h2>
+<?php
+if(count($_["prefRec"][$_["prefCode"][0]])!=0){
+?>
+						<div class="areabox line">
+							<form method="post" action="">
+								<input type="hidden" name="pref" value="<?php echo h($_["prefCode"][0]);?>">
+								<h3 class="com_tlxs"><?php echo h($_["prefData"][$_["prefCode"][0]]["name"]);?>の路線一覧</h3>
+								<div class="litbox">
+									<ul class="clearfix">
+										<?php
+										foreach($_["stcmpData"] as $k => $v){
+											if(!empty($_["stcmpRec"][$k])){
+										        echo '<li><a href="#bx'.h($k).'">'.h($v).'</a></li>';
+										    }
+										}
+										?>
+									</ul>
+								</div>
+								<?php
+								foreach($_["stcmpData"] as $k => $v){
+							    	if(!empty($_["stcmpRec"][$k])){
+								?><div class="areain" id="bx<?php echo h($k);?>">
+									<div class="ttlbx">
+										<h4><input type="checkbox" id="a_<?php echo h($k);?>" name="cmp[]" value="<?php echo h($k);?>"><label class="chk" for="a_<?php echo h($k);?>"><a href="/callcenter/sta/<?php echo h($_["prefCode"][0]);?>/cmp-<?php echo h($k);?>/"><?php echo h($v);?></a></label></h4>
+									</div>
+									<div class="areact">
+										<ul class="clearfix">
+											<?php
+											if(!empty($_["lineData"][$k])){
+    											foreach($_["lineData"][$k] as $k2 => $v2){
+    											    if(!empty($_["lineRec"][$k2])){
+    											        echo '<li><input type="checkbox" id="b_'.h($k2).'" name="line[]" value="'.h($k2).'"><label class="chk" for="b_'.h($k2).'"><a href="/callcenter/sta/'.h($_["prefCode"][0]).'/line-'.h($k2).'/">'.h($v2).'</a> ('.h(count($_["lineRec"][$k2])).')</label></li>';
+    											    }
+    											}
+											}
+											?>
+										</ul>
+									</div>
+								</div>
+								<?php
+								    }
+								}
+								?>
+								<div class="btnbox">
+									<p class="pc"><a href="#" class="formSubmitBtn"><img src="/callcenter/images/btn_src_line_off.png" alt="この条件で求人検索する"></a></p>
+									<p class="sp"><a href="#" class="formSubmitBtn"><span>この条件で求人検索する</span></a></p>
+								</div>
+							</form>
+						</div>
+<?php
+} else {
+?>
+            <p class="com_lyajst m_b20">申し訳ありません。<br>現在このエリアにはご案内できる求人案件がございません。お近くのエリアをお探しください。</p>
+						<div class="areabox">
+								<div class="btnbox">
+									<p class="pc"><a href="/callcenter/"><img src="/callcenter/images/btn_topbk_off.png" alt="TOPへ戻る"></a></p>
+									<p class="sp"><a class="icno" href="/callcenter/">TOPへ戻る</a></p>
+								</div>
+						</div>
+<?php
+}
+?>
+					</div>
+				</div>
+			</section>
+			<section id="Sidebox">
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/sidebox.html'; ?>
+			</section>
+		</section>
+		<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/sp_bottom.html'; ?>
+	</section>
+</article>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/footer.html'; ?>
+</body>
+</html>

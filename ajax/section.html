@@ -1,0 +1,32 @@
+<?php
+require_once dirname($_SERVER['DOCUMENT_ROOT']). '/libs/inc.php';
+
+
+$_["section"] = "";
+$_["html"] = "";
+$_["section2"] = "";
+
+if(!empty($_GET["section"])){
+    $_["section"] = $_GET["section"];
+    $_["section2"] = $_GET["section2"];
+    
+    
+    if(!empty($_GET["html"])){
+        $_["html"] = $_GET["html"];
+    }
+    if($_["html"]==2){
+        echo '<select name="section2">';        
+        echo '<option value=""></option>';
+        foreach(Data::jobSections(array('s'=>'1','w_type'=>'3','w_groupid'=>$_["section"],'w_status'=>'1')) as $val){
+            echo '<option ';
+            if($_["section2"]==$val["id"]){
+                echo "selected";
+            }
+            echo ' value="'.h($val["id"]).'">'.h($val["name"]).'</option>';
+        }
+        echo '</select>';
+    }
+
+}
+
+?>

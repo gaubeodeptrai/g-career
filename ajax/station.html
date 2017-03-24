@@ -1,0 +1,58 @@
+<?php
+require_once dirname($_SERVER['DOCUMENT_ROOT']). '/libs/inc.php';
+
+
+$_["station"] = "";
+$_["html"] = "";
+
+
+if(!empty($_GET["station"])){
+    $_["station"] = $_GET["station"];
+    
+    if(!empty($_GET["html"])){
+        $_["html"] = $_GET["html"];
+    }
+
+    if($_["html"]==1){
+
+        echo '<table>';
+        echo '<tr>';
+        echo '<th>コード</th>';
+        echo '<td class="tl">ラベル</td>';
+        echo '</tr>';
+        
+        foreach(Data::stations($_=array('w_stname'=>$_["station"])) as $val){
+            echo '<tr>';
+            echo '<th>'.$val["id"].'</th>';
+            echo '<td>'.$val["cmp_name"]," ".$val["line_name"]," ".$val["name"].'</td>';
+            echo '</tr>';
+        }
+        echo '</table>';
+    }
+
+    if($_["html"]==2){
+
+        echo '<table class="table_r">';
+        echo '<tr>';
+        echo '<th>事業者</th>';
+        echo '<th>路線</th>';
+        echo '<th>駅</th>';
+        echo '<th>選択</th>';
+        echo '</tr>';
+        
+        foreach(Data::stations($_=array('w_stname'=>$_["station"])) as $val){
+            echo '<tr>';
+            echo '<td class="st_cmp">'.h($val["cmp_name"]).'</td>';
+            echo '<td class="st_line">'.h($val["line_name"]).'</td>';
+            echo '<td class="st_name"><span class="st">'.h($val["name"]).'</span><span class="st_id" style="display:none;">'.h($val["id"]).'</span></td>';
+            echo '<td><button class="btn">選択</button></td>';
+            echo '</tr>';
+        }
+        echo '</table>';
+        
+    }
+    
+
+}
+
+?>

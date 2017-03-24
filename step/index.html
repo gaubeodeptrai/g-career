@@ -1,0 +1,109 @@
+<?php
+require_once dirname($_SERVER['DOCUMENT_ROOT']). '/libs/inc.php';
+
+?><!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>ご就業までの流れ｜<?php echo h($GLOBALS["PAGETITLE"]);?></title>
+<meta name="description" content="ご就業までの流れのページです。<?php echo h($GLOBALS["PAGDESCRIPTION"]);?>">
+<meta name="keywords" content="<?php echo h($GLOBALS["PAGEKEYWORDS"]);?>">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/head.html'; ?>
+</head>
+<body>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/header.html'; ?>
+<article id="Contents">
+	<section class="com_pnkzbox m_b10">
+		<ul class="clearfix" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+			<li><a href="<?php echo h($GLOBALS["PNKZURL"]);?>" itemprop="url"><span itemprop="title"><?php echo h($GLOBALS["PNKZTITLE"]);?></span></a></li>
+			<li itemprop="title"><span class="clr_gr">&gt;</span>&nbsp;&nbsp;ご就業までの流れ</li>
+		</ul>
+	</section>
+	<section id="FLWBX">
+		<section id="Clmbox" class="com_wid clearfix">
+			<section id="Mainbox">
+				<div class="stepbox">
+					<h2 class="com_tlx"><img src="/callcenter/images/title_flow.png" alt="お申込みからご就業までの流れ" ></h2>
+					<h2 class="com_spttl"><img src="/callcenter/images/sp_ttl_step.png" alt="ご就業までの流れ" height="26"></h2>
+					<div class="stepin">
+						<div class="stepct">
+							<div class="ttlbx">
+								<h3>スタッフ登録会の予約をする</h3>
+								<p class="tl pc"><img src="/callcenter/images/ttls_step01.png" alt="STEP1"></p>
+								<p class="tl sp"><img src="/callcenter/images/ttls_step01_sp.png" height="41" alt="STEP1"></p>
+							</div>
+							<div class="step">
+								<dl class="clearfix">
+									<dt><img src="/callcenter/images/step_img01.jpg" alt="スタッフ登録会の予約をする"></dt>
+									<dd>
+									WEB上で、スタッフ登録会にご応募ください。<br>
+									後ほど当社オペレーターからお電話差し上げますので、会場と参加日の確定をお願いいたします。<br>
+									なお、スタッフ登録会のご応募は、お電話でも承っております。<br>
+                                    フリーダイヤル：<span>0120-106-914<br>
+                                    </span>平日10：00～21：00／土日祝10：00～19：00）
+                                  </dd>
+								</dl>
+								<?php /*
+								<p class="btn pc"><a href="/callcenter/entry/index.html"><img src="/callcenter/images/btn_step_req_off.png" alt="スタッフ登録お申し込み(無料)"></a></p>
+								<p class="btn sp"><a href="/callcenter/entry/index.html">スタッフ登録お申し込み(無料)</a></p>
+								*/ ?>
+							</div>
+						</div>
+					</div>
+					<div class="stepin">
+						<div class="stepct">
+							<div class="ttlbx non">
+								<h3>スタッフ登録会でお仕事ご紹介</h3>
+								<p class="tl pc"><img src="/callcenter/images/ttls_step02.png" alt="STEP2"></p>
+								<p class="tl sp"><img src="/callcenter/images/ttls_step02_sp.png" height="41" alt="STEP2"></p>
+							</div>
+							<div class="step">
+								<dl class="clearfix">
+									<dt><img src="/callcenter/images/step_img02.jpg" alt="スタッフ登録会でお仕事ご紹介"></dt>
+									<dd>
+                                    受付は10分前より開始しております。<br>
+                                    お時間に遅れますとご案内できない場合がございます、お時間に余裕を持ってお越しください。<br>
+                                  スタッフ登録会では、ご登録手続きの他、ご希望条件やこれまでのお仕事経験・スキル等をお伺いして、お仕事紹介のプロが、 ご希望に合うお仕事をご紹介いたします。</dd>
+								</dl>
+							</div>
+						</div>
+					</div>
+					<div class="stepin">
+						<div class="stepct">
+							<div class="ttlbx non">
+								<h3>お仕事スタート</h3>
+								<p class="tl pc"><img src="/callcenter/images/ttls_step03.png" alt="STEP3"></p>
+								<p class="tl sp"><img src="/callcenter/images/ttls_step03_sp.png" height="41" alt="STEP3"></p>
+							</div>
+							<div class="step">
+								<dl class="clearfix">
+									<dt><img src="/callcenter/images/step_img03.jpg" alt="お仕事スタート"></dt>
+									<dd>
+                                    お仕事開始後も継続的に、担当のコーディネーターがサポート。<br>
+また、勤務先により、研修もあるので安心スタートできます。<br>
+                                    思うように仕事が進められない、職場の環境に慣れないなど、<br>
+お悩みはいつでもコーディネーターにご相談ください。<br>
+                                    気持ちよく仕事をしていただくことも、当社セントメディアのコーディネーターの重要な任務です。
+                                    </dd>
+								</dl>
+							</div>
+						</div>
+					</div>
+					<div class="btnbox">
+						<p class="btn pc"><a href="/callcenter/entry/index.html"><img src="/callcenter/images/step_btn_off.png" alt="スタッフ登録に今すぐ応募する"></a></p>
+						<p class="btn sp"><a href="/callcenter/entry/index.html">スタッフ登録会に応募する</a></p>
+					</div>
+				</div>
+			</section>
+			<section id="Sidebox">
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/sidebox.html'; ?>
+			</section>
+		</section>
+		<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/sp_bottom.html'; ?>
+	</section>
+</article>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/footer.html'; ?>
+</body>
+</html>

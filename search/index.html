@@ -1,0 +1,2186 @@
+<?php
+require_once dirname($_SERVER['DOCUMENT_ROOT']). '/libs/inc.php';
+
+$_ = array();
+foreach(array(
+"id"                   => "",
+"url"                  => array(),
+"data"                 => array(),
+"jobid"                => array(),
+"error"                => "0",
+"today"                => date("Y-m-d"),
+"newflg"               => "0",
+"citiesData"           => array(),
+"picturesData"         => array(),
+"jobIndustries"        => array(),
+"jobIndustriesStr"     => array(),
+"jobCategories"        => array(),
+"jobFeatures"          => array(),
+"jobdays"              => array(),
+"jobweeks"             => array(),
+"jobtypes"             => array(),
+"salaries"             => array(),
+"prefectures"          => array(),
+"cities"               => array(),
+"lines"                => array(),
+"stations"             => array(),
+"prefCities"           => array(),
+"pictures"             => array(),
+"lineStas"             => array(),
+"lineGpSta"             => array(),
+"stationGpDate"        => array(),
+
+//ページャー
+"pmsPage"              => "",
+"pgrPage"              => "",
+"pgrTotal"             => "",
+"pgrStart"             => "",
+"pgrNum"               => "",
+"pgrEnd"               => "",
+"pgrPrev"              => "",
+"pgrNext"              => "",
+"pgrUrl"               => "",
+"pgrUrlSort"           => "",
+"limitEnd"             => "20",
+"limitStart"           => "",
+
+//パラメータ
+"params"               => array(),
+"pmsPref"              => "",
+"pmsCity"              => "",
+"pmsLine"              => "",
+"pmsSta"               => "",
+"pmsInd"               => "",
+"pmsCate"              => "",
+"pmsType"              => "",
+"pmsSalary"            => "",
+"pmsDay"               => "",
+"pmsFea"               => "",
+"pmsWord"              => "",
+"pmsPage"              => "",
+"pmsSort"              => "new1",
+
+"pmsPrefs"             => array(),
+"pmsCities"            => array(),
+"pmsLines"             => array(),
+"pmsStas"              => array(),
+"pmsStasGp"            => array(),
+"pmsStas2"             => array(),
+"pmsInds"              => array(),
+"pmsCates"             => array(),
+"pmsTypes"             => array(),
+"pmsSalaries"          => array(),
+"pmsDays"              => array(),
+"pmsFeas"              => array(),
+
+//パラメータ表示
+"pmsPrefStr"           => "",
+"pmsCityStr"           => "",
+"pmsLineStr"           => "",
+"pmsStaStr"            => "",
+"pmsIndStr"           => "",
+"pmsCateStr"           => "",
+"pmsTypeStr"           => "",
+"pmsSalaryStr"           => "",
+"pmsDayStr"            => "",
+"pmsFeaStr"            => "",
+"pmsWordStr"           => "",
+
+"searchStr"            => array(),
+"searchStrOne"         => "",
+"searchCount"          => "0",
+
+//件数
+"prefRec"              => array(),
+"prefIndRec"           => array(),
+"cityRec"              => array(),
+"cityIndRec"           => array(),
+"feaRec"               => array(),
+"dayRec"               => array(),
+
+"favlist"              => array(),
+
+"randdata"             => array(),
+
+
+) as $k => $v){
+    $_[$k] = $v;
+}
+
+$_["url"] = explode("/", $_SERVER["REQUEST_URI"]);
+if(!empty($_["url"][2])){
+    foreach($_["url"] as $key => $val){
+        
+        if(
+        preg_match("/^pref-([0-9-]+$)/u", $val, $match)
+        ){
+            $_["params"]["pref"] = $match[1];
+            $_["pmsPref"] = $match[1];
+            
+        } else if(
+        preg_match("/^city-([0-9-]+$)/u", $val, $match)
+        ){
+            $_["params"]["city"] = $match[1];
+            $_["pmsCity"] = $match[1];
+
+        } else if(
+        preg_match("/^line-([0-9-]+$)/u", $val, $match)
+        ){
+            $_["params"]["line"] = $match[1];
+            $_["pmsLine"] = $match[1];
+
+        } else if(
+        preg_match("/^sta-([0-9-]+$)/u", $val, $match)
+        ){
+            $_["params"]["sta"] = $match[1];
+            $_["pmsSta"] = $match[1];
+
+        } else if(
+        preg_match("/^ind-([0-9-]+$)/u", $val, $match)
+        ){
+            $_["params"]["ind"] = $match[1];
+            $_["pmsInd"] = $match[1];
+            
+        } else if(
+        preg_match("/^cate-([0-9-]+$)/u", $val, $match)
+        ){
+            $_["params"]["cate"] = $match[1];
+            $_["pmsCate"] = $match[1];
+
+        } else if(
+        preg_match("/^type-([0-9-]+$)/u", $val, $match)
+        ){
+            $_["params"]["type"] = $match[1];
+            $_["pmsType"] = $match[1];
+
+        } else if(
+        preg_match("/^salary-([0-9-]+$)/u", $val, $match)
+        ){
+            $_["params"]["salary"] = $match[1];
+            $_["pmsSalary"] = $match[1];
+            
+        } else if(
+        preg_match("/^day-([0-9-]+$)/u", $val, $match)
+        ){
+            $_["params"]["day"] = $match[1];
+            $_["pmsDay"] = $match[1];
+
+        } else if(
+        preg_match("/^fea-([0-9-]+$)/u", $val, $match)
+        ){
+            $_["params"]["fea"] = $match[1];
+            $_["pmsFea"] = $match[1];
+            
+        } else if(
+        preg_match("/^word-([^\/]+$)/u", $val, $match)
+        ){
+            $_["params"]["word"] = $match[1];
+            $_["pmsWord"] = $match[1];
+            $_["pmsWord"] = str_ireplace("%252f","%2f",$_["pmsWord"]);
+            
+        //ソート
+        } else if(
+        preg_match("/^o_new-([0-9]+$)/u", $val, $match)
+        ){
+            $_["params"]["o_sort"] = "new".$match[1];
+            $_["pmsSort"] = "new".$match[1];
+
+        } else if(
+        preg_match("/^o_salary-([0-9]+$)/u", $val, $match)
+        ){
+            $_["params"]["o_sort"] = "salary".$match[1];
+            $_["pmsSort"] = "salary".$match[1];
+
+        } else if(
+        preg_match("/^o_way-([0-9]+$)/u", $val, $match)
+        ){
+            $_["params"]["o_sort"] = "way".$match[1];
+            $_["pmsSort"] = "way".$match[1];
+                        
+        
+        } else if(
+        preg_match("/^page-([0-9]+$)/u", $val, $match)
+        ){
+            $_["params"]["page"] = $match[1];
+            $_["pmsPage"] = $match[1];
+        }
+
+    }
+
+}
+
+if(!empty($_REQUEST["pref"])){
+    $_["pmsPref"] = $_REQUEST["pref"];
+}
+
+(!empty($_["pmsPage"]))? $_["pgrPage"] = $_["pmsPage"]:$_["pgrPage"] = 1;
+$_["limitStart"] = ($_["pgrPage"]-1) * $_["limitEnd"];
+
+
+if(!empty($_SESSION["kaigoi"]["pms"])){
+    foreach($_SESSION["kaigoi"]["pms"] as $k => $v){
+        $_SESSION["kaigoi"]["pms"][$k] = "";
+    }
+}
+
+if(!empty($_["pmsPref"])){
+    $_["pmsPrefs"] = explode("-",$_["pmsPref"]);
+    $_SESSION["kaigoi"]["pms"]["pmsPrefs"] = $_["pmsPrefs"];
+}
+
+if(!empty($_["pmsCity"])){
+    $_["pmsCities"] = explode("-",$_["pmsCity"]);
+    $_SESSION["kaigoi"]["pms"]["pmsCities"] = $_["pmsCities"];
+}
+
+
+if(!empty($_["pmsSta"]) or !empty($_["pmsLine"])){
+
+    foreach($_["pmsPrefs"] as $val){
+        foreach(Data::stations(array('w_pref'=>$val)) as $v){
+            $_["stationGpDate"][$v["idg"]][] = $v["id"];
+        }
+    }
+}
+
+if(!empty($_["pmsSta"])){
+    $_["pmsStas"] = explode("-",$_["pmsSta"]);
+    $_SESSION["kaigoi"]["pms"]["pmsStas"] = $_["pmsStas"];
+
+    foreach($_["stationGpDate"] as $k=>$v){
+        if(in_array($k,$_["pmsStas"])){
+            foreach($v as $v2){
+               $_["pmsStas2"][] = $v2;
+            }
+        }
+    }
+}
+
+if(!empty($_["pmsLine"])){
+    $_["pmsLines"] = explode("-",$_["pmsLine"]);
+    $_SESSION["kaigoi"]["pms"]["pmsLines"] = $_["pmsLines"];
+    
+    //駅
+    foreach(Data::stations(array('lineids'=>$_["pmsLines"])) as $v) {
+        $_["lineStas"][] = $v["id"];
+        $_["pmsStas"][]  = $v["id"];
+        $_["pmsStasGp"][]  = $v["idg"];
+        $_["lineGpSta"][$v["line_id"]] = $v["id"];
+    }
+    foreach($_["stationGpDate"] as $k=>$v){
+        if(in_array($k,$_["pmsStasGp"])){
+            foreach($v as $v2){
+               $_["pmsStas2"][] = $v2;
+            }
+        }
+    }
+}
+
+if(!empty($_["pmsInd"])){
+    $_["pmsInds"] = explode("-",$_["pmsInd"]);
+    $_SESSION["kaigoi"]["pms"]["pmsInds"] = $_["pmsInds"];
+}
+
+if(!empty($_["pmsCate"])){
+    $_["pmsCates"] = explode("-",$_["pmsCate"]);
+    $_SESSION["kaigoi"]["pms"]["pmsCates"] = $_["pmsCates"];
+}
+
+if(!empty($_["pmsType"])){
+    $_["pmsTypes"] = explode("-",$_["pmsType"]);
+    $_SESSION["kaigoi"]["pms"]["pmsTypes"] = $_["pmsTypes"];
+}
+
+if(!empty($_["pmsSalary"])){
+    $_["pmsSalaries"] = explode("-",$_["pmsSalary"]);
+    $_SESSION["kaigoi"]["pms"]["pmsSalaries"] = $_["pmsSalaries"];
+}
+
+if(!empty($_["pmsDay"])){
+    $_["pmsDays"] = explode("-",$_["pmsDay"]);
+    $_SESSION["kaigoi"]["pms"]["pmsDays"] = $_["pmsDays"];
+}
+
+if(!empty($_["pmsFea"])){
+    $_["pmsFeas"] = explode("-",$_["pmsFea"]);
+    $_SESSION["kaigoi"]["pms"]["pmsFeas"] = $_["pmsFeas"];
+}
+
+if(!empty($_["pmsWord"])){
+    $_SESSION["kaigoi"]["pms"]["pmsWord"] = $_["pmsWord"];
+}
+
+if(!empty($_["pmsSort"])){
+    $_SESSION["kaigoi"]["pms"]["pmsSort"] = $_["pmsSort"];
+}
+
+
+
+$_["data"] = DataCcRec::recruitsSearch(array(
+    's'=>'1',
+    'w_status'=>'OPEN',
+    'w_startdate'=>$_["today"],
+    'w_pref'=>$_["pmsPrefs"],
+    'w_city'=>$_["pmsCities"],
+    'w_sta'=>$_["pmsStas2"],
+    'w_ind'=>$_["pmsInds"],
+    'w_cate'=>$_["pmsCates"],
+    'w_type'=>$_["pmsTypes"],
+    'w_salary'=>$_["pmsSalaries"],
+    'w_day'=>$_["pmsDays"],
+    'w_fea'=>$_["pmsFeas"],
+    'w_word'=>$_["pmsWord"],
+    'o_sort'=> $_["pmsSort"],
+    'limitStart'=>$_["limitStart"],
+    'limitEnd'=>$_["limitEnd"]));
+
+//print_r($_["data"]);
+
+
+$_["pgrTotal"] = DataCcRec::$dataTotal;
+
+Pager::dataList(array("total"=>$_["pgrTotal"],"limit"=>$_["limitEnd"],"page"=>$_["pgrPage"]));
+
+Pager::dataListSp(array("total"=>$_["pgrTotal"],"limit"=>$_["limitEnd"],"page"=>$_["pgrPage"]));
+
+$_["pgrUrl"] = $_SERVER["REQUEST_URI"];
+if(preg_match("/^(.*?)\/page/u", $_SERVER["REQUEST_URI"], $match)){
+    $_["pgrUrl"] = $match[1]."/";
+}
+
+//ソートパラメータ削除
+$_["pgrUrlSort"] = $_["pgrUrl"];
+if(preg_match("/o_/u", $_["pgrUrl"], $match)){
+    $_["pgrUrlSort"] = strstr($_["pgrUrl"], "o_", TRUE);
+}
+
+$_["pgrNum"] = Pager::$num;
+$_["pgrStart"] = Pager::$start;
+$_["pgrEnd"] = Pager::$end;
+
+$_["pgrNumSp"] = Pager::$num_sp;
+$_["pgrStartSp"] = Pager::$start_sp;
+$_["pgrEndSp"] = Pager::$end_sp;
+
+//募集職種
+$_["jobCategories"] = Data::jobCategories_CC(array('s'=>'1','w_status'=>'1'));
+
+//業種
+$_["jobIndustries"] = Data::jobIndustry_CC(array('s'=>'1','w_status'=>'1'));
+
+foreach($_["jobIndustries"] as $k=>$v){
+    $_["jobIndustriesStr"][$v["name"]] = $v["id"];
+}
+
+//雇用形態
+$_["jobTypes"] = Data::jobtypes(array('s'=>'1','w_status'=>'1'));
+
+//雇用形態略文言
+$_["jobTypesS"] = Data::jobtypes_S();
+
+//雇用形態略文言
+$_["jobTypesSS"] = Data::jobtypes_SS();
+
+//給与
+$_["salaries"] = Data::salarytime();
+
+//特色フラグ
+$_["jobFeatures"] = Data::jobFeatures_CC(array('s'=>'1','w_status'=>'1'));
+
+//勤務日数
+$_["jobdays"] = Data::jobdays(array('s'=>'1','w_status'=>'1'));
+
+//勤務曜日
+$_["jobweeks"] = Data::jobweeks(array('s'=>'1','w_status'=>'1'));
+
+//都道府県
+$_["prefectures"] = Data::prefectures(array('s'=>'1','w_status'=>'1'));
+
+
+
+//市区町村
+/*
+foreach($_["data"] as $v){
+    $_["citiesData"][] = $v["city_code"];
+}
+foreach(Data::cities(array('ids'=>$_["citiesData"])) as $v){
+*/
+
+foreach(Data::cities() as $v){
+    $_["cities"][$v["id"]] = $v;
+    $_["prefCities"][$v["pref"]][$v["id"]] = $v;
+}
+
+//駅
+/*
+foreach($_["data"] as $v){
+for($i=1;$i<=5;$i++){
+    $_["stationsData"][] = $v["st{$i}_code"];
+}
+}
+foreach(Data::stations(array('ids'=>$_["stationsData"])) as $v) {
+*/
+
+foreach(Data::stations() as $v) {
+    $_["lines"][$v["line_id"]] = $v;
+    $_["stations"][$v["id"]] = $v;
+}
+
+
+//画像
+foreach($_["data"] as $v){
+for($i=1;$i<=3;$i++){
+    $_["picturesData"][] = $v["pic{$i}_code"];
+}
+
+
+}
+foreach(Data::pictures(array("s"=>1,'ids'=>$_["picturesData"])) as $v){
+    $_["pictures"][$v["id"]] = $v["pic"];
+}
+
+
+$titleStrAdd ="(日払い・高時給)";
+
+//検索結果表示
+if(!empty($_["pmsPref"])){
+
+    if(!empty($_["pmsCity"])){
+        $_["pmsCities"] = explode("-",$_["pmsCity"]);
+        $_["error"] = 1;
+    }
+    
+    $searchStrPref = "";
+    foreach($_["pmsPrefs"] as $v){
+        $_["pmsPrefStr"][] = $_["prefectures"][$v];
+        $searchStrPref .= $_["prefectures"][$v]["name"];
+        foreach($_["pmsCities"] as $v2){
+            if(!empty($_["prefCities"][$_["prefectures"][$v]["name"]][$v2])){
+                $_["pmsCityStr"][$_["prefectures"][$v]["name"]][] = $_["prefCities"][$_["prefectures"][$v]["name"]][$v2];
+                $searchStrPref .= $_["prefCities"][$_["prefectures"][$v]["name"]][$v2]["city"];
+                $_["error"] = 0;
+    
+                $titleStrAdd = "";
+            }
+        }
+        if(count($_["pmsCities"]) >1){
+            $_["searchCount"] = 1;
+        }
+    }
+}
+
+if(!empty($_["pmsLine"])){
+    
+    foreach($_["pmsLines"] as $v){
+        if(!empty($_["lines"][$v]["line_name"])){
+            $_["pmsLineStr"][] = $_["lines"][$v]["line_name"];
+            $searchStrPref .= $_["lines"][$v]["line_name"];
+
+            $titleStrAdd = "";
+        }
+    }
+    if(count($_["pmsLines"]) >1){
+        $_["searchCount"] = 1;
+    }
+}
+
+
+if(!empty($_["pmsStas"])){
+
+    foreach($_["lineStas"] as $del){
+        if(($key = array_search($del, $_["pmsStas"])) !== false) {
+            unset($_["pmsStas"][$key]);
+        } 
+    }
+
+    foreach($_["pmsStas"] as $v){
+        if(!empty($_["stations"][$v]["name"])){
+            $_["pmsStaStr"][] = $_["stations"][$v]["name"];
+            $searchStrPref .= $_["stations"][$v]["name"]."駅";
+        }
+        if(!empty($_["lineGpSta"]) and empty($_["lineGpSta"][$v])){
+            $_["searchCount"] = '1';
+        }
+    }
+    if(count($_["pmsStas"]) >1){
+        $_["searchCount"] = 1;
+    }
+    
+}
+
+if(!empty($_["pmsPref"])){
+    foreach($_["pmsPrefs"] as $v){
+        $_["searchStr"]["pref"][] = $searchStrPref;
+    }
+}
+
+if(!empty($_["pmsInd"])){
+    
+    foreach($_["pmsInds"] as $v){
+        if(!empty($_["jobIndustries"][$v])){
+            $_["pmsIndStr"][] = $_["jobIndustries"][$v];
+            $_["searchStr"]["Ind"][] = $_["jobIndustries"][$v]["name"];
+
+            $titleStrAdd = "";
+                
+        }
+    }
+}
+
+if(!empty($_["pmsCate"])){
+    
+    foreach($_["pmsCates"] as $v){
+        if(!empty($_["jobCategories"][$v])){
+            $_["pmsCateStr"][] = $_["jobCategories"][$v];
+            $_["searchStr"]["cate"][] = $_["jobCategories"][$v]["name"];
+        }
+    }
+}
+
+if(!empty($_["pmsType"])){
+    
+    foreach($_["pmsTypes"] as $v){
+        if(!empty($_["jobTypes"][$v])){
+            $_["pmsTypeStr"][] = $_["jobTypes"][$v];
+
+            if($v==6){
+                $_["searchStr"]["type"][] = "雇用形態その他"; 
+            } else {
+                $_["searchStr"]["type"][] = $_["jobTypes"][$v]["name"];
+            } 
+
+            $titleStrAdd = "";
+            
+        }
+    }
+}
+
+if(!empty($_["pmsSalary"])){
+    
+    foreach($_["pmsSalaries"] as $v){
+        if(in_array($v,$_["salaries"])){
+            $_["pmsSalaryStr"][] = "時給".$v."円以上";
+            
+            $_["searchStr"]["salary"][] = "時給".$v."円以上";
+
+            $titleStrAdd = "";
+            
+        }
+    }
+}
+
+if(!empty($_["pmsDay"])){
+    
+    foreach($_["pmsDays"] as $v){
+        if(!empty($_["jobdays"][$v])){
+            $_["pmsDayStr"][] = $_["jobdays"][$v];
+            $_["searchStr"]["day"][] = $_["jobdays"][$v]["name"];
+
+            $titleStrAdd = "";
+        }
+    }
+}
+
+if(!empty($_["pmsFea"])){
+    
+    foreach($_["pmsFeas"] as $v){
+        if(!empty($_["jobFeatures"][$v])){
+            $_["pmsFeaStr"][] = $_["jobFeatures"][$v];
+            $_["searchStr"]["fea"][] = $_["jobFeatures"][$v]["name"];
+
+            $titleStrAdd = "";
+            
+        }
+    }
+}
+
+if(!empty($_["pmsWord"])){
+    $_["pmsWord"] = urldecode($_["pmsWord"]);
+    $_["pmsWord"] = srcMix($_["pmsWord"]);
+    $_["pmsWord"] = implode(" ",$_["pmsWord"]);
+    $_["pmsWordStr"] = $_["pmsWord"];
+    $_["searchStr"]["word"] = $_["pmsWord"];
+}
+
+$nm = 0;
+foreach($_["searchStr"] as $k=>$v){
+    if($k!="pref"){
+        $nm++;
+    }
+    if($nm>1){
+        $_["searchCount"] = 1;
+    } else {
+        if(is_array($v)){
+        foreach($v as $v2){
+            if(!empty($_["searchStrOne"])){
+                $_["searchCount"] = 1;
+            } else {
+                if(count($_["searchStr"]) ==1 or $k!="pref"){
+                    $_["searchStrOne"] = $v2;
+                }
+            }
+        }
+        } else {
+            $_["searchCount"] = 1;
+        }
+    }
+}
+
+
+if(!empty($_["error"])){
+    header("Location: /callcenter/search/");
+    exit;
+}
+
+
+
+//求人件数
+foreach(DataCcRec::recruits(array('s'=> '1','w_status'=> 'OPEN','w_startdate'=> $_["today"])) as $v){
+
+    $_["prefRec"][$v["pref_code"]][] = $v["id"];
+    $_["cityRec"][$v["city_code"]][] = $v["id"];
+    
+    if(!empty($_["pmsPref"]) and $v["pref_code"]!=$_["pmsPref"]){
+        continue;
+    }
+
+    $v["industry_code"] =  explode(",", $v["industry_code"]);
+    $_["indStr"] = array();
+    foreach($v["industry_code"] as $r){
+        $_["indRec"][$r][] = $v["id"];
+        $_["indStr"][] = $_["jobIndustries"][$r][name];
+    }
+    
+    //携帯ショップ
+    if(!empty($v["industry_code"]) and "携帯ショップ"==$_["indStr"][0]){
+        $_["prefIndRec"][$v["pref_code"]][] = $v["id"];
+        $_["cityIndRec"][$v["city_code"]][] = $v["id"];
+    }
+    
+    
+    $v["cate_codes"] =  explode(",", $v["cate_codes"]);
+    foreach($v["cate_codes"] as $r){
+        $_["cateRec"][$r][] = $v["id"];
+    }  
+
+    $v["jobtype_codes"] =  explode(",", $v["jobtype_codes"]);
+    foreach($v["jobtype_codes"] as $r){
+        $_["typeRec"][$r][] = $v["id"];
+    }  
+
+    $_["salaryRec"][$v["salarytime_low"]][] = $v["salarytime_low"];
+
+    $v["feature_codes"] =  explode(",", $v["feature_codes"]);
+    foreach($v["feature_codes"] as $r){
+        $_["feaRec"][$r][] = $v["id"];
+    }
+
+    $v["jobday_codes"] =  explode(",", $v["jobday_codes"]);
+    foreach($v["jobday_codes"] as $r){
+        $_["dayRec"][$r][] = $v["id"];
+    }
+    
+}
+
+if(!empty($_REQUEST["ajax"]) and !empty($_REQUEST["ajax_type"]) and $_REQUEST["ajax_type"]==1){
+    require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/search_city.html';
+    exit;
+}
+
+if(!empty($_REQUEST["ajax"]) and !empty($_REQUEST["ajax_type"]) and $_REQUEST["ajax_type"]==3){
+    require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/search_line.html';
+    exit;
+}
+
+if(!empty($_REQUEST["ajax"]) and !empty($_REQUEST["ajax_type"]) and $_REQUEST["ajax_type"]==2){
+    echo "（".h($_["pgrTotal"])."件）";
+    exit;
+}
+
+//検討中取得
+if(!empty($_COOKIE["favlist"])){
+    $_["favlist"] = explode("|",$_COOKIE["favlist"]);
+    foreach($_["favlist"] as $k=>$v){
+        $favlist = mb_split(",", $v);
+        $_["favlist"][$k] = $favlist[0];
+    }
+}
+
+//オススメ求人
+$_["randdata"] = DataCcRec::recruits(array('w_status'=> 'OPEN','w_startdate'=> $_["today"],'w_prefs'=> $_["pmsPrefs"],'w_city'=> $_["pmsCities"]
+,'o_rand'=>'1','limitStart'=>'0','limitEnd'=>'20',));
+
+//$GLOBALS["PAGEH1"] = "";
+if($_["searchCount"] != 1 and !empty($_["searchStrOne"])){
+
+    $SRC_PAGEH1 = "";
+    if(count($_["searchStr"]) !=1 and !empty($_["pmsPrefStr"])){
+        $SRC_PAGEH1 .= $_["pmsPrefStr"][0]["name"];
+        
+        if(!empty($_["pmsCityStr"])){
+             $SRC_PAGEH1 .= $_["pmsCityStr"][$_["pmsPrefStr"][0]["name"]][0]["city"];
+        }
+        if(!empty($_["pmsLineStr"])){
+             $SRC_PAGEH1 .= $_["pmsLineStr"][0];
+        }
+        if(!empty($_["pmsStaStr"])){
+             $SRC_PAGEH1 .= $_["pmsStaStr"][0];
+        }
+        $SRC_PAGEH1 .=  "の";
+        
+    }
+    
+    if(!empty($_["pmsCateStr"]) || !empty($_["pmsIndStr"])){
+        //$SRC_PAGEH1 .= $_["searchStrOne"]."の";
+        $SRC_PAGEH1 .= $_["searchStrOne"];
+
+        $GLOBALS["PAGEH1"] .= "求人{$titleStrAdd}は【コールセンター求人ナビ】";
+        $GLOBALS["PAGEH1"] = $SRC_PAGEH1."の求人｜".$GLOBALS["PAGEH1"];
+    } else {
+        $GLOBALS["PAGEH1"] = $_["searchStrOne"]."の求人｜".$GLOBALS["PAGEH1"];
+    }
+} else {
+
+}
+
+if(!empty($_["pmsPage"]) and $_["pmsPage"]>1){
+    $GLOBALS["PAGEH1"] .= " (".h($_["pmsPage"])."ページ目)";
+}
+    
+//条件変更遷移フラグ
+unset($_SESSION["kaigoi"]["sp_select"]);
+
+?><!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title><?php
+//$CateIndSTr = "コールセンター";
+if($_["searchCount"] != 1 and !empty($_["searchStrOne"])){
+
+    if(count($_["searchStr"]) !=1 and !empty($_["pmsPrefStr"])){
+    
+        echo h($_["pmsPrefStr"][0]["name"]);
+        
+        if(!empty($_["pmsCityStr"])){
+             echo h($_["pmsCityStr"][$_["pmsPrefStr"][0]["name"]][0]["city"]);
+        }
+        if(!empty($_["pmsLineStr"])){
+             echo h($_["pmsLineStr"][0]);
+        }
+        if(!empty($_["pmsStaStr"])){
+             echo h($_["pmsStaStr"][0])."駅";
+        }
+        echo "の";
+    }
+
+    if(!empty($_["pmsFeaStr"]) || !empty($_["pmsDayStr"]) || !empty($_["pmsSalaryStr"]) || !empty($_["pmsTypeStr"])){
+        // echo "コールセンター";  
+    }
+    if(!empty($_["pmsCateStr"]) || !empty($_["pmsIndStr"])){
+        echo h($_["searchStrOne"]);
+        if(!empty($_["pmsIndStr"])){
+            echo "のコールセンター";  
+        } else {
+            echo "の";  
+        }
+    } else {
+        echo h($_["searchStrOne"])."のコールセンター";
+    }
+} else {
+    echo "コールセンターの";
+}
+?><?php // echo h($titleStrAdd);?>求人｜<?php echo h($GLOBALS["PAGETITLE"]);?><?php
+if(!empty($_["pmsPage"]) and $_["pmsPage"]>1){
+    echo "(".h($_["pmsPage"])."ページ目)";
+}
+?></title>
+<meta name="description" content="<?php
+$CateIndSTr = "コールセンターの";
+if($_["searchCount"] != 1 and !empty($_["searchStrOne"])){
+
+    if(count($_["searchStr"]) !=1 and !empty($_["pmsPrefStr"])){
+
+        echo h($_["pmsPrefStr"][0]["name"]);
+        
+        if(!empty($_["pmsCityStr"])){
+             echo h($_["pmsCityStr"][$_["pmsPrefStr"][0]["name"]][0]["city"]);
+        }
+        if(!empty($_["pmsLineStr"])){
+             echo h($_["pmsLineStr"][0]);
+        }
+        if(!empty($_["pmsStaStr"])){
+             echo h($_["pmsStaStr"][0])."駅";
+        }
+        echo "の";
+    }
+
+    if(!empty($_["pmsFeaStr"]) || !empty($_["pmsDayStr"]) || !empty($_["pmsSalaryStr"]) || !empty($_["pmsTypeStr"])){
+         $CateIndSTr = "コールセンター";  
+    }
+    if(!empty($_["pmsCateStr"]) || !empty($_["pmsIndStr"])){
+        echo h($_["searchStrOne"]);
+        if(!empty($_["pmsIndStr"])){
+            $CateIndSTr = "のコールセンター";  
+        } else {
+            $CateIndSTr = "の";  
+        }
+    } else {
+        echo h($_["searchStrOne"])."の";
+    }
+    
+}
+?><?php echo $CateIndSTr;?>求人はこちら。<?php echo h($GLOBALS["PAGDESCRIPTION"]);?>">
+<meta name="keywords" content="<?php
+if($_["searchCount"] != 1 and !empty($_["searchStrOne"])){
+
+    if(!empty($_["pmsPrefStr"])){
+        echo h($_["pmsPrefStr"][0]["name"]).",";
+    
+        if(!empty($_["pmsCityStr"])){
+             echo h($_["pmsCityStr"][$_["pmsPrefStr"][0]["name"]][0]["city"]).",";
+        }
+        if(!empty($_["pmsLineStr"])){
+             echo h($_["pmsLineStr"][0]).",";
+        }
+        if(!empty($_["pmsStaStr"])){
+             echo h($_["pmsStaStr"][0])."駅".",";
+        }
+        if(!empty($_["pmsIndStr"])){
+             echo h($_["pmsIndStr"][0]["name"]).",";
+        }
+        if(!empty($_["pmsCateStr"])){
+             echo h($_["pmsCateStr"][0]["name"]).",";
+        }
+        if(!empty($_["pmsTypeStr"])){
+             echo h($_["pmsTypeStr"][0]["name"]).",";
+        }
+        if(!empty($_["pmsSalaryStr"])){
+             echo h($_["pmsSalaryStr"][0]).",";
+        }
+        if(!empty($_["pmsDayStr"])){
+             echo h($_["pmsDayStr"][0]).",";
+        }
+        if(!empty($_["pmsFeaStr"])){
+             echo h($_["pmsFeaStr"][0]["name"]).",";
+        }
+     } else {
+        echo h($_["searchStrOne"]).",";
+     }
+}
+?><?php
+if(!empty($_["pmsIndStr"])){
+    echo "コールセンター";
+} else {
+    echo "コールセンター";
+}
+?>,<?php echo h($GLOBALS["PAGEKEYWORDS"]);?>">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+<?php
+if($_["searchCount"] != 1 and !empty($_["searchStrOne"])){
+    if(
+    (!empty($_["pmsPrefStr"]) && !empty($_["pmsIndStr"])) ||
+    (!empty($_["pmsPrefStr"]) && !empty($_["pmsCateStr"])) ||
+    (!empty($_["pmsPrefStr"]) && !empty($_["pmsTypeStr"])) ||
+    (!empty($_["pmsPrefStr"]) && !empty($_["pmsSalaryStr"])) ||
+    (!empty($_["pmsPrefStr"]) && !empty($_["pmsDayStr"])) ||
+    (!empty($_["pmsPrefStr"]) && !empty($_["pmsFeaStr"]))
+    ){
+        echo '<meta name="robots" content="noindex">';
+    } else if(
+    !empty($_["pmsSort"])
+    ) {
+        echo '<link rel="canonical" href="https://'.h($_SERVER["HTTP_HOST"]).h($_["pgrUrlSort"]).'">';
+    }
+   
+} else {
+    echo '<link rel="canonical" href="https://'.h($_SERVER["HTTP_HOST"]).'/callcenter/search/">';
+    
+    if($_SERVER["REQUEST_URI"] != "/callcenter/search/"){
+        echo '<meta name="robots" content="noindex">';
+    }
+}
+?>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<?php
+if($_["pgrNum"]!=$_["pgrPage"]){
+    $nextPage = $_["pgrPage"]+1;
+    echo '<link rel="next" href="https://'.h($_SERVER["HTTP_HOST"]).h($_["pgrUrl"]).'page-'.$nextPage.'/" />';
+}
+if($_["pgrPage"]!=1){
+    $prevPage = $_["pgrPage"]-1;
+    echo '<link rel="prev" href="https://'.h($_SERVER["HTTP_HOST"]).h($_["pgrUrl"]).'page-'.$prevPage.'/" />';
+}
+?>
+<?php
+require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/head.html'; ?>
+<script type="text/javascript" src="/callcenter/common/js/search.js"></script>
+<link rel="stylesheet" type="text/css" href="/callcenter/common/css/jquery.bxslider.css" media="all" />
+<script type="text/javascript" src="/callcenter/common/js/jquery.bxslider.min.js"></script>
+<script type="text/javascript" src="/callcenter/common/js/jquery.flatheights.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function($){
+	var w = $(window).width();
+	var x = 700
+	if (w <= x) {
+  $('#reco_slider, #reco_slider2').bxSlider({
+		controls: true,
+		auto: true,
+		pause: 8000,
+		speed: 1000,
+		pager: false,
+		minSlides: 1,
+		maxSlides: 1,
+		moveSlides: 1
+  });
+	} else {
+  $('#reco_slider, #reco_slider2').bxSlider({
+		controls: true,
+		slideWidth: 240,
+		auto: true,
+		pause: 8000,
+		speed: 1000,
+		pager: true,
+		slideMargin: 60,
+		minSlides: 3,
+		maxSlides: 3,
+		moveSlides: 3
+  });
+    }
+});
+$(function flatHeights(){
+    var sets = [], temp = [];
+    $('#Slidebox .recobox .slidebox ul li .detbox .detin').each(function(i) {
+        temp.push(this);
+    });
+    if (temp.length) sets.push(temp);
+
+    $.each(sets, function() {
+        $(this).flatHeights();
+    });
+});
+</script>
+</head>
+<body>
+<script src="//d.adlpo.com/121/1392/js/smartadlpo.js" type="text/javascript"></script>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/header.html'; ?>
+<article id="Contents">
+	<section class="com_pnkzbox">
+		<ul class="clearfix" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+			<li><a href="<?php echo h($GLOBALS["PNKZURL"]);?>" itemprop="url"><span itemprop="title"><?php echo h($GLOBALS["PNKZTITLE"]);?></span></a></li>
+<?php
+if(!empty($_["pmsPrefStr"]) and count($_["pmsPrefStr"]) == 1){
+           echo '<li itemprop="title"><span class="clr_gr">&gt;</span>&nbsp;&nbsp';
+           if(!empty($_["pmsCityStr"])){
+               echo '<a href="/callcenter/search/pref-'.h($_["pmsPrefs"][0]).'/">';
+           }
+           echo h($_["pmsPrefStr"][0]["name"]).'の求人';
+           if(!empty($_["pmsCityStr"])){
+               echo '</a>';
+           }
+           echo '</li>';
+          
+          if(!empty($_["pmsCityStr"])){
+               echo '<li itemprop="title"><span class="clr_gr">&gt;</span>&nbsp;&nbsp;';
+               foreach($_["pmsPrefStr"] as $k =>$v){
+                   if(!empty($_["pmsCityStr"][$v["name"]])){
+                       foreach($_["pmsCityStr"][$v["name"]] as $k2 =>$v2){
+           		        echo ($k2!=0)?"、":"";
+           		        echo h($v2["city"]);
+                       }
+                   }
+               }
+               echo 'の求人</li>';
+          }
+          
+} else {
+?>
+			<li itemprop="title"><span class="clr_gr">&gt;</span>&nbsp;&nbsp;求人検索</li>
+<?php
+}
+?>
+		</ul>
+	</section>
+	<section id="SRCBX">
+		<section id="Clmbox" class="com_wid agt clearfix">
+			<section id="Mainbox">
+				<div class="searchbox">
+					<div class="srclistbox">
+						<div class="ttl">
+    						<h2><?php
+if($_["searchCount"] != 1 and !empty($_["searchStrOne"])){
+
+    if(count($_["searchStr"]) !=1 and !empty($_["pmsPrefStr"])){
+    
+        echo '<span class="sb">';
+        echo h($_["pmsPrefStr"][0]["name"]);
+        
+        if(!empty($_["pmsCityStr"])){
+             echo h($_["pmsCityStr"][$_["pmsPrefStr"][0]["name"]][0]["city"]);
+        }
+        if(!empty($_["pmsLineStr"])){
+             echo h($_["pmsLineStr"][0]);
+        }
+        if(!empty($_["pmsStaStr"])){
+             echo h($_["pmsStaStr"][0])."駅";
+        }
+        echo '</span>';
+    }
+    
+    if(!empty($_["pmsCateStr"]) || !empty($_["pmsIndStr"])){
+        echo '<span class="sb">';
+        echo h($_["searchStrOne"]);
+        echo '</span>';
+    } else {
+        echo '<span class="sb">';
+        echo h($_["searchStrOne"]);
+        echo '</span>'."のコールセンター";
+    }
+} else {
+    echo '<span class="sb">コールセンター</span>';
+}
+?>求人一覧</h2>
+    						<?php
+    						/*
+    						<p class="nm">【 求人数<span><?php echo h($_["pgrTotal"]);?></span>件 】</p>
+    						*/
+    						?>
+						</div>
+						<div class="src_tpbx">
+							<form method="post" action="/callcenter/search/">
+								<div class="sltbx">
+									<dl class="tp">
+										<?php
+										if(!empty($_["pmsSta"]) or !empty($_["pmsLine"])){
+										    echo '<dt><img src="/callcenter/images/tpsrc_ttl_stn.png" alt="路線・駅"><span class="btn"><a href="#pop_area">エリアから探す</a></span></dt>';
+										} else {
+										    echo '<dt><img src="/callcenter/images/tpsrc_ttl_area.png" alt="エリア"><span class="btn"><a href="#pop_sta">路線･駅から探す</a></span></dt>';
+										}
+										?>
+										<dd>
+											<div class="chibx clearfix">
+												<?php
+												if(!empty($_["pmsSta"]) or !empty($_["pmsLine"])){
+												    echo '<p class="btn"><a href="#pop_sta"><img src="/callcenter/images/btn_add_off.png" alt="追加・変更"></a></p>';
+												} else {
+												    echo '<p class="btn"><a href="#pop_area"><img src="/callcenter/images/btn_add_off.png" alt="追加・変更"></a></p>';
+												}
+												?>
+												<p class="txt" id="pms_pref"><?php
+												if(!empty($_["pmsPrefStr"]) || !empty($_["pmsLineStr"]) || !empty($_["pmsStaStr"])){
+												    
+												    if(!empty($_["pmsPrefStr"]) and count($_["pmsPrefStr"]) == 1){
+    												    foreach($_["pmsPrefStr"] as $k =>$v){
+    												        echo ($k!=0)?"、":"";
+    												        echo h($v["name"]);
+    												        if(!empty($_["pmsCityStr"][$v["name"]])){
+            												    echo "（";
+    												            foreach($_["pmsCityStr"][$v["name"]] as $k2 =>$v2){
+            												        echo ($k2!=0)?"、":"";
+            												        echo h($v2["city"]);
+    												            }
+            												    echo "）";
+    												        }
+    												    }
+												    }
+
+    												if(!empty($_["pmsLineStr"]) || !empty($_["pmsStaStr"])){
+    												    $nm = 0;
+    												    if(!empty($_["pmsPrefStr"]) and count($_["pmsPrefStr"]) == 1){
+    												        echo "（";
+    												    }
+    												    //echo "<br>[路線・駅]&nbsp;&nbsp;";
+    												    if(!empty($_["pmsLineStr"])){
+	    												    foreach($_["pmsLineStr"] as $k =>$v){
+	    												        echo ($nm!=0)?"、":"";
+	    												        echo h($v);
+	    												        $nm++;
+	    												    }
+    												    }
+    												    if(!empty($_["pmsStaStr"])){
+	    												    $v2 = '';
+	    												    foreach($_["pmsStas"] as $k =>$v){
+	    												        if($v2!=$_["stations"][$v]["line_name"]){
+	    												            //echo ($v2!="")?"）":"";
+	    												            echo ($nm!=0)?"、":"";
+	    												            //echo $_["stations"][$v]["line_name"];
+	    												            $nm++;
+	    												        }
+	    												        //echo ($v2!=$_["stations"][$v]["line_name"])?"（":"";
+                                                                if(!empty($_["stations"][$v]["name"])){
+	    												            echo ($v2==$_["stations"][$v]["line_name"])?"、":"";
+                                                                    echo h($_["stations"][$v]["name"])."駅";
+                                                                    $nm++;
+                                                                }
+
+	    												        $v2 = $_["stations"][$v]["line_name"];
+	    												    }
+	    												    //echo "）";
+    												    }
+    												    if(!empty($_["pmsPrefStr"]) and count($_["pmsPrefStr"]) == 1){
+    												        echo "）";
+    												    }
+    												}
+												
+												} else {
+												    echo "未選択";
+
+												}
+
+                								foreach($_["pmsPrefs"] as $v){
+                								    if(!empty($v)){
+                								        echo '<input type="hidden" name="pref[]" value="'.h($v).'" >';
+                								    }
+                								}
+                								foreach($_["pmsCities"] as $v){
+                								    if(!empty($v)){
+                								        echo '<input type="hidden" name="city[]" value="'.h($v).'" >';
+                								    }
+                								}
+
+                								foreach($_["pmsLines"] as $v){
+                								    if(!empty($v)){
+                								        echo '<input type="hidden" name="line[]" value="'.h($v).'" >';
+                								    }
+                								}
+                								?>
+                								<?php
+                								foreach($_["pmsStas"] as $v){
+                								    if(!empty($v)){
+                								        echo '<input type="hidden" name="sta[]" value="'.h($v).'" >';
+                								    }
+                								}
+                								?>
+												</p>
+											</div>
+										</dd>
+									</dl>
+									<dl>
+										<dt><img src="/callcenter/images/tpsrc_ttl_ind.png" alt="業種"></dt>
+										<dd>
+											<div class="chibx clearfix">
+												<p class="btn"><a href="#pop_ind"><img src="/callcenter/images/btn_add_off.png" alt="追加・変更"></a></p>
+												<p class="txt" id="pms_ind"><?php
+												if(!empty($_["pmsIndStr"])){
+												    foreach($_["pmsIndStr"] as $k =>$v){
+												        echo ($k!=0)?"、":"";
+												        echo h($v["name"]);
+												    }
+												} else {
+												    echo "未選択";
+												}
+                								foreach($_["pmsInds"] as $v){
+                								    if(!empty($v)){
+                								        echo '<input type="hidden" name="ind[]" value="'.h($v).'" >';
+                								    }
+                								}
+												?></p>
+											</div>
+										</dd>
+									</dl>
+									<dl>
+										<dt><img src="/callcenter/images/tpsrc_ttl_cate.png" alt="職種"></dt>
+										<dd>
+											<div class="chibx clearfix">
+												<p class="btn"><a href="#pop_cate"><img src="/callcenter/images/btn_add_off.png" alt="追加・変更"></a></p>
+												<p class="txt" id="pms_cate"><?php
+												if(!empty($_["pmsCateStr"])){
+												    foreach($_["pmsCateStr"] as $k =>$v){
+												        echo ($k!=0)?"、":"";
+												        echo h($v["name"]);
+												    }
+												} else {
+												    echo "未選択";
+												}
+                								foreach($_["pmsCates"] as $v){
+                								    if(!empty($v)){
+                								        echo '<input type="hidden" name="cate[]" value="'.h($v).'" >';
+                								    }
+                								}
+												?></p>
+											</div>
+										</dd>
+									</dl>
+									<dl>
+										<dt><img src="/callcenter/images/tpsrc_ttl_salary.png" alt="給与"></dt>
+										<dd>
+     										<select name="salary">
+     										<option value="">給与を選択してください</option>
+     										<?php
+                                             foreach($_["salaries"] as $v){
+                                                 echo '<option ';
+       									        echo (!empty($_["pmsSalary"]) and in_array($v,$_["pmsSalaries"]))?" selected":"";
+                                                 echo ' value="'.h($v).'">時給'.h($v).'円以上</option>';
+                                             }
+                                             ?>
+     										</select>
+										</dd>
+									</dl>
+									<dl class="ajt">
+										<dt><img src="/callcenter/images/tpsrc_ttl_jobcate.png" alt="雇用形態"></dt>
+										<dd>
+											<ul class="ltul clearfix">
+            									<?php
+            									foreach($_["jobTypes"] as $k => $v){
+        									        if($v["name"]=="その他"){
+        									            continue;
+        									        }
+        									        echo '<li><input type="checkbox" id="type_'.h($k).'" name="type[]" value="'.h($k).'"';
+        									        echo (!empty($_["pmsTypes"]) and in_array("$k",$_["pmsTypes"]))?" checked":"";
+        									        echo '><label class="chk" for="type_'.h($k).'"><a href="/callcenter/search';
+        									        echo '/type-'.h($k).'/">'.h($v["name"]).'</a></label></li>';
+            									}
+            									?>
+         									</ul>
+										</dd>
+									</dl>
+									<dl>
+										<dt><img src="/callcenter/images/tpsrc_ttl_dt.png" alt="こだわり条件"></dt>
+										<dd>
+											<div class="chibx clearfix">
+												<p class="btn"><a href="#pop_etc"><img src="/callcenter/images/btn_add_off.png" alt="追加・変更"></a></p>
+												<p class="txt" id="pms_etc"><?php
+												if(
+												!empty($_["pmsDayStr"]) or
+												!empty($_["pmsFeaStr"])
+												){
+												    $nm = 0;
+												    if(!empty($_["pmsDayStr"])){
+    												    foreach($_["pmsDayStr"] as $k =>$v){
+    												        echo ($nm!=0)?"、":"";
+    												        echo h($v["name"]);
+    												        $nm++;
+    												    }
+												    }
+												    if(!empty($_["pmsFeaStr"])){
+    												    foreach($_["pmsFeaStr"] as $k =>$v){
+    												        echo ($nm!=0)?"、":"";
+    												        echo h($v["name"]);
+    												        $nm++;
+    												    }
+												    }
+												} else {
+												    echo "未選択";
+												}
+                								foreach($_["pmsDays"] as $v){
+                								    if(!empty($v)){
+                								        echo '<input type="hidden" name="day[]" value="'.h($v).'" >';
+                								    }
+                								}
+                								foreach($_["pmsFeas"] as $v){
+                								    if(!empty($v)){
+                								        echo '<input type="hidden" name="fea[]" value="'.h($v).'" >';
+                								    }
+                								}
+												?></p>
+											</div>
+										</dd>
+									</dl>
+									<dl>
+										<dt><img src="/callcenter/images/tpsrc_ttl_word.png" alt="フリーワード"></dt>
+										<dd><p class="inp"><input name="word" type="text" value="<?php echo (!empty($_["pmsWordStr"]))?h($_["pmsWordStr"]):'';?>" id="freeword" placeholder=""></p></dd>
+									</dl>
+								</div>
+								<div class="btnbox">
+									<p><a href="#" class="formSubmitBtn"><img src="/callcenter/images/btn_top_serach_l2_off.png" alt="この条件で求人検索する"><span class="hd" id="count">（<?php echo h($_["pgrTotal"]);?>件）</span></a>
+									</p>
+								</div>
+							</form>
+						</div>
+						<div class="list_allbox">
+							<div class="pagerbox clearfix">
+								<?php
+								if(!empty($_["pgrTotal"])){
+								?>
+								<p class="num_txt"><span><?php echo h($_["pgrTotal"]);?></span>件の<?php
+if($_["searchCount"] != 1 and !empty($_["searchStrOne"])){
+    echo h($_["searchStrOne"])."の";
+}
+?>求人があります</p>
+
+
+								<div class="sp_numbx clearfix">
+									<p class="num tp">【求人数<span><?php echo h($_["pgrTotal"]);?></span>件】</p>
+									<p class="lnk"><a href="/callcenter/search/select.html">条件を変更</a></p>
+								</div>
+
+<?php
+if($_["pgrNum"] > 1){
+    echo '<div class="com_pc com_pager clearfix">';
+    
+    echo h(Pager::dataHtml(array(
+    "total"=>$_["pgrTotal"],
+    "limit"=>$_["limitEnd"],
+    "page"=>$_["pgrPage"],
+    "num"=>$_["pgrNum"],
+    "start"=>$_["pgrStart"],
+    "end"=>$_["pgrEnd"],
+    "prev"=>$_["pgrPrev"],
+    "next"=>$_["pgrNext"],
+    "url"=>$_["pgrUrl"]
+    )),0);
+    
+    echo '</div>';
+}
+?>
+
+<?php
+if($_["pgrNum"] > 1){
+    echo '<div class="com_sp com_pager clearfix">';
+    
+    echo h(Pager::dataHtmlSp(array(
+    "total"=>$_["pgrTotal"],
+    "limit"=>$_["limitEnd"],
+    "page"=>$_["pgrPage"],
+    "num"=>$_["pgrNumSp"],
+    "start"=>$_["pgrStartSp"],
+    "end"=>$_["pgrEndSp"],
+    "prev"=>$_["pgrPrev"],
+    "next"=>$_["pgrNext"],
+    "url"=>$_["pgrUrl"]
+    )),0);
+    
+    echo '</div>';
+}
+?>
+
+							</div>
+							<ul class="com_pc sortbx clearfix">
+							    <li class="tp"><?php
+							    if(isset($_["pmsSort"]) and $_["pmsSort"]=="new1"){
+							        echo '<span>新着順</span>';
+							    } else {
+							        echo '<a href="'.h($_["pgrUrlSort"]).'o_new-1/">新着順</a>';
+							    }
+							    ?></li>
+							    <li><?php
+							    if(isset($_["pmsSort"]) and $_["pmsSort"]=="salary1"){
+							        echo '<span>時給順</span>';
+							    } else {
+							        echo '<a href="'.h($_["pgrUrlSort"]).'o_salary-1/">時給順</a>';
+							    }
+							    ?></li>
+							    <li><?php
+							    if(isset($_["pmsSort"]) and $_["pmsSort"]=="way1"){
+							        echo '<span>通勤便利順</span>';
+							    } else {
+							        echo '<a href="'.h($_["pgrUrlSort"]).'o_way-1/">通勤便利順</a>';
+							    }
+							    ?></li>
+							</ul>
+							<dl class="com_sp sortbx clearfix">
+							    <dt>並び順を変更</dt>
+							    <dd><select name="sort">
+							    <option value="<?php echo h($_["pgrUrlSort"]).'o_new-1/'; ?>" <?php echo (isset($_["pmsSort"]) and $_["pmsSort"]=="new1")?" selected":"";?>>新着順</option>
+							    <option value="<?php echo h($_["pgrUrlSort"]).'o_salary-1/';?>" <?php echo (isset($_["pmsSort"]) and $_["pmsSort"]=="salary1")?" selected":"";?>>時給順</option>
+							    <option value="<?php echo h($_["pgrUrlSort"]).'o_way-1/';?>" <?php echo (isset($_["pmsSort"]) and $_["pmsSort"]=="way1")?" selected":"";?>>通勤便利順</option>
+							    </select></dd>
+							</dl>
+
+<?php
+} else {
+?>
+								<p class="num_txt">申し訳ありません。<br>
+現在この条件でご案内できる求人案件がございません。</p>
+<?php
+}
+?>
+
+							<div class="listbox">
+								<?php
+								foreach($_["data"] as $v){
+								
+								
+								    //新着判別
+								    $_["newflg"] = newFlg($v["startdate"]);
+								?><div class="listin">
+									<div class="ttlbx clearfix <?php echo (!empty($_["newflg"]))? 'new':""; ?>">
+										<p class="tl"><a href="/callcenter/details/<?php echo h($v["id"]);?>/"><span class="nm"><?php echo (!empty($v["title"]))? h($v["title"]) :""; ?></span></a>
+										</p>
+										<?php
+										echo (!empty($_["newflg"]))? '<p class="new_icn"><span class="com_pc"><img src="/callcenter/images/icn_src_new.png" alt="NEW"></span><span class="com_sp"><img src="/callcenter/images/icn_src_new_sp.png" alt="NEW"></span></p>':""; ?>
+									</div>
+									<div class="listct">
+										<div class="datebook">
+											<div class="tpbx">
+            									<div class="imgbx">
+            									<?php
+                                                $nm = 0;
+                                                for($i=1;$i<=3;$i++){
+                                                if(!empty($_["pictures"][$v["pic{$i}_code"]]) and !empty($v["pic{$i}_flg"]) && $nm==0){
+                                                    $nm++;
+                                                    $pic = preg_replace("/\.(jpg|jpeg|png)$/ui", "_tr220x165.$1", $_["pictures"][$v["pic{$i}_code"]]);
+                                                    ?><div class="img"><img src="<?php echo h(IMG_PATH);?>/tmp/recruit/img/<?php echo h($pic); ?>" width="220" alt="<?php echo (!empty($v["title"]))? h($v["title"]) :""; ?>"></div>
+                                                <?php
+                                                }
+                                                }
+												?>
+													<div class="com_sp ctbx">
+													    <?php
+													    if(!empty($v["jobtype_codes"])){
+													    ?>
+													    <p class="icn"><?php
+                    								    $jobtypeCodesLi = explode(",", $v["jobtype_codes"]);
+                    								    foreach($jobtypeCodesLi as $k => $t){
+                    								        if(!empty($_["jobTypes"][$t]["name"])){
+                    								            $jobTypesName = $_["jobTypes"][$t]["name"];
+                    								        }
+                    								    }
+                    								    echo h($_["jobTypesS"][$jobTypesName],"0");
+													    ?></p>
+													    <?php
+													    }
+													    ?>
+													    <?php
+													    if(!empty($v["industry_code"])){
+													    ?>
+													    <p class="job"><?php
+                    								    echo h($_["jobIndustries"][$v["industry_code"]]["name"]);
+
+														if(!empty($v["cate_codes"])){
+														    $v["cate_codes"] = explode(",", $v["cate_codes"]);
+														    foreach($v["cate_codes"] as $k => $r){
+														        if(!empty($_["jobCategories"][$r]["name"])){
+														            echo " / ";
+														            echo h($_["jobCategories"][$r]["name"]);
+														        }
+														    }
+														}
+                    								    ?>
+                    								    </p>
+                    								    <?php
+                    								    }
+													    ?>
+													</div>
+												</div>
+												<div class="tpin">
+													<div class="com_pc ltpbx">
+													    <?php
+													    if(!empty($v["jobtype_codes"])){
+													    ?>
+													    <p class="icn"><?php
+                    								    foreach($jobtypeCodesLi as $k => $t){
+                    								        if(!empty($_["jobTypes"][$t]["name"])){
+                    								            $jobTypesName = $_["jobTypes"][$t]["name"];
+                    								        }
+                    								    }
+                    								    echo h($_["jobTypesS"][$jobTypesName],"0");
+													    ?></p>
+													    <?php
+													    }
+													    ?>
+													    <?php
+													    if(!empty($v["industry_code"])){
+													    ?>
+													    <p class="job">
+													    <?php
+                    								    echo h($_["jobIndustries"][$v["industry_code"]]["name"]);
+
+														if(!empty($v["cate_codes"])){
+														    foreach($v["cate_codes"] as $k => $r){
+														        if(!empty($_["jobCategories"][$r]["name"])){
+														            echo " / ";
+														            echo h($_["jobCategories"][$r]["name"]);
+														        }
+														    }
+														}
+                    								    ?></p>
+													    <?php
+													    }
+													    ?>
+													</div>
+													<div class="tbbx">
+													<?php
+													if(
+													!empty($v["salary_flg"]) and
+													(
+													!empty($v["salarytime_low"]) or
+													!empty($v["salary"])
+													)
+													){
+													?>
+													<dl class="dta salary">
+														<dt><span>給与</span></dt>
+														<dd><?php
+														echo (!empty($v["salarytime_low"]) or !empty($v["salarytime_high"]))? '時給':"";
+														echo (!empty($v["salarytime_low"]))? h($v["salarytime_low"])."円":"";
+														echo (!empty($v["salarytime_low"]) or !empty($v["salarytime_high"]))? '～':"";
+														echo (!empty($v["salarytime_high"]))? h($v["salarytime_high"])."円":"";
+														if(!empty($v["salary"])){
+														    echo (!empty($v["salarytime_low"]) or !empty($v["salarytime_high"]))? '<br>':"";
+														    echo nl2br(h($v["salary"]));
+														}
+														?></dd>
+													</dl>
+													<?php
+													}
+													?>
+													<dl class="dta area">
+														<dt><span>勤務地</span></dt>
+														<dd><?php
+														if(!empty($_["prefectures"][$v["pref_code"]]["name"]) && !empty($_["cities"][$v["city_code"]]["city"])){
+														    echo '<a href="/callcenter/search/pref-'.h($v["pref_code"]).'/city-'.h($v["city_code"]).'/">';
+														}
+														echo (!empty($_["prefectures"][$v["pref_code"]]["name"]))? h($_["prefectures"][$v["pref_code"]]["name"]):"";
+														echo (!empty($_["cities"][$v["city_code"]]["city"]))? h($_["cities"][$v["city_code"]]["city"]):"";
+
+														if(!empty($_["prefectures"][$v["pref_code"]]["name"]) && !empty($_["cities"][$v["city_code"]]["city"])){
+														    echo '</a>';
+														}
+														?></dd>
+													</dl>
+													<?php
+													if(
+													!empty($v["st1_code"]) ||
+													!empty($v["st2_code"]) ||
+													!empty($v["st3_code"]) ||
+													!empty($v["st4_code"]) ||
+													!empty($v["st5_code"]) ||
+													!empty($v["busetc"]) ||
+													!empty($v["jobway"])
+													){
+													?>
+													<dl class="dta access">
+														<dt><span>アクセス</span></dt>
+														<dd><?php
+														for($i=1;$i<=5;$i++){
+															if(!empty($v["st{$i}_code"])){
+														        if(!empty($_["stations"][$v["st{$i}_code"]]["name"])){
+														            echo h($_["stations"][$v["st{$i}_code"]]["cmp_name"]).h($_["stations"][$v["st{$i}_code"]]["line_name"]).h($_["stations"][$v["st{$i}_code"]]["name"])."駅";
+														            if(!empty($v["st{$i}out"])){
+														                echo h($v["st{$i}out"]);
+														            }
+														            if(!empty($v["st{$i}way_code"])){
+														                echo h(Data::accesshow($v["st{$i}way_code"]));
+														                if($v["st{$i}way_code"]==1){
+														                    echo h($v["st{$i}walktime"])."分";
+														                } elseif($v["st{$i}way_code"]==2){
+														                    echo h($v["st{$i}bus"]).h($v["st{$i}bustime"])."分";
+														                }
+														            }
+														            echo '<br>';
+														        }
+															}
+														}
+														echo (!empty($v["busetc"]))? nl2br(h($v["busetc"])).'<br>':"";
+														echo (!empty($v["jobway"]))? "[通勤手段]<br>".h($v["jobway"],0):"";
+														?></dd>
+													</dl>
+													<?php
+													}
+													if(
+													!empty($v["jobday_codes"]) or
+													!empty($v["jobday"])
+													){
+													?>
+													<dl class="dta jobday">
+														<dt><span>勤務日</span></dt>
+														<dd><?php
+														    if(!empty($v["jobday_codes"])){
+														    $v["jobday_codes"] = explode(",", $v["jobday_codes"]);
+														    $nm = 1;
+														    foreach($_["jobdays"] as $r){
+														        if(in_array($r["id"],$v["jobday_codes"])){
+															        echo ($nm!=1)?" / ":"";
+														            echo h($r["name"]);
+															        $nm++;
+														        }
+														    }
+													    }
+														if(!empty($v["jobday"])){
+														    echo (!empty($v["jobday_codes"]))? '<br>':"";
+						    								echo nl2br(h($v["jobday"]));
+														}
+														?></dd>
+													</dl>
+													<?php
+													}
+													?>
+													</div>
+												</div>
+											</div>
+			    							<?php
+											if(!empty($v["catchcopy"])){
+											?><p class="ptbx"><?php echo h($v["catchcopy"]);?></p>
+			    							<?php
+			    							}
+			    							?>
+											<div class="btnbox clearfix">
+												<?php
+												if(!empty($_["favlist"]) and in_array($v["id"],$_["favlist"])){
+												    echo '<p class="btn"><img src="/callcenter/images/btn_src_list_add.png" alt="検討中BOXへ追加済み"></p>';
+												} else {
+												    echo '<p class="btn"><a href="/callcenter/scrap/" onclick="scrap('.h($v["id"]).', this); return false;"><img src="/callcenter/images/btn_src_list_add_off.png" alt="検討中BOXへ追加"></a></p>';
+												}
+												?>
+												
+												<p class="btn"><a href="/callcenter/details/<?php echo h($v["id"]);?>/"><img src="/callcenter/images/btn_src_list_det_off.png" alt="求人詳細を見る"></a></p>
+												<p class="btn end"><a href="/callcenter/apply/<?php echo h($v["id"]);?>/index.html"><img src="/callcenter/images/btn_src_list_req_off.png" alt="応募する"></a></p>
+											</div>
+										</div>
+										<div class="sp_btnbox clearfix tp">
+											<?php
+											if(!empty($_["favlist"]) and in_array($v["id"],$_["favlist"])){
+											    echo '<p class="lbt"><span class="no"><span>検討中BOXへ追加済</span></span></p>';
+											} else {
+											    echo '<p class="lbt"><a href="/callcenter/scrap/" onclick="scrapSp('. h($v["id"]).', this); return false;"><span>検討中BOXへ追加</span></a></p>';
+											}
+											?>
+											<p class="rbt"><a href="/callcenter/details/<?php echo h($v["id"]);?>/"><span>詳しく見る</span></a></p>
+										</div>
+										<!--<div class="sp_btnbox clearfix">
+											<p class="ent"><a href="/callcenter/details/<?php echo h($v["id"]);?>/"><span>WEB応募</span></a></p>
+										</div>-->
+									</div>
+								</div>
+								<?php
+								}
+								?>
+							</div>
+
+
+							<div class="pagerbox clearfix">
+								<?php
+								if(!empty($_["pgrTotal"])){
+								?>
+								<p class="num_txt"><span><?php echo h($_["pgrTotal"]);?></span>件の<?php
+if($_["searchCount"] != 1 and !empty($_["searchStrOne"])){
+    echo h($_["searchStrOne"])."の";
+}
+?>求人があります</p>
+                                <?php
+                                }
+                                ?>
+                                
+								<div class="sp_numbx clearfix">
+									<p class="num">【求人数<span><?php echo h($_["pgrTotal"]);?></span><?php
+if($_["searchCount"] != 1 and !empty($_["searchStrOne"])){
+    echo h($_["searchStrOne"])."の";
+}
+?>件】</p>
+									<p class="lnk"><a href="/callcenter/search/select.html">条件を変更</a></p>
+								</div>
+
+<?php
+if($_["pgrNum"] > 1){
+    echo '<div class="com_pc com_pager clearfix">';
+    
+    echo h(Pager::dataHtml(array(
+    "total"=>$_["pgrTotal"],
+    "limit"=>$_["limitEnd"],
+    "page"=>$_["pgrPage"],
+    "num"=>$_["pgrNum"],
+    "start"=>$_["pgrStart"],
+    "end"=>$_["pgrEnd"],
+    "prev"=>$_["pgrPrev"],
+    "next"=>$_["pgrNext"],
+    "url"=>$_["pgrUrl"]
+    )),0);
+    
+    echo '</div>';
+}
+?>
+
+<?php
+if($_["pgrNum"] > 1){
+    echo '<div class="com_sp com_pager clearfix">';
+    
+    echo h(Pager::dataHtmlSp(array(
+    "total"=>$_["pgrTotal"],
+    "limit"=>$_["limitEnd"],
+    "page"=>$_["pgrPage"],
+    "num"=>$_["pgrNumSp"],
+    "start"=>$_["pgrStartSp"],
+    "end"=>$_["pgrEndSp"],
+    "prev"=>$_["pgrPrev"],
+    "next"=>$_["pgrNext"],
+    "url"=>$_["pgrUrl"]
+    )),0);
+    
+    echo '</div>';
+}
+?>
+							</div>
+							
+
+						</div>
+						
+		<?php
+		if(!empty($_["randdata"])){
+		?>
+		<section id="Slidebox2" class="com_wid com_sp">
+			<div class="recobox">
+				<div class="slidebox2 m_b0">
+				<p class="ttl2">おすすめ求人</p>
+				<div class="slidein">
+					<ul id="reco_slider2">
+						<?php       
+					    foreach($_["randdata"] as $v){
+						?>
+						<li>
+							<div class="detbox">
+								<div class="detin">
+								<p class="tl"><span><a href="/callcenter/details/<?php echo h($v["id"]);?>/"><?php echo (!empty($v["title"]))? h($v["title"]) :""; ?></a></span>[<?php
+                    								    $jobtypeCodesLi = explode(",", $v["jobtype_codes"]);
+                    								    foreach($jobtypeCodesLi as $k => $t){
+                    								        if(!empty($_["jobTypes"][$t]["name"])){
+                    								            $jobTypesName = $_["jobTypes"][$t]["name"];
+                    								        }
+                    								    }
+                    								    echo h($_["jobTypesSS"][$jobTypesName],"0");
+													    ?>]<?php
+                    								    echo h($_["jobIndustries"][$v["industry_code"]]["name"]);
+
+														if(!empty($v["cate_codes"])){
+														    $v["cate_codes"] = explode(",", $v["cate_codes"]);
+														    foreach($v["cate_codes"] as $k => $r){
+														        if(!empty($_["jobCategories"][$r]["name"])){
+														            echo " / ";
+														            echo h($_["jobCategories"][$r]["name"]);
+														        }
+														    }
+														}
+                    								    ?></p>
+								<dl class="area">
+									<dt>勤務地</dt>
+									<dd><?php
+									if(!empty($_["prefectures"][$v["pref_code"]]["name"]) && !empty($_["cities"][$v["city_code"]]["city"])){
+									    echo '<a href="/callcenter/search/pref-'.h($v["pref_code"]).'/city-'.h($v["city_code"]).'/">';
+									}
+									echo (!empty($_["prefectures"][$v["pref_code"]]["name"]))? h($_["prefectures"][$v["pref_code"]]["name"]):"";
+									echo (!empty($_["cities"][$v["city_code"]]["city"]))? h($_["cities"][$v["city_code"]]["city"]):"";
+
+									if(!empty($_["prefectures"][$v["pref_code"]]["name"]) && !empty($_["cities"][$v["city_code"]]["city"])){
+									    echo '</a>';
+									}
+									?></dd>
+								</dl>
+								<dl class="yen">
+									<dt>給与</dt>
+									<dd><?php
+									echo (!empty($v["salarytime_low"]) or !empty($v["salarytime_high"]))? '時給':"";
+									echo (!empty($v["salarytime_low"]))? h($v["salarytime_low"])."円":"";
+									echo (!empty($v["salarytime_low"]) or !empty($v["salarytime_high"]))? '～':"";
+									echo (!empty($v["salarytime_high"]))? h($v["salarytime_high"])."円":"";
+									if(!empty($v["salary"])){
+									    echo (!empty($v["salarytime_low"]) or !empty($v["salarytime_high"]))? '<br>':"";
+									    echo nl2br(h($v["salary"]));
+									}
+									?></dd>
+								</dl>
+								<dl class="day">
+									<dt>勤務日</dt>
+									<dd><?php
+									    if(!empty($v["jobday_codes"])){
+									    $v["jobday_codes"] = explode(",", $v["jobday_codes"]);
+									    $nm = 1;
+									    foreach($_["jobdays"] as $r){
+									        if(in_array($r["id"],$v["jobday_codes"])){
+										        echo ($nm!=1)?" / ":"";
+									            echo h($r["name"]);
+										        $nm++;
+									        }
+									    }
+								    }
+									if(!empty($v["jobday"])){
+									    echo (!empty($v["jobday_codes"]))? '<br>':"";
+	    								echo nl2br(h($v["jobday"]));
+									}
+									?></dd>
+								</dl>
+								</div>
+								<p class="com_sp_btn mr0"><a href="/callcenter/details/<?php echo h($v["id"]);?>/"><span>詳しく見る</span></a></p>
+							</div>
+						</li>
+						<?php
+						}
+						/*
+						<li>
+							<div class="detbox">
+								<p class="tl"><span><a href="#">タイトルが入りますタイトルが入りますタイトルが入ります</a></span><br>[派]auショップの受付</p>
+								<dl class="area">
+									<dt>勤務地</dt>
+									<dd>東京都墨田区</dd>
+								</dl>
+								<dl class="yen">
+									<dt>給与</dt>
+									<dd>時給1300円～</dd>
+								</dl>
+								<dl class="day">
+									<dt>勤務日</dt>
+									<dd>土日祝を含む週5日勤務</dd>
+								</dl>
+								<p class="btn"><a href="#">詳しく見る</a></p>
+							</div>
+						</li>
+						*/
+						?>
+					</ul>
+				</div>
+				</div>
+			</div>
+		</section>
+		<?php
+		}
+		?>
+
+		
+		<?php
+		if($_["searchCount"] != 1 and !empty($_["searchStrOne"])){
+		if(!empty($_["pmsCityStr"]) or !empty($_["pmsStaStr"])){
+		?>
+		<div class="txtdetbx ajt">
+		    <p class="tx">
+<?php
+echo h($_["pmsPrefStr"][0]["name"]);
+if(!empty($_["pmsCityStr"])){
+     echo h($_["pmsCityStr"][$_["pmsPrefStr"][0]["name"]][0]["city"]);
+}
+if(!empty($_["pmsStaStr"])){
+     echo h($_["pmsStaStr"][0])."駅";
+}
+?>のコールセンター求人情報を探すならコールセンター求人ナビ！<br>
+大手企業の駅チカ求人や、高時給・未経験OK・経験者歓迎のバイト・派遣・正社員お仕事情報を紹介しています。<br>
+<?php
+echo h($_["pmsPrefStr"][0]["name"]);
+if(!empty($_["pmsCityStr"])){
+     echo h($_["pmsCityStr"][$_["pmsPrefStr"][0]["name"]][0]["city"]);
+}
+if(!empty($_["pmsStaStr"])){
+     echo h($_["pmsStaStr"][0])."駅";
+}
+?>のコールセンターお仕事探しはコールセンター求人ナビにお任せ！</p>
+		</div>
+		<?php
+		}
+		}
+		?>
+		
+		                <section class="com_sp sp_meritbx">
+		                    <h2><span>コールセンター求人ナビの<br>お勧めポイント</span></h2>
+		                    <div class="inner">
+            				    <dl>
+            				        <dt>豊富な求人数</dt>
+            				        <dd>コールセンター求人に特化した専門サイトなので、質の高い求人情報が多数揃っています。</dd>
+            				    </dl>
+            				    <dl>
+            				        <dt>未経験向けの研修</dt>
+            				        <dd>コールセンターでのお仕事経験が無い方でも安心。基本からしっかり教える研修もあるので不安なくスタート。</dd>
+            				    </dl>
+            				    <dl>
+            				        <dt>充実したフォロー体制</dt>
+            				        <dd>お仕事開始後も、担当のコーディネーターがサポートします。<br>お仕事のお悩みはいつでもご相談ください。</dd>
+            				    </dl>
+		                    </div>
+		                </section>
+						
+					</div>
+				</div>
+			</section>
+			<section id="Sidebox">
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/sidebox.html'; ?>
+			</section>
+		</section>
+
+
+		<?php
+		if(!empty($_["randdata"])){
+		?>
+		<section id="Slidebox" class="com_wid com_pc">
+			<div class="recobox">
+				<div class="slidebox">
+				<div class="slidein">
+				<p class="ttl"><img src="/callcenter/images/top_reco_ttl.png" alt="おすすめ求人"></p>
+					<ul id="reco_slider">
+						<?php       
+					    foreach($_["randdata"] as $v){
+						?>
+						<li>
+							<div class="detbox">
+								<div class="detin">
+								<p class="tl"><span><a href="/callcenter/details/<?php echo h($v["id"]);?>/"><?php echo (!empty($v["title"]))? h($v["title"]) :""; ?></a></span>[<?php
+                    								    $jobtypeCodesLi = explode(",", $v["jobtype_codes"]);
+                    								    foreach($jobtypeCodesLi as $k => $t){
+                    								        if(!empty($_["jobTypes"][$t]["name"])){
+                    								            $jobTypesName = $_["jobTypes"][$t]["name"];
+                    								        }
+                    								    }
+                    								    echo h($_["jobTypesSS"][$jobTypesName],"0");
+													    ?>]<?php
+                    								    echo h($_["jobIndustries"][$v["industry_code"]]["name"]);
+
+														if(!empty($v["cate_codes"])){
+														    $v["cate_codes"] = explode(",", $v["cate_codes"]);
+														    foreach($v["cate_codes"] as $k => $r){
+														        if(!empty($_["jobCategories"][$r]["name"])){
+														            echo " / ";
+														            echo h($_["jobCategories"][$r]["name"]);
+														        }
+														    }
+														}
+                    								    ?></p>
+								<dl class="area">
+									<dt>勤務地</dt>
+									<dd><?php
+
+									if(!empty($_["prefectures"][$v["pref_code"]]["name"]) && !empty($_["cities"][$v["city_code"]]["city"])){
+									    echo '<a href="/callcenter/search/pref-'.h($v["pref_code"]).'/city-'.h($v["city_code"]).'/">';
+									}
+									echo (!empty($_["prefectures"][$v["pref_code"]]["name"]))? h($_["prefectures"][$v["pref_code"]]["name"]):"";
+									echo (!empty($_["cities"][$v["city_code"]]["city"]))? h($_["cities"][$v["city_code"]]["city"]):"";
+
+									if(!empty($_["prefectures"][$v["pref_code"]]["name"]) && !empty($_["cities"][$v["city_code"]]["city"])){
+									    echo '</a>';
+									}
+									
+									?></dd>
+								</dl>
+								<dl class="yen">
+									<dt>給与</dt>
+									<dd><?php
+									echo (!empty($v["salarytime_low"]) or !empty($v["salarytime_high"]))? '時給':"";
+									echo (!empty($v["salarytime_low"]))? h($v["salarytime_low"])."円":"";
+									echo (!empty($v["salarytime_low"]) or !empty($v["salarytime_high"]))? '～':"";
+									echo (!empty($v["salarytime_high"]))? h($v["salarytime_high"])."円":"";
+									if(!empty($v["salary"])){
+									    echo (!empty($v["salarytime_low"]) or !empty($v["salarytime_high"]))? '<br>':"";
+									    echo nl2br(h($v["salary"]));
+									}
+									?></dd>
+								</dl>
+								<dl class="day">
+									<dt>勤務日</dt>
+									<dd><?php
+									    if(!empty($v["jobday_codes"])){
+									    $v["jobday_codes"] = explode(",", $v["jobday_codes"]);
+									    $nm = 1;
+									    foreach($_["jobdays"] as $r){
+									        if(in_array($r["id"],$v["jobday_codes"])){
+										        echo ($nm!=1)?" / ":"";
+									            echo h($r["name"]);
+										        $nm++;
+									        }
+									    }
+								    }
+									if(!empty($v["jobday"])){
+									    echo (!empty($v["jobday_codes"]))? '<br>':"";
+	    								echo nl2br(h($v["jobday"]));
+									}
+									?></dd>
+								</dl>
+								</div>
+								<p class="btn"><a href="/callcenter/details/<?php echo h($v["id"]);?>/">詳しく見る</a></p>
+							</div>
+						</li>
+						<?php
+						}
+						/*
+						<li>
+							<div class="detbox">
+								<p class="tl"><span><a href="#">タイトルが入りますタイトルが入りますタイトルが入ります</a></span><br>[派]auショップの受付</p>
+								<dl class="area">
+									<dt>勤務地</dt>
+									<dd>東京都墨田区</dd>
+								</dl>
+								<dl class="yen">
+									<dt>給与</dt>
+									<dd>時給1300円～</dd>
+								</dl>
+								<dl class="day">
+									<dt>勤務日</dt>
+									<dd>土日祝を含む週5日勤務</dd>
+								</dl>
+								<p class="btn"><a href="#">詳しく見る</a></p>
+							</div>
+						</li>
+						*/
+						?>
+					</ul>
+				</div>
+				</div>
+			</div>
+		</section>
+		<?php
+		}
+		?>
+		
+		<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/sp_bottom.html'; ?>
+	</section>
+</article>
+<section id="GlayLayer"></section>
+<section id="OverLayer">
+	<div class="popbox" id="pop_area">
+		<div class="tpbx clearfix">
+			<p class="ttl"><span>【エリア】</span>を変更する</p>
+			<p class="close"><a href="#"><img src="/callcenter/images/btn_close_pop_off.png" alt="閉じる"></a></p>
+		</div>
+		<div class="sltbox">
+			<form method="post" action="">
+				<dl class="pref">
+				<dt>都道府県</dt>
+				<dd><select name="pref[]">
+				<option value="">選択してください</option>
+				<?php
+    			foreach($_["prefectures"] as $v){
+			        if(!empty($_["prefRec"][$v["id"]])){
+			            echo '<option value="'.h($v["id"]).'"';
+			            echo ($_["pmsPref"]==$v["id"])?" selected":"";
+			            echo '>'.h($v["name"]).'</option>';
+			        }
+    			}
+    			?>
+				</select></dd>
+				</dl>
+				<div id="popcity">
+				<?php
+				require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/search_city.html';
+				?>
+				</div>
+				<p class="btn m_t20"><a href="#pms_pref"><img src="/callcenter/images/btn_pop_re_off.png" alt="再設定する"></a></p>
+			</form>
+		</div>
+	</div>
+	<div class="popbox" id="pop_sta">
+		<div class="tpbx clearfix">
+			<p class="ttl"><span>【路線・駅】</span>を変更する</p>
+			<p class="close"><a href="#"><img src="/callcenter/images/btn_close_pop_off.png" alt="閉じる"></a></p>
+		</div>
+		<div class="sltbox">
+			<form method="post" action="">
+				<dl class="pref">
+				<dt>都道府県</dt>
+				<dd><select name="pref_sta[]">
+				<option value="">選択してください</option>
+				<?php
+    			foreach($_["prefectures"] as $v){
+			        if(!empty($_["prefRec"][$v["id"]])){
+			            echo '<option value="'.h($v["id"]).'"';
+			            echo ($_["pmsPref"]==$v["id"])?" selected":"";
+			            echo '>'.h($v["name"]).'</option>';
+			        }
+    			}
+    			?>
+				</select></dd>
+				</dl>
+				<div id="popline">
+				<?php
+				require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/search_line.html';
+				?>
+				</div>
+				<p class="btn m_t20"><a href="#pms_pref" class="station"><img src="/callcenter/images/btn_pop_re_off.png" alt="再設定する"></a></p>
+			</form>
+		</div>
+	</div>
+	<div class="popbox" id="pop_cate">
+		<div class="tpbx clearfix">
+			<p class="ttl"><span>【職種】</span>を変更する</p>
+			<p class="close"><a href="#"><img src="/callcenter/images/btn_close_pop_off.png" alt="閉じる"></a></p>
+		</div>
+		<div class="sltbox">
+			<form method="post" action="">
+				<div class="sltin">
+					<p class="all"><input type="checkbox" name="all" value="" id="pop_cate_all"><label for="pop_cate_all">全てを選択</label></p>
+					<ul class="clearfix">
+						<?php
+						$n=0;
+						foreach($_["jobCategories"] as $k => $v){
+						    if(!empty($_["cateRec"][$k])){
+						        echo ($n!=0 and $n%4==0)?'</ul><ul class="clearfix">':'';
+						        echo '<li><input type="checkbox"  name="cate[]" id="pop_ct'.h($k).'" ';
+						        echo (!empty($_["pmsCates"]) and in_array("$k",$_["pmsCates"]))?" checked":"";
+						        echo ' value="'.h($k).'"><label class="chk" for="pop_ct'.h($k).'"><span>'.h($v["name"]).'</span>';
+						        /*
+						         ('.count($_["cateRec"][$k]).')
+						         */
+						        echo '</label></li>';
+						        $n++;
+						    }
+						}
+						?>
+					</ul>
+				</div>
+				<p class="btn"><a href="#pms_cate"><img src="/callcenter/images/btn_pop_re_off.png" alt="再設定する"></a></p>
+			</form>
+		</div>
+	</div>
+	<div class="popbox" id="pop_ind">
+		<div class="tpbx clearfix">
+			<p class="ttl"><span>【業種】</span>を変更する</p>
+			<p class="close"><a href="#"><img src="/callcenter/images/btn_close_pop_off.png" alt="閉じる"></a></p>
+		</div>
+		<div class="sltbox">
+			<form method="post" action="">
+				<div class="sltin">
+					<p class="all"><input type="checkbox" name="all" value="" id="pop_ind_all"><label for="pop_ind_all">全てを選択</label></p>
+					<ul class="clearfix">
+						<?php
+						$n=0;
+						foreach($_["jobIndustries"] as $k => $v){
+						    if(!empty($_["indRec"][$k])){
+						        echo ($n!=0 and $n%4==0)?'</ul><ul class="clearfix">':'';
+						        echo '<li><input type="checkbox"  name="ind[]" id="pop_ind'.h($k).'" ';
+						        echo (!empty($_["pmsInds"]) and in_array("$k",$_["pmsInds"]))?" checked":"";
+						        echo ' value="'.h($k).'"><label class="chk" for="pop_ind'.h($k).'"><span>'.h($v["name"]).'</span>';
+						        /*
+						         ('.count($_["indRec"][$k]).')
+						         */
+						        echo '</label></li>';
+						        $n++;
+						    }
+						}
+						?>
+					</ul>
+				</div>
+				<p class="btn"><a href="#pms_ind"><img src="/callcenter/images/btn_pop_re_off.png" alt="再設定する"></a></p>
+			</form>
+		</div>
+	</div>
+	<div class="popbox" id="pop_etc">
+		<div class="tpbx clearfix">
+			<p class="ttl"><span>【こだわり条件】</span>を変更する</p>
+			<p class="close"><a href="#"><img src="/callcenter/images/btn_close_pop_off.png" alt="閉じる"></a></p>
+		</div>
+		<div class="sltbox">
+			<form method="post" action="">
+				<div class="sltin">
+					<p class="all"><input type="checkbox" name="all" value="" id="pop_etc_all"><label for="pop_etc_all">全てを選択</label></p>
+					<ul class="clearfix">
+						<?php
+						$n=0;
+						foreach($_["jobdays"] as $k => $v){
+						    if(!empty($_["dayRec"][$k])){
+						        echo ($n!=0 and $n%4==0)?'</ul><ul class="clearfix">':'';
+						        echo '<li><input type="checkbox"  name="day[]" id="pop_day'.h($k).'" ';
+						        echo (!empty($_["pmsDays"]) and in_array("$k",$_["pmsDays"]))?" checked":"";
+						        echo ' value="'.h($k).'"><label class="chk" for="pop_day'.h($k).'"><span>'.h($v["name"]).'</span>';
+						        /*
+						         ('.count($_["dayRec"][$k]).')
+						         */
+						         echo '</label></li>';
+						        $n++;
+						    }
+						}
+						foreach($_["jobFeatures"] as $k => $v){
+						    if(!empty($_["feaRec"][$k])){
+						        echo ($n!=0 and $n%4==0)?'</ul><ul class="clearfix">':'';
+						        echo '<li><input type="checkbox"  name="fea[]" id="pop_fea'.h($k).'" ';
+						        echo (!empty($_["pmsFeas"]) and in_array("$k",$_["pmsFeas"]))?" checked":"";
+						        echo ' value="'.h($k).'"><label class="chk" for="pop_fea'.h($k).'"><span>'.h($v["name"]).'</span>';
+						        /*
+						         ('.count($_["feaRec"][$k]).')
+						         */
+						         echo '</label></li>';
+						        $n++;
+						    }
+						}
+						?>
+					</ul>
+				</div>
+				<p class="btn"><a href="#pms_etc"><img src="/callcenter/images/btn_pop_re_off.png" alt="再設定する"></a></p>
+			</form>
+		</div>
+	</div>
+</section>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/footer.html'; ?>
+</body>
+</html>

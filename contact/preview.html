@@ -1,0 +1,51 @@
+<?php
+require_once dirname($_SERVER['DOCUMENT_ROOT']). '/libs/inc.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/template/contact/preview_sys.html';
+?><!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>入力内容確認｜お問い合わせ｜<?php echo h($GLOBALS["PAGETITLE"]);?></title>
+<meta name="description" content="お問い合わせの入力内容確認のページです。<?php echo h($GLOBALS["PAGDESCRIPTION"]);?>">
+<meta name="keywords" content="<?php echo h($GLOBALS["PAGEKEYWORDS"]);?>">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="robots" content="noindex,follow">
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/head.html'; ?>
+<script type="text/javascript">
+var subbtn=0;
+</script>
+</head>
+<body>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/header.html'; ?>
+<article id="Contents">
+	<section class="com_pnkzbox m_b10">
+		<ul class="clearfix" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+			<li><a href="<?php echo h($GLOBALS["PNKZURL"]);?>" itemprop="url"><span itemprop="title"><?php echo h($GLOBALS["PNKZTITLE"]);?></span></a></li>
+			<li itemprop="title"><span class="clr_gr">&gt;</span>&nbsp;&nbsp;お問い合わせ</li>
+		</ul>
+	</section>
+	<section id="FMBX">
+		<section id="Clmbox" class="com_wid clearfix">
+			<section id="Mainbox">
+				<div class="formbox">
+					<div class="fltbx clearfix">
+						<h2 class="ttl"><img src="/callcenter/images/rec_form_ttl3.png" alt="入力フォーム"></h2>
+						<p class="step com_pc"><img src="/callcenter/images/form_cont_step02.png" alt="基本情報入力"></p>
+						<p class="step com_sp"><img src="/callcenter/images/form_cont_step02_sp.png" alt="基本情報入力"></p>
+					</div>
+<?php
+require_once $_SERVER['DOCUMENT_ROOT'].'/template/contact/preview.html';
+?>
+				</div>
+			</section>
+			<section id="Sidebox">
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/sidebox.html'; ?>
+			</section>
+		</section>
+		<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/sp_bottom.html'; ?>
+	</section>
+</article>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/footer.html'; ?>
+</body>
+</html>

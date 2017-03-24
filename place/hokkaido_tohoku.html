@@ -1,0 +1,98 @@
+<?php
+require_once dirname($_SERVER['DOCUMENT_ROOT']). '/libs/inc.php';
+
+?><!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>登録会場のご案内：北海道・東北一覧｜<?php echo h($GLOBALS["PAGETITLE"]);?></title>
+<meta name="description" content="登録会場のご案内：北海道・東北一覧のページです。<?php echo h($GLOBALS["PAGDESCRIPTION"]);?>">
+<meta name="keywords" content="北海道,東北,<?php echo h($GLOBALS["PAGEKEYWORDS"]);?>">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/head.html'; ?>
+</head>
+<body>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/header.html'; ?>
+<article id="Contents">
+	<section class="com_pnkzbox m_b10">
+		<ul class="clearfix" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+			<li><a href="<?php echo h($GLOBALS["PNKZURL"]);?>" itemprop="url"><span itemprop="title"><?php echo h($GLOBALS["PNKZTITLE"]);?></span></a></li>
+			<li itemprop="title"><span class="clr_gr">&gt;</span>&nbsp;&nbsp;登録会場のご案内：北海道・東北一覧</li>
+		</ul>
+	</section>
+	<section id="LSTBX">
+		<section id="Clmbox" class="com_wid clearfix">
+			<section id="Mainbox">
+				<div class="areabox">
+					<div class="tabbox">
+						<ul class="clearfix">
+							<li><a class="on" href="hokkaido_tohoku.html">北海道・東北</a></li>
+							<li><a href="index.html">関東・甲信越</a></li>
+							<li><a href="hokuriku_tokai.html">北陸・東海</a></li>
+							<li><a href="kansai.html">関西</a></li>
+							<li><a href="chugoku_shikoku.html">中国・四国</a></li>
+							<li><a href="kyushu_okinawa.html">九州・沖縄</a></li>
+						</ul>
+					</div>
+					<h2 class="com_tlx plc"><img src="/callcenter/images/title_place.png" alt="登録会場のご案内" >[北海道・東北]</h2>
+					<h2 class="com_spttl"><img src="/callcenter/images/sp_ttl_place.png" alt="登録会場のご案内" height="26"></h2>
+					<p class="com_stx">日本全国にセントメディアの登録会場がございますので、最寄の登録会場でスタッフ登録を行ってください。</p>
+					<div class="sp_linkbox clearfix">
+						<p class="ttl">北海道・東北</p>
+						<div class="selbx">
+							<form>
+								<select onchange="location.href = this.options[this.selectedIndex].value;">
+									<option seleced value="#"selected>地域を変更する</option>
+									<option value="hokkaido_tohoku.html" >北海道・東北</option>
+									<option value="index.html">関東・甲信越</option>
+									<option value="hokuriku_tokai.html">北陸・東海</option>
+									<option value="kansai.html">関西</option>
+									<option value="chugoku_shikoku.html">中国・四国</option>
+									<option value="kyushu_okinawa.html">九州・沖縄</option>
+								</select>
+							</form>
+						</div>
+					</div>
+					<div class="areain">
+						<div class="areact">
+							<h3 class="ttlbx">札幌登録会場</h3>
+							<div class="area clearfix">
+								<dl>
+									<dt>北海道札幌市中央区北一条西四丁目２番２号<br>
+                                    札幌ノースプラザ４階</dt>
+									<dd>【交通】<br>JR札幌駅 南口 徒歩10分<br>
+									市営地下鉄南北線 さっぽろ駅 9番出口 徒歩3分<br>
+									市営地下鉄南北線、東豊線、東西線 大通り駅 7番出口徒歩1分</dd>
+								</dl>
+								<p class="btn pc"><a href="#pop" onclick="window.open('http://www.saintmedia.co.jp/stmparts/map/sapporo/','pop','width=740,height=770,scrollbars=yes,resizable=yes,location=yes,toolbar=yes,left=0,top=0')" id="bigmap_link"><img src="/callcenter/images/btn_maplk_off.png" alt="地図を見る"></a></p>
+								<p class="btn sp"><a href="http://www.saintmedia.co.jp/stmparts/map/sapporo/" target="_blank">地図を見る</a></p>
+							</div>
+						</div>
+						<div class="areact">
+							<h3 class="ttlbx">仙台登録会場</h3>
+							<div class="area clearfix">
+								<dl>
+									<dt>宮城県仙台市青葉区中央二丁目8番13号<br>
+                                    大和証券仙台ビル6階</dt>
+									<dd>【交通】<br>JR仙台駅 西口 徒歩10分<br>
+									JRあおば通駅 徒歩6分<br>
+									地下鉄広瀬通駅 西2出口 徒歩2分</dd>
+								</dl>
+								<p class="btn pc"><a href="#pop" onclick="window.open('http://www.saintmedia.co.jp/stmparts/map/sendai/','pop','width=740,height=770,scrollbars=yes,resizable=yes,location=yes,toolbar=yes,left=0,top=0')" id="bigmap_link"><img src="/callcenter/images/btn_maplk_off.png" alt="地図を見る"></a></p>
+								<p class="btn sp"><a href="http://www.saintmedia.co.jp/stmparts/map/sendai/" target="_blank">地図を見る</a></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section id="Sidebox">
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/sidebox.html'; ?>
+			</section>
+		</section>
+		<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/sp_bottom.html'; ?>
+	</section>
+</article>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/footer.html'; ?>
+</body>
+</html>

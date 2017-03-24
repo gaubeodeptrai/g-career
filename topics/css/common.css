@@ -1,0 +1,106 @@
+/* CSS Document */
+
+*{
+	padding:0;
+	margin:0;
+}
+a{
+	color:#0099CC;
+	text-decoration:none;
+}
+a:visited{
+	color:#6699cc;
+}
+a:hover{
+	color:#f49c31;
+}
+h1,h2,h3,h4,h5,h6{
+	padding:0;
+	margin:0;
+	font-size:100%
+}
+img{
+	border:none;
+	vertical-align:top;
+}
+ol,ul,li{
+	margin:0px;
+	padding:0px;
+}
+dl,dd,dt{
+	margin:0px;
+	padding:0px;
+	list-style-type:none;
+}
+form{
+	margin:0px;
+	padding:0px;
+}
+.clear{
+	clear:both;
+	margin:0;
+	padding:0;
+}
+/*=== clearfix ===*/
+.clearfix:after{
+  content: ".";
+  display: block;
+  clear: both;
+  height: 0;
+  visibility: hidden;
+}
+.clearfix{ min-height: 1px;}
+* html .clearfix{
+  height: 1px;
+  /*\*//*/
+  height: auto;
+  overflow: hidden;
+  /**/
+}
+
+/*注意書き*/
+.attention{
+	color:#f62721;
+}
+.attention02{
+	color:#f62721;
+	font-size:10px;
+}
+#listNum {
+	padding-top:8px;
+}
+
+/*テキストエリアの幅を指定*/
+textarea {
+	width:400px;
+}
+/*エラーメッセージ*/
+#ErrMsg {
+	width:574px;
+	margin:10px;
+	padding:10px 20px;
+	list-style:none;
+	background-color:#FFF7EE;
+	border:3px solid #FF0000;
+	color:#FF0000;
+}
+
+/* safari2 only \*/
+html:\66irst-child body{
+	letter-spacing:-1px;
+}
+/* end */
+
+/* safari3 only \*/
+body:first-of-type body{
+	letter-spacing:-2px;
+}
+/* end */
+
+/* IE7 only \*/
+*:first-child+html body {
+	letter-spacing:0px;
+}
+/* end */
+
+

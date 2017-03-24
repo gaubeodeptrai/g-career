@@ -1,0 +1,88 @@
+/* CSS Document */
+
+/*--------------------------------------------------------------------
+main
+-----------------------------------------------------------------------*/
+#main h2 {
+	clear:both;
+	font-size:18px;
+	font-weight:bold;
+	color:#000033;
+	padding:11px 0 0 55px;
+	height:29px;
+}
+
+/*セントメディアについて*/
+#aboutH2 {
+	background:url(../images/about_ttl.jpg) 0 0 no-repeat;
+}
+
+/*会社概要*/
+#companyH2 {
+	background:url(../images/company_ttl.jpg) 0 0 no-repeat;
+}
+
+/*法人サービス紹介*/
+#corpServiceH2 {
+	background:url(../images/corpService_ttl.jpg) 0 0 no-repeat;
+}
+
+/*よくあるご質問*/
+#faqH2 {
+	background:url(../images/faq_ttl.jpg) 0 0 no-repeat;
+}
+
+/*トータルH2*/
+#h2H2 {
+	background:url(../images/h2_ttl.jpg) 0 0 no-repeat;
+}
+
+/*ニュース*/
+#newsH2 {
+	background:url(../images/help_ttl.jpg) 0 0 no-repeat;
+}
+
+/*お問い合わせ*/
+#inqH2 {
+	background:url(../images/inq_ttl.jpg) 0 0 no-repeat;
+}
+
+/*ログイン*/
+#loginH2 {
+	background:url(../images/login_ttl.jpg) 0 0 no-repeat;
+}
+
+/*プライバシーポリシー*/
+#policyH2 {
+	background:url(../images/policy_ttl.jpg) 0 0 no-repeat;
+}
+
+/*会員登録*/
+#registerH2 {
+	background:url(../images/register_ttl.jpg) 0 0 no-repeat;
+}
+
+/*【Index】お仕事をお探しの方*/
+#searchH2 {
+	background:url(../images/search_ttl.jpg) 0 0 no-repeat;
+}
+
+/*追加検索をする*/
+#searchAddH2 {
+	background:url(../images/searchAdd_ttl.jpg) 0 0 no-repeat;
+}
+
+/*サイトマップ*/
+#sitemapH2 {
+	background:url(../images/sitemap_ttl.jpg) 0 0 no-repeat;
+}
+
+/*担当者の声*/
+#main #voiceH2 {
+	background:url(../images/voice_ttl.jpg) 0 0 no-repeat;
+	padding:11px 0 0 45px;
+}
+
+
+
+

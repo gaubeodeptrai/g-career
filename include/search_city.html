@@ -1,0 +1,26 @@
+				<?php
+				if(!empty($_["prefCities"][$_["prefectures"][$_["pmsPref"]]["name"]])){
+				?><div class="sltin">
+					<p class="all"><input type="checkbox" name="all" value="" id="pop_city_all"><label for="pop_city_all">全てを選択</label></p>
+					<ul class="clearfix">
+					<?php
+						$n=0;
+						foreach($_["prefCities"][$_["prefectures"][$_["pmsPref"]]["name"]] as $k => $v){
+					        if(!empty($_["cityRec"][$v["id"]])){
+						        echo ($n!=0 and $n%4==0)?'</ul><ul class="clearfix">':'';
+						        echo '<li><input type="checkbox"  name="city[]" id="pop_city'.h($k).'" ';
+						        echo (!empty($_["pmsCities"]) and in_array("$k",$_["pmsCities"]))?" checked":"";
+						        echo ' value="'.h($k).'"><label class="chk" for="pop_city'.h($k).'"><span>'.h($v["city"]).'</span><?php
+						        /*
+						         ('.count($_["cityRec"][$k]).')
+						         */
+						         ?></label></li>';
+						        $n++;
+					        }
+						}
+					?>
+					</ul>
+				</div>
+				<?php
+				}
+				?>

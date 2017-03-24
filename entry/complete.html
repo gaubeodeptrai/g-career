@@ -1,0 +1,169 @@
+<?php
+require_once dirname($_SERVER['DOCUMENT_ROOT']). '/libs/inc.php';
+
+$title = 'スタッフ登録会に応募する';
+if(!empty($_REQUEST["consult"])){
+    $title = 'お仕事に関して相談する';
+}
+
+if(!empty($_SESSION["kaigoi"]["entry"]["data"]["complete"])){
+   $_["data"] = array();
+   $_["data"] = $_SESSION["kaigoi"]["entry"]["data"];
+   unset($_SESSION["kaigoi"]["entry"]["data"]);
+
+   $_["entrydata"] = Data::entryForm(array(
+      'w_status'=>"1",
+      'w_id'=>$_["data"]["form_id"]));
+        
+} else {
+    header("Location: /callcenter/error_access.html");
+    exit;
+}
+
+?><!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>内容送信完了｜<?php echo h($title);?>｜<?php echo h($GLOBALS["PAGETITLE"]);?></title>
+<meta name="description" content="<?php echo h($title);?>の内容送信完了のページです。<?php echo h($GLOBALS["PAGDESCRIPTION"]);?>">
+<meta name="keywords" content="<?php echo h($GLOBALS["PAGEKEYWORDS"]);?>">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="robots" content="noindex,follow">
+<!-- Gyro-n(共通) 20170303 Tag -->
+<script type="text/javascript">
+  var __gyr = {
+    "config": {
+      "clientToken": "RDTV09I35N",
+      "site": "www.saintmedia.co.jp"
+    }
+  };
+  (function() {
+    var ub = document.createElement('script');
+    ub.type = 'text/javascript'; ub.async = true;
+    ub.src = location.protocol + "//cmn.gyro-n.com/js/gyr.min.js";
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(ub, s);
+  })();
+</script>
+<!-- Gyro-n(共通) 20170303 Tag END -->
+<!-- Gyro-n (登録完了) tag-->
+<script type="text/javascript">
+  var __gyrefo_queue = __gyrefo_queue || [];
+      __gyrefo_queue.push(["cnvEFO"]);
+  (function() {
+    var ge = document.createElement('script');
+    ge.type = 'text/javascript'; ge.async = true;
+    ge.charset = "utf-8";
+    ge.src = location.protocol + "//efo.gyro-n.com/js/gyr-efo.min.js";
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(ge, s);
+  })();
+</script>
+<!-- Gyro-n (登録完了) tag END -->
+
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/head.html'; ?>
+</head>
+<body>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/header_short.html'; ?>
+<article id="Contents">
+	<section class="com_pnkzbox m_b10">
+		<ul class="clearfix" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+			<li><a href="<?php echo h($GLOBALS["PNKZURL"]);?>" itemprop="url"><span itemprop="title"><?php echo h($GLOBALS["PNKZTITLE"]);?></span></a></li>
+			<li itemprop="title"><span class="clr_gr">&gt;</span>&nbsp;&nbsp;<?php echo h($title);?></li>
+		</ul>
+	</section>
+	<section id="FMBX">
+		<section id="Clmbox" class="com_wid clearfix">
+			<section id="Mainbox">
+				<div class="formbox">
+					<?php
+					if(!empty($_REQUEST["consult"])){
+					?>
+					<div class="ttlbx m_b0">
+						<h2 class="ttl"><img src="/callcenter/images/rec_form_consult.png" alt="お仕事に関して相談する"></h2>
+						<h2 class="ttl_sp"><img src="/callcenter/images/sp_ttl_consult.png" height="23" alt="お仕事に関して相談する"></h2>
+						<p class="stx">後ほどこちらよりお電話にてご連絡させて頂きます。</p>
+					</div>
+					<?php
+					} else {
+					?>
+					<div class="ttlbx">
+						<h2 class="ttl"><img src="/callcenter/images/rec_form_ttl2.png" alt="スタッフ登録会に応募する"></h2>
+						<h2 class="ttl_sp"><img src="/callcenter/images/sp_ttl_enrty.png" width="290" alt="スタッフ登録会に応募する"></h2>
+						<p class="stx">後ほどこちらよりお電話にてご連絡させて頂きます。</p>
+					</div>
+					<?php
+					}
+					?>
+					<div class="stpbx">
+						<p class="step com_pc"><img src="/callcenter/images/form_step03.png" alt="STEP3 内容送信完了"></p>
+						<p class="step com_sp"><img src="/callcenter/images/form_step03_sp.png" alt="STEP3 内容送信完了"></p>
+					</div>
+					<?php
+					if(!empty($_REQUEST["consult"])){
+					?>
+					<p class="tx">お仕事のご相談が完了いたしました。ありがとうございました。<br>お申し込み内容を、ご登録のメールアドレスへお送りいたしましたのでご確認ください。</p>
+					<?php
+					} else {
+					?>
+					<p class="tx">お仕事のご応募が完了いたしました。ありがとうございました。<br>お申し込み内容を、ご登録のメールアドレスへお送りいたしましたのでご確認ください。</p>
+					<?php
+					}
+					?>
+					    <!--holiday info-->
+					    <!--
+					    <style type="text/css">
+					      .sp_info {
+					        display: none;
+					      }
+
+					      .pc_info p,
+					      .sp_info p{
+					        margin: -20px 0 0px 0;
+					      }
+					      @media screen and (max-width: 600px) {
+					      .sp_info {
+					        display: block;
+					      }
+					      .pc_info {
+					        display: none;
+					      }
+					    }
+					    </style>
+					    <div class="pc_info clearfix" style="width:auto; box-sizing:border-box; padding:1em; text-align:left; line-height:1.8; background:#fff; font-size:12px; width: 980px; margin: 0 auto;">
+					      <span style="font-size: 16px; font-weight: bold;">年末年始のご応募対応についてのお知らせ</span><br>
+					      12/28・12/29・12/30・1/3につきましては、お電話の受付時間を10〜19時に変更させていただきます。<br>
+					      12/31・1/1・1/2につきましては、お電話の受付を休業させていただきます。<br>
+					      休業中に応募フォームよりご応募いただいた場合、1/3以降順次対応させていただきます。<br>
+					      何かとご不便をおかけすることと存じますが、ご理解を賜りますようお願い申し上げます。
+					    </div>
+					    <div class="sp_info clearfix" style="width:auto; box-sizing:border-box; margin:0; padding:1em; text-align:left; border:solid #ccc; border-width:1px 0; line-height:1.8; background:#fff; font-size:12px;">
+					      <span style="font-size: 16px; font-weight: bold;">年末年始のご応募対応についてのお知らせ</span><br>
+					      12/28・12/29・12/30・1/3につきましては、お電話の受付時間を10  〜19時に変更させていただきます。<br>
+					      12/31・1/1・1/2につきましては、お電話の受付を休業させていただきます。<br>
+					      休業中に応募フォームよりご応募いただいた場合、1/3以降順次対応させていただきます。<br>
+					      何かとご不便をおかけすることと存じますが、ご理解を賜りますようお願い申し上げます。
+					    </div>
+						-->
+					    <!--/holiday info-->
+					<p class="lnk"><a href="/callcenter/">コールセンター求人ナビTOPへ戻る</a></p>
+				</div>
+			</section>
+			<section id="Sidebox">
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/sidebox_entry.html'; ?>
+			</section>
+		</section>
+	</section>
+</article>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/footer.html';
+
+if($GLOBALS["DEVICE"]=="sp"){
+    require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/template/tag/sp_entry_complete.html';
+} else {
+    require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/template/tag/entry_complete.html';
+}
+
+?>
+</body>
+</html>

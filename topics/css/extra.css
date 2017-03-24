@@ -1,0 +1,164 @@
+/* =============================================== */
+/* 追加スタイルシート */
+/* =============================================== */
+
+
+
+/* 登録会フォーム用 */
+
+#EnMainBoxArea {
+	margin: auto 0 auto 0;
+	padding: 0;
+	width: 800px;
+}
+
+
+
+
+
+
+/* 応募フォーム規約同意チェックエリア */
+
+.entryCheckbox {
+	font-size: 14px;
+	margin: 8px 0 8px 0;
+}
+.entryCheckboxText {
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+
+/* 応募前画面 */
+
+#oubo-now-ttlImg {
+	width: 238px;
+	height: 20px;
+	margin: 0 auto 15px auto;
+	padding: 30px 0 0 0;
+}
+
+#oubo-dotline {
+	width: 600px;
+	height: 10px;
+	margin: 40px auto 20px auto;
+}
+
+#oubo-member-ttlImg {
+	width: 249px;
+	height: 18px;
+	margin: 0 auto 15px auto;
+}
+
+#oubo-member-loginbtn-area {
+	width: 200px;
+	float: left;
+}
+
+#oubo-member-area {
+	width: 450px;
+	margin: 20px auto 0 auto;
+	padding: 0 0 30px 0;
+}
+
+.oubo-member-loginpanel-left {
+	width: 220px;
+	float: left;
+	margin: 0;
+	padding: 0;
+	font-weight: bold;
+	font-size: 12px;
+}
+
+.oubo-member-loginpanel-right {
+	width: 200px;
+	float: left;
+	margin: 0 0 0 30px;
+	padding: 10px 0 0 0;
+}
+
+.oubo-member-loginpanel-txt {
+	width: 50px;
+	margin: 0;
+	padding: 0;
+	font-weight: bold;
+	font-size: 12px;
+	float: left;
+}
+
+.oubo-member-loginpanel-txtbox {
+	margin: 0 0 20px 0;
+	padding: 0;
+	float: left;
+}
+
+input.userform {
+   height: 1.2em;
+   width: 9em;
+}
+
+.oubo-member-loginpanel-check {
+	margin: 0;
+	padding: 0;
+	float: left;
+}
+
+.oubo-member-logintxt1 {
+	margin: 0 0 0 20px;
+	padding: 3px 0 0 0;
+	float: left;
+	font-weight: normal;
+	font-size: 10px;
+	line-height: 140%;
+}
+
+.oubo-member-logintxt2 {
+	font-weight: normal;
+	font-size: 10px;
+	margin: 10px 0 0 0;
+	padding: 0;
+}
+
+.oubo-btn-area001 {
+	width:640px;
+	border: 1px #CCCCCC solid;
+	padding-bottom: 30px;
+}
+
+.oubo-btn001 {
+	width:238px;
+	height:48px;
+	margin: 0 auto 0 auto;
+	padding: 0 0 10px 0;
+}
+
+.oubo-btn002 {
+	width: 157px;
+	height: 33px;
+	margin: 0 auto 10px auto;
+}
+
+/*今すぐ応募するボタン*/
+.oubo-btn001 #btn_apply101{
+	background:url(../common/images/applyn_btn03.jpg) no-repeat 0 top;
+	width:238px;
+	height:48px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+
+/*ログインしてから応募するボタン*/
+.oubo-btn002 #btn_apply102{
+	background:url(../common/images/applyn_btn04.jpg) no-repeat 0 top;
+	width:157px;
+	height:32px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+

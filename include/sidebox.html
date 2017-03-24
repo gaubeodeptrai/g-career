@@ -1,0 +1,393 @@
+                <div class="bnrbx bookmark">
+                    <p><a href="#" onclick="window.external.AddFavorite('http://g-career.jp','コールセンター求人ナビ');return false;" ><img src="images/side_btn_bookmark_off.png" alt="ブックマークに登録する"></a></p>
+                </div>
+				<?php
+                if($_SERVER["SCRIPT_NAME"] != "details/index.html"
+                ){
+                    if(
+                    $_SERVER["SCRIPT_NAME"] != "flow/index.html" and
+                    preg_match ("/^\/flow\/.+$/u", $_SERVER["SCRIPT_NAME"])
+                    ){
+                    } else {
+                ?>
+				<?php require_once './template/sidebnr/index.html'; ?>
+				<?php
+				    }
+				}
+				?>
+                <div class="bnrbx">
+					<p><a href="scrap/"><img src="images/btn_review_off.png" alt="検討中BOXを見る"></a></p>
+                </div>
+                
+                
+                <?php
+                    if(!preg_match ("/^\/callcenter\/hellowork\/.+$/u", $_SERVER["SCRIPT_NAME"])){
+                	?>
+                    
+                    
+				<div class="merit cntbox">
+				    <h2><img src="images/side_merit_ttl.png" alt="コールセンター求人ナビのお勧めポイント"></h2>
+				    <dl class="tp">
+				        <dt><img src="images/side_merit_ttl1.png" alt="国内最大級の求人数"></dt>
+				        <dd>コールセンター求人に特化した専門サイトなので、質の高い求人情報が多数揃っています。</dd>
+				    </dl>
+				    <dl>
+				        <dt><img src="images/side_merit_ttl2.png" alt="未経験向けの研修充実"></dt>
+				        <dd>コールセンターでのお仕事経験が無い方でも安心。基本からしっかり教える研修もあるので不安なくスタート。</dd>
+				    </dl>
+				    <dl>
+				        <dt><img src="images/side_merit_ttl3.png" alt="安心のフォロー体制"></dt>
+				        <dd>お仕事開始後も、担当のコーディネーターがサポートします。お仕事のお悩みはいつでもご相談ください。
+				        </dd>
+				    </dl>
+				</div>
+
+				<div class="flow cntbox">
+				    <h2><img src="images/side_flow_ttl.png" alt="就業までの流れ"></h2>
+				    <ul>
+				    <li class="tp">
+				        <img src="images/side_flow_ttl1.png" alt="スタッフ登録会の予約をする">
+				        <span><img src="images/side_flow_gra1.jpg" alt="スタッフ登録会の予約をする"></span>
+				    </li>
+				    <li>
+				        <img src="images/side_flow_ttl2.png" alt="スタッフ登録会でお仕事ご紹介">
+				        <span><img src="images/side_flow_gra2.jpg" alt="スタッフ登録会でお仕事ご紹介"></span>
+				    </li>
+				    <li>
+				        <img src="images/side_flow_ttl3.png" alt="お仕事スタート">
+				        <span><img src="images/side_flow_gra3.jpg" alt="お仕事スタート"></span>
+				    </li>
+				    </ul>
+				</div>
+                
+                <?php
+                	}
+                	?>
+                
+                
+                
+                
+                
+                
+				<?php
+                if($_SERVER["SCRIPT_NAME"] == "details/index.html"){
+                ?>
+                <dl class="entrybx">
+                <dt><img src="images/side_entry_gra.png" width="230" alt="ぴったりなお仕事が見つからない場合は"></dt>
+                <dd><a href="entry/?consult=1"><img src="images/side_entry_btn_off.png" width="188" alt="相談する"></a></dd>
+                </dl>
+                <?php
+                }
+                ?>
+                
+                <?php
+                if($_SERVER["SCRIPT_NAME"] == "search/index.html"){
+                ?>
+                
+                
+                
+
+				<?php
+				}
+                if($_SERVER["SCRIPT_NAME"] == "search/index.html" || $_SERVER["SCRIPT_NAME"] == "details/index.html"){
+                ?>
+
+                
+                
+                
+				<?php
+				}
+				?>
+              <?php
+              if($_SERVER["SCRIPT_NAME"] == "search/index.html" && !empty($_["pmsPrefStr"][0]["name"]) && count($_["pmsPrefStr"])==1){
+              ?>
+				<div class="srcbx">
+					<h3><span><?php echo h($_["pmsPrefStr"][0]["name"]);?></span>の求人を探す</h3>
+					<div class="srcin">
+			         <h4><?php echo h($_["pmsPrefStr"][0]["name"]);?>の<br><span>市区町村</span>から絞り込む</h4>
+			         <ul>
+    					<?php
+    						foreach($_["prefCities"][$_["prefectures"][$_["pmsPref"]]["name"]] as $k => $v){
+    					        if(!empty($_["cityRec"][$v["id"]])){
+    						        echo '<li><a href="search/pref-'.h($_["pmsPrefs"][0]).'/city-'.h($k).'/">';
+    						        echo h($v["city"]);
+    						        echo '</a></li>';
+    					        }
+    						}
+    					?>
+			         </ul>
+			         <h4><?php echo h($_["pmsPrefStr"][0]["name"]);?>の<br><span>業種</span>から絞り込む</h4>
+			         <ul>
+						<?php
+						foreach($_["jobIndustries"] as $k => $v){
+						    if(!empty($_["indRec"][$k])){
+    						    echo '<li><a href="search/pref-'.h($_["pmsPrefs"][0]).'/ind-'.h($k).'/">';
+						        echo h($v["name"]);
+						        echo '</a></li>';
+						    }
+						}
+						?>
+			         </ul>
+			         <h4><?php echo h($_["pmsPrefStr"][0]["name"]);?>の<br><span>職種</span>から絞り込む</h4>
+			         <ul>
+						<?php
+						foreach($_["jobCategories"] as $k => $v){
+						    if(!empty($_["cateRec"][$k])){
+    						    echo '<li><a href="search/pref-'.h($_["pmsPrefs"][0]).'/cate-'.h($k).'/">';
+						        echo h($v["name"]);
+						        echo '</a></li>';
+						    }
+						}
+						?>
+			         </ul>
+			         <h4><?php echo h($_["pmsPrefStr"][0]["name"]);?>の<br><span>給与</span>から絞り込む</h4>
+			         <ul>
+						<?php
+						foreach($_["salaries"] as $v){
+						    if(!empty($_["salaryRec"][$v])){
+    						    echo '<li><a href="search/pref-'.h($_["pmsPrefs"][0]).'/salary-'.h($v).'/">';
+						        echo h($v)."円以上";
+						        echo '</a></li>';
+						    }
+						}
+						?>
+			         </ul>
+			         <h4><?php echo h($_["pmsPrefStr"][0]["name"]);?>の<br><span>雇用形態</span>から絞り込む</h4>
+			         <ul>
+						<?php
+						foreach($_["jobTypes"] as $k => $v){
+						    if(!empty($_["typeRec"][$k])){
+    						    echo '<li><a href="search/pref-'.h($_["pmsPrefs"][0]).'/type-'.h($k).'/">';
+						        echo h($v["name"]);
+						        echo '</a></li>';
+						    }
+						}
+						?>
+			         </ul>
+			         <h4><?php echo h($_["pmsPrefStr"][0]["name"]);?>の<br><span>こだわり条件</span>から絞り込む</h4>
+			         <ul>
+						<?php
+						foreach($_["jobdays"] as $k => $v){
+						    if(!empty($_["dayRec"][$k])){
+    						    echo '<li><a href="search/pref-'.h($_["pmsPrefs"][0]).'/day-'.h($k).'/">';
+						        echo h($v["name"]);
+						        echo '</a></li>';
+						    }
+						}
+						foreach($_["jobFeatures"] as $k => $v){
+						    if(!empty($_["feaRec"][$k])){
+    						    echo '<li><a href="search/pref-'.h($_["pmsPrefs"][0]).'/fea-'.h($k).'/">';
+						        echo h($v["name"]);
+						        echo '</a></li>';
+						    }
+						}
+						?>
+			         </ul>
+				</div>
+				</div>
+				<?php
+				} else if($_SERVER["SCRIPT_NAME"] == "hellowork/search/index.html" && !empty($_["prefectures"][$_["pmsPref"]]["name"])){
+				?>
+				<div class="srcbx">
+					<h3 class="ajt"><span class="st">ハローワクーク以外の</span><br><span><?php echo h($_["prefectures"][$_["pmsPref"]]["name"]); ?></span>の求人を探す</h3>
+					<div class="srcin">
+			         <h4><?php echo h($_["prefectures"][$_["pmsPref"]]["name"]);?>の<br><span>市区町村</span>から絞り込む</h4>
+			         <ul>
+    					<?php
+    						foreach($_["prefCities"][$_["prefectures"][$_["pmsPref"]]["name"]] as $k => $v){
+    					        if(!empty($_["cityRecCallcenter"][$v["id"]])){
+    						        echo '<li><a href="search/pref-'.h($_["pmsPref"]).'/city-'.h($k).'/">';
+    						        echo h($v["city"]);
+    						        echo '</a></li>';
+    					        }
+    						}
+    					?>
+			         </ul>
+				</div>
+				</div>
+				<?php
+				} else if($_SERVER["SCRIPT_NAME"] == "hellowork/details/index.html" && !empty($_["prefectures"][$_["data"]["hw_pref_code"]]["name"])){
+				?>
+				<div class="srcbx">
+					<h3><span><?php echo h($_["prefectures"][$_["data"]["hw_pref_code"]]["name"]); ?></span>の求人を探す</h3>
+					<div class="srcin">
+			         <h4><?php echo h($_["prefectures"][$_["data"]["hw_pref_code"]]["name"]);?>の<br><span>市区町村</span>から絞り込む</h4>
+			         <ul>
+    					<?php
+    						foreach($_["prefCities"][$_["prefectures"][$_["data"]["hw_pref_code"]]["name"]] as $k => $v){
+    					        if(!empty($_["cityRecCallcenter"][$v["id"]])){
+    						        echo '<li><a href="search/pref-'.h($_["data"]["hw_pref_code"]).'/city-'.h($k).'/">';
+    						        echo h($v["city"]);
+    						        echo '</a></li>';
+    					        }
+    						}
+    					?>
+			         </ul>
+				</div>
+				</div>
+				<?php
+				}
+				?>
+				<?php
+                if($_SERVER["SCRIPT_NAME"] == "details/index.html"){
+                ?>
+                <div class="rankbx">
+                    <?php
+                    if(!empty($_["prefectures"][$_["data"]["pref_code"]]["name"])){
+						if(!empty($_["recruitsAreaLi"])){
+                            echo '<h3><span>'.h($_["prefectures"][$_["data"]["pref_code"]]["name"]).'</span>の新着求人</h3>';
+                        } else if(!empty($_["recruitsAccessAllLi"])) {
+                            echo '<h3><span>全ての求人</span>で見られている求人</h3>';
+                        }  else {
+                            echo '<h3><span>'.h($_["prefectures"][$_["data"]["pref_code"]]["name"]).'</span>で見られている求人</h3>';
+                        }
+                    }
+                    ?>
+                    <div class="rankin">
+                        <ul>
+						<?php
+						if(!empty($_["recruitsAreaLi"])){
+						    $_["recruitsAccessLi"] = $_["recruitsAreaLi"];
+						}
+						if(!empty($_["recruitsAccessAllLi"])){
+						    $_["recruitsAccessLi"] = $_["recruitsAccessAllLi"];
+						}
+					    foreach($_["recruitsAccessLi"] as $v){
+						?>
+                            <li>[<?php
+						    $jobtypeCodesLi = explode(",", $v["jobtype_codes"]);
+						    foreach($jobtypeCodesLi as $k => $t){
+						        if(!empty($_["jobTypes"][$t]["name"])){
+						            $jobTypesName = $_["jobTypes"][$t]["name"];
+						        }
+						    }
+						    echo h($_["jobTypesSS"][$jobTypesName],"0");
+						    ?>]<?php
+						    echo h($_["jobIndustries"][$v["industry_code"]]["name"]);
+
+							if(!empty($v["cate_codes"])){
+							    $v["cate_codes"] = explode(",", $v["cate_codes"]);
+							    foreach($v["cate_codes"] as $k => $r){
+							        if(!empty($_["jobCategories"][$r]["name"])){
+							            echo " / ";
+							            echo h($_["jobCategories"][$r]["name"]);
+							        }
+							    }
+							}
+						    ?><span><a href="details/<?php echo h($v["id"]);?>/"><?php echo (!empty($v["title"]))? h($v["title"]) :""; ?></a></span>
+						    
+								<dl class="area">
+									<dt>勤務地</dt>
+									<dd><?php
+									echo (!empty($_["cities"][$v["city_code"]]["city"]))? h($_["cities"][$v["city_code"]]["city"]):"";
+									?></dd>
+								</dl>
+								<?php
+								if(!empty($v["salary_flg"])){
+								?>
+								<dl class="yen">
+									<dt>給与</dt>
+									<dd><?php
+									echo (!empty($v["salarytime_low"]) or !empty($v["salarytime_high"]))? '時給':"";
+									echo (!empty($v["salarytime_low"]))? h($v["salarytime_low"])."円":"";
+									echo (!empty($v["salarytime_low"]) or !empty($v["salarytime_high"]))? '～':"";
+									echo (!empty($v["salarytime_high"]))? h($v["salarytime_high"])."円":"";
+									if(!empty($v["salary"])){
+									    echo (!empty($v["salarytime_low"]) or !empty($v["salarytime_high"]))? '<br>':"";
+									    echo nl2br(h($v["salary"]));
+									}
+									?></dd>
+								</dl>
+								<?php
+								}
+								?>
+								<dl class="day">
+									<dt>勤務日</dt>
+									<dd><?php
+									    if(!empty($v["jobday_codes"])){
+									    $v["jobday_codes"] = explode(",", $v["jobday_codes"]);
+									    $nm = 1;
+									    foreach($_["jobdays"] as $r){
+									        if(in_array($r["id"],$v["jobday_codes"])){
+										        echo ($nm!=1)?" / ":"";
+									            echo h($r["name"]);
+										        $nm++;
+									        }
+									    }
+								    }
+									if(!empty($v["jobday"])){
+									    echo (!empty($v["jobday_codes"]))? '<br>':"";
+	    								echo nl2br(h($v["jobday"]));
+									}
+									?></dd>
+								</dl>
+						    </li>
+						 <?php
+						 }
+						 ?>
+                        </ul>
+                    </div>
+                </div>
+                <?php
+                }
+                ?>
+				<?php
+                if($_SERVER["SCRIPT_NAME"] == "details/index.html" && !empty($_["prefectures"][$_["data"]["pref_code"]]["name"])){
+                ?>
+				<div class="srcbx">
+					<h3><span>近隣</span>の求人を探す</h3>
+				<div class="srcin">
+			        <h4><?php echo h($_["prefectures"][$_["data"]["pref_code"]]["name"]);?>の<br><span>市区町村</span>から絞り込む</h4>
+			        <ul>
+    					<?php
+						if(!empty($_["cityData"])){
+    						$nm = 1;
+							foreach($_["cityData"] as $v){
+						        if(!empty($_["cityRec"][$v["id"]]) and $nm<=30){
+							        echo '<li><a href="search/pref-'.h($_["data"]["pref_code"]).'/city-'.h($v["id"]).'/">';
+							        echo h($v["city"]);
+							        echo '</a></li>';
+						            $nm++;
+						        }
+							}
+							if($nm == 31){
+							    echo '<li class="more"><a href="area/'.h($_["data"]["pref_code"]).'/">もっと見る</a></li>';
+							}
+						}
+    					?>
+			        </ul>
+			        <h4><?php echo h($_["prefectures"][$_["data"]["pref_code"]]["name"]);?>の<br><span>駅</span>から絞り込む</h4>
+			        <ul>
+    					<?php
+						if(!empty($_["stationData"])){
+    						$nm = 1;
+							foreach($_["stationData"] as $k3 => $v3){
+							    if(!empty($_["stationRec"][$k3]) and $nm<=30){
+
+    						        echo '<li><a href="search/pref-'.h($_["data"]["pref_code"]).'/sta-'.h($k3).'/">';
+    						        echo h($v3);
+    						        echo '</a></li>';
+							        $nm++;
+							    }
+							}
+							if($nm == 31){
+							    echo '<li class="more"><a href="line/'.h($_["data"]["pref_code"]).'/">もっと見る</a></li>';
+							}
+						}
+    					?>
+			        </ul>
+				</div>
+				</div>
+				<?php
+				}
+				?>
+
+                <div class="bnrbx">
+                    <?php
+                    if(!preg_match ("/^\/callcenter\/hellowork\/.+$/u", $_SERVER["SCRIPT_NAME"])){
+                	?><p><a href="hellowork/"><img src="images/side_bnr_hellowork_off.png" alt="ハローワークの求人を探す"></a></p>
+                	<?php
+                	}
+                	?>
+                </div>
+

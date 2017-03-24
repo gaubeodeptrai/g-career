@@ -1,0 +1,1142 @@
+/* ボタンと各フォームまわりの定義
+last update: 2016/01/13 */
+
+
+/*ヘッダ・グローバルナビ*/
+/*May-2015 renewal*/
+div#gnaviWrap{width:880px;}
+ul#globalNavi{
+/*20160112*/
+	width:550px;
+	list-style-type:none;
+	height:55px;
+	float:left;
+	letter-spacing:-.4em;
+	background:url(../images/gnav_menu_bg.png) 0 0 repeat-x;
+}
+ul#globalNavi li{
+/*20151224*/
+	display:block;
+	float:left;
+	margin:0 0 0 0;
+	padding:0;
+	text-indent:-9999px;
+	overflow:hidden;
+	letter-spacing:normal;
+}
+ul#globalNavi li a{
+	text-decoration:none;
+	display:block;
+}
+ul#globalNavi li#stock{ margin-right:0 !important;}
+
+ul#globalNavi li#search a{
+	width:114px; height:55px;
+	background:url(../images/gnav_work.png) 0 0 no-repeat;}
+ul#globalNavi li#search a:hover{background:url(../images/gnav_work.png) 0 -55px no-repeat;}
+#header_wrap_01 #Gnavi_01{background:url(../images/gnav_work.png) 0 -55px no-repeat !important;}
+
+ul#globalNavi li#kaijyou a{
+	width:116px; height:55px;
+	background:url(../images/gnav_place.png) 0 0 no-repeat;}
+ul#globalNavi li#kaijyou a:hover{background:url(../images/gnav_place.png) 0 -55px no-repeat;}
+#header_wrap_05 #Gnavi_05{background:url(../images/gnav_place.png) 0 -55px no-repeat !important;}
+
+ul#globalNavi li#guide a{
+	width:153px; height:55px;
+	background:url(../images/gnav_guide.png) 0 0 no-repeat;}
+ul#globalNavi li#guide a:hover{background:url(../images/gnav_guide.png) 0 -55px no-repeat;}
+#header_wrap_02 #Gnavi_02{background:url(../images/gnav_guide.png) 0 -55px no-repeat !important;}
+
+ul#globalNavi li#ccplus a{
+	width:124px; height:55px;
+	background:url(../images/gnav_ccplus.png) 0 0 no-repeat;}
+ul#globalNavi li#ccplus a:hover{background:url(../images/gnav_ccplus.png) 0 -55px no-repeat;}
+#header_wrap_07 #Gnavi_07{background:url(../images/gnav_ccplus.png) 0 -55px no-repeat !important;}
+
+ul#globalNavi li#stock a{
+	width:135px; height:55px;
+	background:url(../images/gnav_study.png) 0 0 no-repeat;}
+ul#globalNavi li#stock a:hover{background:url(../images/gnav_study.png) 0 -55px no-repeat;}
+#header_wrap_06 #Gnavi_06{background:url(../images/gnav_study.png) 0 -55px no-repeat !important;}
+
+
+
+/*ヘッダ・エントリー*/
+ul#globalEntry{
+/*20160112*/
+	width:310px;
+	list-style-type:none;
+	height:53px;
+	float:right;
+	letter-spacing:-.4em;
+	}
+ul#globalEntry li{
+/*20160112*/
+	display:block;
+	margin:0 0 0 0;
+	padding:0 0 0 0;
+	float:left;
+	text-indent:-9999px;
+	overflow:hidden;
+	letter-spacing:normal;
+}
+/*20160112*/
+ul#globalEntry li a.header-staff-entry{
+	display:block;
+	text-decoration:none;
+	width:211px;
+	height:53px;
+	background:url(../images/header_entry_btn.jpg) 0 0 no-repeat;
+}
+/*20160113*/
+ul#globalEntry li a.header-bookmark{
+	display:block;
+	text-decoration:none;
+	width:89px;
+	height:53px;
+	margin-left:10px;
+	background:url(../images/bookmark.jpg) 0 -3px no-repeat;
+}
+ul#globalEntry li a:hover{
+	opacity:0.75;
+}
+
+
+
+/*ログインボタン*/
+#loginArea #l_btn input#btn_login01{
+	background:url(../common/images/login_btn01.jpg) no-repeat 0 top;
+	width:105px;
+	height:25px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+	clear:both;
+	padding:5px;
+}
+
+/*マイページへボタン（右エリア内）*/
+#btn_my01{
+	background:url(../common/images/my_btn.jpg) no-repeat 0 0;
+	width:165px;
+	height:25px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+	clear:both;
+}
+#btn_my01 a{
+	text-decoration:none;
+	display:block;
+	width:165px;
+	height:25px;
+	left:0px;
+	background:url(../common/images/my_btn.jpg) no-repeat 0 0;
+}
+#btn_my01 a:hover{
+	left:0px;
+	background:url(../common/images/my_btn.jpg) no-repeat 0 -25px;
+}
+
+/*ログアウトボタン*/
+#btn_out01{
+	background:url(../common/images/logout_btn01.jpg) no-repeat 0 0;
+	width:105px;
+	height:25px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+	clear:both;
+	margin-top:6px;
+}
+#btn_out01 a{
+	text-decoration:none;
+	display:block;
+	width:105px;
+	height:25px;
+	left:0px;
+	background:url(../common/images/logout_btn01.jpg) no-repeat 0 0;
+}
+#btn_out01 a:hover{
+	left:0px;
+	background:url(../common/images/logout_btn01.jpg) no-repeat 0 -25px;
+}
+
+
+/*-----------------------------------------------------------------------
+index
+-------------------------------------------------------------------------*/
+/*検索するボタン*/
+form input#btn_submit{
+	background:url(../common/images/search_btn01.jpg) no-repeat left top;
+	width:105px;
+	height:25px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+
+/*May-2015 renewal*/
+form input#btn_submit_header{
+	background: url(../images/header_search_btn.jpg) no-repeat left top;
+	width:89px;
+	height:25px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+	outline:none;
+}
+form input#btn_submit_header:hover{
+	opacity:0.75;
+}
+/* Operaのみ適用/
+*+html:first-child body form input.search_btn01 {
+	padding-left: 300px;
+}
+
+/*-----------------------------------------------------------------------
+list,detail,reg_index
+-------------------------------------------------------------------------*/
+/*指定するボタン*/
+form input#btn_jobset{
+	background:url(../common/images/jobset.jpg) no-repeat 0 0;
+	width:68px;
+	height:18px;
+	margin-top:2px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+	clear:both;
+}
+
+.btn_jobset{
+	background:url(../common/images/jobset.jpg) no-repeat 0 0;
+	width:68px;
+	height:18px;
+	margin:2px 0 0 5px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+.btn_jobset a{
+	text-decoration:none;
+	display:block;
+	width:68px;
+	height:18px;
+	left:0px;
+	background:url(../common/images/jobset.jpg) no-repeat 0 0;
+}
+.btn_jobset a:hover{
+	left:0px;
+	background:url(../common/images/jobset.jpg) no-repeat 0 -18px;
+}
+
+/*再設定する*/
+.btn_reset{
+	background:url(../common/images/reset_btn.jpg) no-repeat 0 0;
+	width:118px;
+	height:38px;
+	margin:10px auto;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+.btn_reset a{
+	text-decoration:none;
+	display:block;
+	width:118px;
+	height:38px;
+	left:0px;
+	background:url(../common/images/reset_btn.jpg) no-repeat 0 0;
+}
+.btn_reset a:hover{
+	left:0px;
+	background:url(../common/images/reset_btn.jpg) no-repeat 0 -38px;
+}
+
+
+/*追加検索ボタン*/
+div#btn_searchAdd input{
+	background:url(../common/images/search_btn02.jpg) no-repeat 0 top;
+	width:118px;
+	height:38px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+	clear:both;
+}
+
+
+/*検索結果に反映するボタン*/
+div#list_btn_searchAdd input{
+	background:url(../images/common/list_btn_searchAdd.png) no-repeat 0 top;
+	width:222px;
+	height:30px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+	clear:both;
+}
+
+
+/*詳細を見るボタン*/
+#list_data #list_btnArea input#btn_detail{
+	float:left;
+	background:url(../images/detail_btn01.png) no-repeat 0 top;
+	width:200px;
+	height:53px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+
+/*応募する01ボタン(list)*/
+#list_data #list_btnArea input#btn_apply{
+	float:left;
+	background:url(../images/apply_btn01.png) no-repeat 0 top;
+	width:200px;
+	height:53px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+
+/*応募する02ボタン(detail)*/
+#detail_btnArea input#btn_apply{
+	background:url(../images/apply_btn02.png) no-repeat 0 top;
+	width:210px;
+	height:135px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+	margin-bottom:5px;
+	margin-top:20px;
+}
+
+/*ストックボタン(list)*/
+#list_data #list_btnArea input#btn_stock{
+	float:left;
+	background:url(../images/stock_btn.png) no-repeat 0 top;
+	width:200px;
+	height:53px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+
+/*ストックボタン(detail)*/
+#detail_btnArea input#btn_stock{
+	float:left;
+	background:url(../images/stock_btn02.png) no-repeat 0 top;
+	width:210px;
+	height:39px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+	margin-bottom:5px;
+}
+
+
+/*修正するボタン*/
+#btn_back{
+	background:url(../images/common/back_btn.jpg) no-repeat 0 top;
+	width:200px;
+	height:50px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+/*戻るボタン*/
+#btn_back02{
+	background:url(../common/images/back_btn02.jpg) no-repeat 0 top;
+	width:144px;
+	height:48px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+
+	overflow:hidden;
+}
+
+/*応募する02ボタン*/
+#btn_apply02{
+	background:url(../images/common/apply_btn02.jpg) no-repeat 0 top;
+	width:200px;
+	height:50px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+
+/*ログインしてから応募するボタン*/
+#form_tbl01 #btn_apply03{
+	background:url(../common/images/apply_btn03.jpg) no-repeat 0 top;
+	width:235px;
+	height:48px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+
+/*今すぐ応募するボタン*/
+#form_tbl01 #btn_apply04{
+	background:url(../common/images/apply_btn04.jpg) no-repeat 0 top;
+	width:235px;
+	height:48px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+
+/*新規会員登録後応募するボタン*/
+#form_tbl01 #btn_apply05{
+	background:url(../common/images/apply_btn05.jpg) no-repeat 0 0;
+	width:235px;
+	height:48px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+
+/*変更するボタン*/
+#btn_change{
+	background:url(../common/images/change_btn.jpg) no-repeat 0 top;
+	width:235px;
+	height:48px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+
+/*情報を変更するボタン*/
+#btn_dataChange{
+	background:url(../common/images/dataChange_btn.jpg) no-repeat 0 top;
+	width:165px;
+	height:25px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+
+/*確認するボタン*/
+#btn_conf{
+	background:url(../images/common/conf_btn.jpg) no-repeat 0 top;
+	width:200px;
+	height:50px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+
+/*ログインする02ボタン*/
+#btn_login02{
+	background:url(../common/images/login_btn02.jpg) no-repeat 0 top;
+	width:235px;
+	height:48px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+
+/*新規会員登録するボタン*/
+#btn_member{
+	background:url(../common/images/member_btn.jpg) no-repeat 0 0;
+	width:235px;
+	height:48px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+#btn_member a{
+	text-decoration:none;
+	display:block;
+	width:235px;
+	height:48px;
+	left:0px;
+	background:url(../common/images/member_btn.jpg) no-repeat 0 0;
+}
+#btn_member a:hover{
+	left:0px;
+	background:url(../common/images/member_btn.jpg) no-repeat 0 -48px;
+}
+
+/*引続き新規会員登録するボタン02（応募完了ページ用）*/
+#btn_member02{
+	background:url(../common/images/member_btn02.jpg) no-repeat 0 0;
+	width:235px;
+	height:48px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+#btn_member02 a{
+	text-decoration:none;
+	display:block;
+	width:235px;
+	height:48px;
+	left:0px;
+	background:url(../common/images/member_btn02.jpg) no-repeat 0 0;
+}
+#btn_member02 a:hover{
+	left:0px;
+	background:url(../common/images/member_btn02.jpg) no-repeat 0 -48px;
+}
+
+/*この条件で検索するボタン*/
+.btn_move{
+	float:right;
+	background:url(../common/images/move_btn.jpg) no-repeat 0 0;
+	width:165px;
+	height:25px;
+	margin-top:2px;
+	margin-right:5px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+.btn_move a{
+	text-decoration:none;
+	display:block;
+	width:165px;
+	height:25px;
+	left:0px;
+	background:url(../common/images/move_btn.jpg) no-repeat 0 0;
+}
+.btn_move a:hover{
+	left:0px;
+	background:url(../common/images/move_btn.jpg) no-repeat 0 -25px;
+}
+
+/*仮登録するボタン*/
+#btn_regist01{
+	float:left;
+	background:url(../common/images/regist_btn01.jpg) no-repeat 0 top;
+	width:235px;
+	height:48px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+
+/*本登録スタートボタン*/
+#btn_regist02{
+	background:url(../common/images/regist_btn02.jpg) no-repeat 0 top;
+	width:235px;
+	height:48px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+
+/*本登録するボタン*/
+#btn_regist03{
+	background:url(../common/images/regist_btn03.jpg) no-repeat 0 top;
+	width:235px;
+	height:48px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+
+/*送信するボタン*/
+#btn_send{
+	background:url(../common/images/send_btn.jpg) no-repeat 0 top;
+	width:235px;
+	height:48px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+
+/*設定するボタン*/
+#btn_set{
+	background:url(../common/images/set_btn.jpg) no-repeat 0 top;
+	width:235px;
+	height:48px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+
+
+/*追加するボタン*/
+#btn_add{
+	background:url(../common/images/add_btn.jpg) no-repeat 0 top;
+	width:235px;
+	height:48px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+
+/*退会するボタン*/
+#btn_drop{
+	background:url(../common/images/drop_btn.jpg) no-repeat 0 top;
+	width:235px;
+	height:48px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+
+/*トップページへボタン01,02*/
+#btn_home{
+	background:url(../images/common/home_btn.jpg) no-repeat 0 0;
+	width:200px;
+	height:50px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+#btn_home a,#btn_home02 a{
+	text-decoration:none;
+	display:block;
+	width:200px;
+	height:50px;
+	left:0px;
+	background:url(../images/common/home_btn.jpg) no-repeat 0 0;
+}
+#btn_home a:hover,#btn_home02 a:hover{
+	left:0px;
+	background:url(../images/common/home_btn.jpg) no-repeat 0 -50px;
+}
+
+/*トップページへボタン02*/
+#btn_home02{
+	background:url(../images/common/home_btn.jpg) no-repeat 0 0;
+	width:200px;
+	height:50px;
+	margin:15px auto 20px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+
+
+/*マイページへボタン（設定完了ページ：背景灰色）*/
+#btn_my03{
+	background:url(../common/images/my_btn03.jpg) no-repeat 0 0;
+	width:235px;
+	height:48px;
+	margin:35px auto 20px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+#btn_my03 a{
+	text-decoration:none;
+	display:block;
+	width:235px;
+	height:48px;
+	left:0px;
+	background:url(../common/images/my_btn03.jpg) no-repeat 0 0;
+}
+#btn_my03 a:hover{
+	left:0px;
+	background:url(../common/images/my_btn03.jpg) no-repeat 0 -48px;
+}
+
+/*マイページへボタン（本会員登録完了ページ：背景白）*/
+#btn_my04{
+	float:left;
+	background:url(../common/images/my_btn04.jpg) no-repeat 0 0;
+	width:235px;
+	height:48px;
+	margin:15px 0 20px;
+	padding-right:10px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+#btn_my04 a{
+	text-decoration:none;
+	display:block;
+	width:235px;
+	height:48px;
+	left:0px;
+	background:url(../common/images/my_btn03.jpg) no-repeat 0 0;
+}
+#btn_my04 a:hover{
+	left:0px;
+	background:url(../common/images/my_btn03.jpg) no-repeat 0 -48px;
+}
+
+/*マイページトップへボタン（設定完了ページ：背景灰色）*/
+#btn_my06{
+	background:url(../common/images/my_btn06.jpg) no-repeat 0 0;
+	width:235px;
+	height:48px;
+	margin:35px auto 20px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+#btn_my06 a{
+	text-decoration:none;
+	display:block;
+	width:235px;
+	height:48px;
+	left:0px;
+	background:url(../common/images/my_btn06.jpg) no-repeat 0 0;
+}
+#btn_my06 a:hover{
+	left:0px;
+	background:url(../common/images/my_btn06.jpg) no-repeat 0 -48px;
+}
+
+
+/*-----------------------------------------------------------------------
+user/mypage
+-------------------------------------------------------------------------*/
+/*登録情報を変更するボタン*/
+#btn_regChange{
+	background:url(../common/images/regChange_btn.jpg) no-repeat 0 top;
+	width:165px;
+	height:25px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+#btn_regChange a{
+	background:url(../common/images/regChange_btn.jpg) 0 0 no-repeat;
+	text-decoration:none;
+	display:block;
+	width:165px;
+	height:25px;
+}
+#btn_regChange a:hover{
+	background:url(../common/images/regChange_btn.jpg) 0 -25px no-repeat;
+}
+
+/*退会手続きに進むボタン*/
+#btn_leave{
+	background:url(../common/images/leave_btn.jpg) no-repeat 0 0;
+	width:165px;
+	height:25px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+#btn_leave a{
+	background:url(../common/images/leave_btn.jpg) 0 0 no-repeat;
+	text-decoration:none;
+	display:block;
+	width:165px;
+	height:25px;
+}
+#btn_leave a:hover{
+	background:url(../common/images/leave_btn.jpg) 0 -25px no-repeat;
+}
+
+/*各種設定ボタン*/
+#setting01{
+	background:url(../common/images/setting01.gif) no-repeat 0 0;
+	width:222px;
+	height:22px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+#setting01 a{
+	background:url(../common/images/setting01.gif) 0 0 no-repeat;
+	text-decoration:none;
+	display:block;
+	width:222px;
+	height:22px;
+}
+#setting01 a:hover{
+	background:url(../common/images/setting01.gif) 0 -22px no-repeat;
+}
+
+#setting02{
+	background:url(../common/images/setting02.gif) no-repeat 0 0;
+	width:222px;
+	height:22px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+#setting02 a{
+	background:url(../common/images/setting02.gif) 0 0 no-repeat;
+	text-decoration:none;
+	display:block;
+	width:222px;
+	height:22px;
+}
+#setting02 a:hover{
+	background:url(../common/images/setting02.gif) 0 -22px no-repeat;
+}
+
+#setting03{
+	background:url(../common/images/setting03.gif) no-repeat 0 0;
+	width:222px;
+	height:22px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+#setting03 a{
+	background:url(../common/images/setting03.gif) 0 0 no-repeat;
+	text-decoration:none;
+	display:block;
+	width:222px;
+	height:22px;
+}
+#setting03 a:hover{
+	background:url(../common/images/setting03.gif) 0 -22px no-repeat;
+}
+
+#setting04{
+	background:url(../common/images/setting04.gif) no-repeat 0 0;
+	width:222px;
+	height:22px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+#setting04 a{
+	background:url(../common/images/setting04.gif) 0 0 no-repeat;
+	text-decoration:none;
+	display:block;
+	width:222px;
+	height:22px;
+}
+#setting04 a:hover{
+	background:url(../common/images/setting04.gif) 0 -22px no-repeat;
+}
+
+#setting05{
+	background:url(../common/images/setting05.gif) no-repeat 0 0;
+	width:222px;
+	height:22px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+#setting05 a{
+	background:url(../common/images/setting05.gif) 0 0 no-repeat;
+	text-decoration:none;
+	display:block;
+	width:222px;
+	height:22px;
+}
+#setting05 a:hover{
+	background:url(../common/images/setting05.gif) 0 -22px no-repeat;
+}
+
+#setting06{
+	background:url(../common/images/setting06.gif) no-repeat 0 0;
+	width:222px;
+	height:22px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+#setting06 a{
+	background:url(../common/images/setting06.gif) 0 0 no-repeat;
+	text-decoration:none;
+	display:block;
+	width:222px;
+	height:22px;
+}
+#setting06 a:hover{
+	background:url(../common/images/setting06.gif) 0 -22px no-repeat;
+}
+
+
+/*設定する（小）ボタン*/
+.btn_set02{
+	background:url(../common/images/set_btn02.jpg) no-repeat 0 0;
+	width:68px;
+	height:18px;
+	margin-top:2px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+.btn_set02 a{
+	text-decoration:none;
+	display:block;
+	width:68px;
+	height:18px;
+	left:0px;
+	background:url(../common/images/set_btn02.jpg) no-repeat 0 0;
+}
+.btn_set02 a:hover{
+	left:0px;
+	background:url(../common/images/set_btn02.jpg) no-repeat 0 -18px;
+}
+
+/*-----------------------------------------------------------------------
+business/index,career/index
+-------------------------------------------------------------------------*/
+#form_tbl02 {
+	padding:4px 8px 8px;
+	margin:10px 0 15px;
+	border:1px solid #ccc;
+	border-collapse:collapse;
+}
+#form_tbl02 input {
+	margin-bottom:2px;
+}
+#form_tbl02 tr th{
+	width:179px;
+	vertical-align:top;
+	background-color:#F6F4F1;
+	padding:7px 10px;
+	font-weight:bold;
+	color:#333;
+	text-align:left;
+	border:1px solid #ccc;
+	border-collapse:collapse;
+}
+#form_tbl02 tr th.setTtl{
+	width:618px;
+	text-align:center;
+	background-color:#E4DED6;
+}
+#form_tbl02 tr th.setSub{
+	background-color:#fff;
+}
+#form_tbl02 tr td{
+	width:65px;
+	padding:7px 10px;
+	text-align:center;
+	border:1px solid #ccc;
+	border-collapse:collapse;
+}
+
+/*編集するボタン*/
+form input#btn_edit{
+	float:left;
+	background:url(../common/images/edit_btn.jpg) no-repeat left top;
+	width:165px;
+	height:25px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+
+/*削除するボタン*/
+form input#btn_del{
+	float:left;
+	background:url(../common/images/del_btn.jpg) no-repeat left top;
+	width:105px;
+	height:25px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+
+/*削除するボタン（大）*/
+#btn_del02{
+	background:url(../common/images/del_btn02.jpg) no-repeat 0 top;
+	width:235px;
+	height:48px;
+	display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+}
+
+
+/*応募する（各種設定の表示・非表示）*/
+#app_skillArea {
+	display:none;
+}
+#app_businessArea {
+	display:none;
+}
+#app_careerArea {
+	display:none;
+}
+
+/*トップ検索ボタン*/
+.Job_searchTop,.route_searchTop{
+	clear:both;
+	width:212px;
+	margin-top:5px;
+	display:block;
+	overflow:hidden;
+}
+.Job_searchTop a,.route_searchTop a{
+	display:block;
+	width:212px;
+	height:92px;
+	text-indent:-9999px;
+}
+.Job_searchTop { left:0px; background:url(../images/top/job_searchBtn.jpg) 0 0 no-repeat;}
+.Job_searchTop a{ left:0px; background:url(../images/top/job_searchBtn.jpg) no-repeat 0 0;}
+.Job_searchTop a:hover{ left:0px; background:url(../images/top/job_searchBtn.jpg) no-repeat 0 -92px;}
+
+.route_searchTop { left:0px; background:url(../images/top/route_searchBtn.jpg) no-repeat 0 0;}
+.route_searchTop a{ left:0px; background:url(../images/top/route_searchBtn.jpg) no-repeat 0 0;}
+.route_searchTop a:hover{ left:0px; background:url(../images/top/route_searchBtn.jpg) no-repeat 0 -92px;}
+
+
+/*一覧タブ*/
+.searchTab01,.searchTab02,.searchTab03,.searchTab011,.searchTab022,.searchTab033{
+	width:213px;
+	margin-top:5px;
+	display:block;
+	overflow:hidden;
+}
+.searchTab01 a,.searchTab02 a,.searchTab03 a,.searchTab011 a,.searchTab022 a,.searchTab033 a{
+	display:block;
+	width:213px;
+	height:55px;
+	text-indent:-9999px;
+}
+.searchTab01 { background:url(../images/searchTab01.jpg) 0 0 no-repeat;}
+.searchTab01 a{ background:url(../images/searchTab01.jpg) no-repeat 0 0;}
+.searchTab01 a:hover{ background:url(../images/searchTab01.jpg) no-repeat 0 -55px;}
+
+.searchTab02 { background:url(../images/searchTab02.jpg) 0 0 no-repeat;}
+.searchTab02 a{ background:url(../images/searchTab02.jpg) no-repeat 0 0;}
+.searchTab02 a:hover{ background:url(../images/searchTab02.jpg) no-repeat 0 -55px;}
+
+.searchTab03 { background:url(../images/searchTab03.jpg) 0 0 no-repeat;}
+.searchTab03 a{background:url(../images/searchTab03.jpg) no-repeat 0 0;}
+.searchTab03 a:hover{ background:url(../images/searchTab03.jpg) no-repeat 0 -55px;}
+
+.searchTab011 { left:0px; background:url(../images/searchTab01.jpg) 0 -55px no-repeat;}
+.searchTab022 { left:0px; background:url(../images/searchTab02.jpg) 0 -55px no-repeat;}
+.searchTab033 { left:0px; background:url(../images/searchTab03.jpg) 0 -55px no-repeat;}
+
+
+
+
+/*検索*/
+.search_btnR{  
+    width: 150px;
+	height:200px;  
+    background:url(../images/common/search_btnR.png) no-repeat 0 top; 
+    display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+    position: fixed;  
+    top: 350px;
+	right:0;  
+    z-index: 20;  
+}
+
+/*次へ*/
+.next_btnR{  
+    width: 150px;
+	height:200px;  
+    background:url(../images/common/next_btnR.png) no-repeat 0 top; 
+    display:block;
+	cursor:pointer;
+	border:0;
+	text-indent:-9999px;
+	overflow:hidden;
+    position: fixed;  
+    top: 350px;
+	right:0;  
+    z-index: 20;  
+}

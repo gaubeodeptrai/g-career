@@ -1,0 +1,155 @@
+<?php
+require_once dirname($_SERVER['DOCUMENT_ROOT']). '/libs/inc.php';
+
+
+$_ = array();
+foreach(array(
+"error"                  => "0",
+"url"                    => array(),
+"params"                 => array(),
+"pmsId"                  => "",
+"pmsPref"                => "",
+"pmsLine"                => "",
+"prefCode"               => array(),
+"prefData"               => array(),
+"prefGroups"             => array(),
+"prefRec"                => array(),
+"today"                  => date("Y-m-d"),
+"pageCate"               => "",
+"prefCout"               => "0",
+) as $k => $v){
+    $_[$k] = $v;
+}
+
+
+$_["url"] = explode("/", $_SERVER["REQUEST_URI"]);
+if(!empty($_["url"][2])){
+    foreach($_["url"] as $key => $val){
+        
+        if(
+        preg_match("/^area-([0-9-]+$)/u", $val, $match)
+        ){
+            $_["params"]["pref"] = $match[1];
+            $_["pmsPref"] = $match[1];
+            $_["pmsId"] = $match[1];
+            $_["pageCate"] = "エリアから探す";
+        } else if(
+        preg_match("/^line-([0-9-]+$)/u", $val, $match)
+        ){
+            $_["params"]["pref"] = $match[1];
+            $_["pmsLine"] = $match[1];
+            $_["pmsId"] = $match[1];
+            $_["pageCate"] = "路線・駅から探す";
+        }
+     }
+}
+
+
+if(!empty($_["pmsId"])){
+   $_["prefCode"][] = $_["pmsId"];
+} else {
+   $_["error"] = 1;
+}
+
+//都道府県
+foreach(Data::prefectures(array('idgps'=>$_["prefCode"],'w_status'=>'1')) as $v){
+    $_["prefData"][$v["id"]] = $v;
+    $_["prefGroups"][$v["gp_id"]] = $v;
+}
+
+//求人
+foreach(DataCcRec::recruits(array('s'=> '1','w_status'=> 'OPEN','w_startdate'=> $_["today"])) as $v){
+    $_["prefRec"][$v["pref_code"]][] = $v["id"];
+}
+
+
+if(!empty($_["error"])){
+    header("Location: /callcenter/search/");
+    exit;
+}
+
+
+foreach($_["prefData"] as $v){
+    if(!empty($_["prefRec"][$v["id"]])){
+        $_["prefCout"] = 1;
+    }
+}
+
+
+?><!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title><?php echo h($_["prefGroups"][$_["prefCode"][0]]["gp_name"]);?>の<?php echo h($_["pageCate"]);?>｜<?php echo h($GLOBALS["PAGETITLE"]);?></title>
+<meta name="description" content="<?php echo h($_["prefGroups"][$_["prefCode"][0]]["gp_name"]);?>の<?php echo h($_["pageCate"]);?>のページです。<?php echo h($GLOBALS["PAGDESCRIPTION"]);?>">
+<meta name="keywords" content="<?php echo h($GLOBALS["PAGEKEYWORDS"]);?>">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/head_sp.html'; ?>
+</head>
+<body>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/header.html'; ?>
+<article id="Contents" class="pc_non">
+	<section id="SRCBX">
+		<section id="Clmbox" class="com_wid_sp clearfix">
+			<section id="Mainbox">
+				<div class="searchbox">
+					<div class="srclistbox">
+						<div class="ttlbox <?php
+						if(!empty($_["pmsPref"])){
+				           echo "area";
+				        } else {
+				           echo "stn";
+				        }
+				          ?>">
+							<h2 class="com_sp"><span><?php echo h($_["prefGroups"][$_["prefCode"][0]]["gp_name"]);?></span>の<?php echo h($_["pageCate"]);?></h2>
+						</div>
+						<h2 class="com_tlx"><?php echo h($_["prefGroups"][$_["prefCode"][0]]["gp_name"]);?>の<?php echo h($_["pageCate"]);?></h2>
+
+<?php
+if($_["prefCout"]==1){
+?>
+						<div class="areabox">
+							<div class="areain">
+								<div class="areact">
+									<ul class="clearfix lnk">
+										<?php
+										foreach($_["prefData"] as $v){
+										    if(!empty($_["prefRec"][$v["id"]])){
+										        echo '<li class="ckno"><label class="chk" for="b_'.h($v["id"]).'"><a href="/callcenter/';
+										        if(!empty($_["pmsPref"])){
+										           echo "area";
+										        } else {
+										           echo "line";
+										        }
+										        echo '/'.h($v["id"]).'/">'.h($v["name"]).'</a> </label></li>';
+										    }
+										}
+										?>
+									</ul>
+								</div>
+							</div>
+						</div>
+<?php
+} else {
+?>
+<p class="com_lyajst m_b20">申し訳ありません。<br>
+現在このエリアにはご案内できる求人案件がございません。お近くのエリアをお探しください。</p>
+						<div class="areabox">
+								<div class="btnbox">
+									<p class="sp"><a class="icno" href="/callcenter/">TOPへ戻る</a></p>
+								</div>
+						</div>
+<?php
+}
+?>
+					</div>
+				</div>
+			</section>
+		</section>
+		<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/sp_bottom.html'; ?>
+	</section>
+</article>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/footer.html'; ?>
+</body>
+</html>

@@ -1,0 +1,116 @@
+
+<!-- コールセンター求人ナビCV用 GoogleAnalyticsTag -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-17408759-33',{'name': 'ccnaviTracker'}); //コールセンター求人ナビ用
+  ga('ccnaviTracker.require', 'displayfeatures');
+  ga('ccnaviTracker.send', 'pageview');
+
+  ga('create', 'UA-8399766-5',{'name': 'allsaintTracker'}); //セントドメイン全体用
+  ga('allsaintTracker.require', 'displayfeatures');
+  ga('allsaintTracker.send', {
+     'hitType': 'pageview',
+     'page': '/callcenter/allentry/complete.html',
+     'title': '完了'
+  });
+
+  ga('create', 'UA-17408759-23',{'name': 'allworkTracker'}); //WORKシリーズ全体用
+  ga('allworkTracker.require', 'displayfeatures');
+  ga('allworkTracker.send','pageview');
+
+</script>
+<!-- コールセンター求人ナビCV用 GoogleAnalyticsTag End -->
+
+
+
+<!-- start of ac cruiser tag S/N acct131112013 
+Copyright (c) 2005-2015 activecore, Inc. All rights reserved. 
+ www.activecore.jp 
+--> 
+<script type="text/javascript" src="../common/js/acEncode.js"></script> 
+<script type="text/javascript"> 
+   var _cid = 2148;
+   var _param="conv=ccnavi_job_cv_sp"; 
+   var _conv_no="job<?php echo h($_["data"]["apply_id"]);?>"; 
+   var _login_id=""; 
+   var _var1="<?php echo h($_["data"]["recruit_id"]);?>"; 
+   var _var2="<?php
+   $birth = $_["data"]["birth_year"].sprintf('%02d', $_["data"]["birth_month"]).sprintf('%02d', $_["data"]["birth_day"]);
+   $age = (int) ((date('Ymd')-$birth)/10000);
+   echo h($age);?>"; 
+   var _var3="<?php echo h(Data::sex($_["data"]["sex"]));?>"; 
+   var _var4="<?php echo h($_["data"]["device"]);?>"; 
+   var _var5="コールセンター求人ナビ"; 
+   var _info = _login_id != '' ? '|ac_login_id=' + _login_id : '';
+   if ('function' === typeof _acEncode) { 
+      _var1 = _acEncode(_var1); 
+      _var2 = _acEncode(_var2); 
+      _var3 = _acEncode(_var3); 
+      _var4 = _acEncode(_var4); 
+      _var5 = _acEncode(_var5); 
+   } 
+   var _delim="*"; 
+   var _entry_js = '//tracer.atrax.jp/entry.js?cid='; 
+   var _proto = window.location.protocol; 
+   if (_proto != 'http:' && _proto != 'https:') { 
+      _proto = 'http:'; 
+   }  
+   document.write('<scr' + 'ipt type="text/javascript" ' 
+      + 'language="JavaScript" src="' 
+      + _proto + _entry_js + _cid + '&param={' + _param + '}' 
+      + '&info={ac_conv_no=' + _conv_no + '|' 
+      + 'ac_user_data=' + _var1 + _delim + _var2 + _delim + _var3 + _delim + _var4 + _delim + _var5 + _info + '}' 
+      + '" ></' + 'scr' + 'ipt>'); 
+</script> 
+<!-- end of ac cruiser tag -->
+
+
+
+<!-- User Insight コールセンター求人ナビ用 -->
+
+<!-- User Insight PCDF Code Start : saintmedia.co.jp -->
+<script type="text/javascript">
+<!--
+var _uic = _uic ||{}; var _uih = _uih ||{};_uih['id'] = 51058;
+_uih['lg_id'] = '';
+_uih['fb_id'] = '';
+_uih['tw_id'] = '';
+_uih['uigr_1'] = ''; _uih['uigr_2'] = ''; _uih['uigr_3'] = ''; _uih['uigr_4'] = ''; _uih['uigr_5'] = '';
+_uih['uigr_6'] = ''; _uih['uigr_7'] = ''; _uih['uigr_8'] = ''; _uih['uigr_9'] = 'ccnavi'; _uih['uigr_10'] = '';
+
+/* DO NOT ALTER BELOW THIS LINE */
+/* WITH FIRST PARTY COOKIE */
+(function() {
+var bi = document.createElement('scri'+'pt');bi.type = 'text/javascript'; bi.async = true;
+bi.src = ('https:' == document.location.protocol ? 'https://bs' : 'http://c') + '.nakanohito.jp/b3/bi.js';
+var s = document.getElementsByTagName('scri'+'pt')[0];s.parentNode.insertBefore(bi, s);
+})();
+//-->
+</script>
+<!-- User Insight PCDF Code End : saintmedia.co.jp -->
+
+<!-- User Insight コールセンター求人ナビ用 End -->
+
+
+
+<!-- ロバストデザイン Indeed CV Tag -->
+<!-- Begin INDEED conversion code -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var indeed_conversion_id = '7857849398642751';
+var indeed_conversion_label = '';
+/* ]]> */
+</script>
+<script type="text/javascript" src="//conv.indeed.com/pagead/conversion.js">
+</script>
+<noscript>
+<img height=1 width=1 border=0 src="//conv.indeed.com/pagead/conv/7857849398642751/?script=0">
+</noscript>
+<!-- End INDEED conversion code -->
+<!-- ロバストデザイン Indeed CV Tag End -->
+
+

@@ -1,0 +1,21 @@
+		<section class="com_wid com_contbx">
+			<div class="lnkbox com_sp">
+				<ul>
+					<?php
+                    if(!preg_match ("/^\/callcenter\/hellowork\/.+$/u", $_SERVER["SCRIPT_NAME"])){
+                	?><li><a href="/callcenter/hellowork/"><img src="/callcenter/images/sp_bnr_hellowork.png" alt="ハローワークの求人を探す" width="290"></a></li>
+					<?php
+					}
+					?>
+					<li><a href="https://www.saintmedia.co.jp/contents/cc_agency_sp/" target="_blank"><img src="/callcenter/images/bnr_cc_agency_sp.png" alt="正社員を目指すならこちら" width="290"></a></li>
+					<li><a href="/callcenter/scrap/"><img src="/callcenter/images/sp_bnr_review.png" alt="検討中BOXを見る" width="290"></a></li>
+					<?php
+                    if(!preg_match ("/^\/callcenter\/hellowork\/.+$/u", $_SERVER["SCRIPT_NAME"])){
+                	?><li><a href="/callcenter/entry/"><img src="/callcenter/images/sp_bnr_entry.png" alt="スタッフ登録会に応募" width="290"></a></li>
+                    <li><a href="tel:0120106914"><img src="/callcenter/images/sp_bnr_tel.png" alt="電話で応募する" width="290"></a></li>
+                    <?php
+                    }
+                    ?>
+				</ul>
+			</div>
+		</section>

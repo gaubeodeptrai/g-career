@@ -1,0 +1,355 @@
+<?php
+require_once dirname($_SERVER['DOCUMENT_ROOT']). '/libs/inc.php';
+
+$_ = array();
+foreach(array(
+"prefectures"     => array(),
+"err"             => array(),
+"data"            => array(),
+"jobdata"         => array(),
+"today"           => date("Y-m-d"),
+) as $k => $v){
+    $_[$k] = $v;
+}
+
+$_["data"] = array(
+"family_name",
+"first_name",
+"family_name_kana",
+"first_name_kana",
+"sex",
+"birth_year",
+"birth_month",
+"birth_day",
+"prefecture",
+"tel1",
+"tel2",
+"tel3",
+"mail",
+"message",
+"agree",
+"recruit_id",
+);
+
+if(!empty($_REQUEST["bk"])){
+    if(!empty($_SESSION["kaigoi"]["entry"])){
+        foreach($_SESSION["kaigoi"]["entry"] as $k => $v){
+            $_[$k] = $_SESSION["kaigoi"]["entry"][$k];
+        }
+    }
+} else {
+    unset($_SESSION["kaigoi"]["entry"]);
+
+
+    //求人処理
+    if(!empty($_REQUEST["recruit_id"])){
+        $_["data"]["recruit_id"] = $_REQUEST["recruit_id"];
+    } else {
+        header("Location: /callcenter/search/");
+        exit;
+    }
+
+}
+
+if(!empty($_["data"]["recruit_id"])){
+    $_["jobid"] = sprintf('%06d', $_["data"]["recruit_id"]);
+}
+
+$_["jobdata"] = DataCcRec::recruits(array(
+    'id'=> $_["data"]["recruit_id"],
+    'w_status'=> 'OPEN',
+    'w_startdate'=> $_["today"]));
+
+if(empty(DataCcRec::$dataTotal)){
+    header("Location: /callcenter/search/");
+    exit;
+}
+
+
+//都道府県
+$_["prefectures"] = Data::prefectures(array('s'=>'1','w_status'=>'1'));
+
+//サイト設定
+$_["siteset"] = Data::siteSet();
+
+//募集職種
+$_["jobCategories"] = Data::jobCategories_CC(array('s'=>'1','w_status'=>'1'));
+
+//業種
+$_["jobIndustries"] = Data::jobIndustry_CC(array('s'=>'1','w_status'=>'1'));
+
+//雇用形態
+$_["jobTypes"] = Data::jobtypes(array('s'=>'1','w_status'=>'1'));
+
+
+
+?><!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>お仕事のご応募｜<?php echo h($GLOBALS["PAGETITLE"]);?></title>
+<meta name="description" content="お仕事のご応募のページです。<?php echo h($GLOBALS["PAGDESCRIPTION"]);?>">
+<meta name="keywords" content="<?php echo h($GLOBALS["PAGEKEYWORDS"]);?>">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" >
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="robots" content="noindex,follow">
+<!-- Gyro-n (共通) tag-->
+<script type="text/javascript">
+  var __gyr = {
+    "config": {
+      "clientToken": "RDTV09I35N",
+      "site": "www.saintmedia.co.jp"
+    }
+  };
+  (function() {
+    var ub = document.createElement('script');
+    ub.type = 'text/javascript'; ub.async = true;
+    ub.src = location.protocol + "//cmn.gyro-n.com/js/gyr.min.js";
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(ub, s);
+  })();
+</script>
+<!-- Gyro-n (共通) tag END-->
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/head.html'; ?>
+</head>
+<body>
+<script src="//d.adlpo.com/121/1392/js/smartadlpo.js" type="text/javascript"></script>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/header_short.html'; ?>
+
+<article id="Contents">
+	<section class="com_pnkzbox m_b10">
+		<ul class="clearfix" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+			<li><a href="<?php echo h($GLOBALS["PNKZURL"]);?>" itemprop="url"><span itemprop="title"><?php echo h($GLOBALS["PNKZTITLE"]);?></span></a></li>
+			<li itemprop="title"><span class="clr_gr">&gt;</span>&nbsp;&nbsp;お仕事のご応募</li>
+		</ul>
+	</section>
+	<section id="FMBX">
+		<section id="Clmbox" class="com_wid clearfix">
+			<section id="Mainbox">
+				<div class="formbox">
+					<div class="ttlbx">
+						<h2 class="ttl"><img src="/callcenter/images/rec_form_ttl.png" alt="お仕事のご応募"></h2>
+						<h2 class="ttl_sp"><img src="/callcenter/images/sp_ttl_apply.png" height="26" alt="お仕事のご応募"></h2>
+					</div>
+					<div class="stpbx ap">
+						<p class="step com_pc"><img src="/callcenter/images/form_step01.png" alt="STEP1 基本情報入力"></p>
+						<p class="step com_sp"><img src="/callcenter/images/form_step01_sp.png" alt="STEP1 基本情報入力"></p>
+					</div>
+					<div class="recbox">
+						<div class="recin clearfix">
+							<p class="num">[<?php
+						    $jobtypeCodesLi = explode(",", $_["jobdata"]["jobtype_codes"]);
+						    foreach($jobtypeCodesLi as $k => $t){
+						        if(!empty($_["jobTypes"][$t]["name"])){
+						            $jobTypesName = $_["jobTypes"][$t]["name"];
+						        }
+						    }
+						    echo h($jobTypesName);
+							?>] <?php
+
+						    if(!empty($_["jobdata"]["industry_code"])){
+							    echo h($_["jobIndustries"][$_["jobdata"]["industry_code"]]["name"]);
+
+								if(!empty($_["jobdata"]["cate_codes"])){
+								    $_["jobdata"]["cate_codes"] = explode(",", $_["jobdata"]["cate_codes"]);
+								    foreach($_["jobdata"]["cate_codes"] as $k => $r){
+								        if(!empty($_["jobCategories"][$r]["name"])){
+								            echo " / ";
+								            echo h($_["jobCategories"][$r]["name"]);
+								        }
+								    }
+								}
+						    }
+
+							?></p>
+						</div>
+						<p class="name"><?php echo (!empty($_["jobdata"]["title"]))? h($_["jobdata"]["title"]) :""; ?></p>
+					</div>
+					<p class="tx">入力して確認ボタンを押してください。</p>
+					<form action="/callcenter/apply/preview.html" method="post" name="form_fm" id="form_fm">
+					<input type="hidden" name="recruit_id" value="<?php echo h($_["data"]["recruit_id"]); ?>" >
+					<div class="formin">
+						<div class="tblbox">
+							<div class="tblin">
+								<p class="th">氏名（ひらがな）<span><img src="/callcenter/images/icn_his.png" alt="必須"></span>
+								</p>
+							</div>
+							<div class="tblct<?php echo (!empty($_["err"]["name_kana"]))?" error":"";?>">
+								<div class="m_b5"><input class="swid5 wid3" name="family_name_kana" type="text" value="<?php echo h($_["data"]["family_name_kana"]); ?>" size="20" maxlength="20"></div>
+								<p class="example">例：せんとたろう</p>
+								<?php echo (!empty($_["err"]["name_kana"]))? h($_["err"]["name_kana"],0):"";?>
+							</div>
+						</div>
+						<div class="tblbox">
+							<div class="tblin">
+								<p class="th">性別<span><img src="/callcenter/images/icn_his.png" alt="必須"></span></p>
+							</div>
+							<div class="tblct<?php echo (!empty($_["err"]["sex"]))?" error":"";?>">
+								<?php
+								foreach(Data::sex() as $key => $val){
+								    echo '<input name="sex" ';
+								    echo ($_["data"]["sex"]==$key)?' checked ':'';
+								    echo ' type="radio" class="in_normal" id="sex'.h($key).'" value="'.h($key).'" ><label for="sex'.h($key).'" class="swid3">'.h($val).'</label>&nbsp;&nbsp;';
+								}
+								?>
+								<?php echo (!empty($_["err"]["sex"]))? h($_["err"]["sex"],0):"";?>
+							</div>
+						</div>
+						<div class="tblbox">
+							<div class="tblin">
+								<p class="th">生年月日<span><img src="/callcenter/images/icn_his.png" alt="必須"></span></p>
+							</div>
+							<div class="tblct<?php echo (!empty($_["err"]["birthday"]))?" error":"";?>">
+								<select name="birth_year">
+									<option value="">西暦（年号）</option>
+									<?php
+									foreach(Data::birthYear() as $val){
+									    echo '<option ';
+										echo ($_["data"]["birth_year"]==$val)?' selected ':'';
+									    echo 'value="'.h($val).'">'.h($val).'</option>';
+									}
+									?>
+								</select>&nbsp;年&nbsp;
+								<select name="birth_month" class="swid4">
+									<option value=""></option>
+									<?php
+									foreach(Data::birthMonth() as $val){
+									    echo '<option ';
+										echo ($_["data"]["birth_month"]==$val)?' selected ':'';
+									    echo 'value="'.h($val).'">'.h($val).'</option>';
+									}
+									?>
+								</select>&nbsp;月&nbsp;
+								<select name="birth_day" class="swid4">
+									<option value=""></option>
+									<?php
+									foreach(Data::birthDay() as $val){
+									    echo '<option ';
+										echo ($_["data"]["birth_month"]==$val)?' selected ':'';
+									    echo 'value="'.h($val).'">'.h($val).'</option>';
+									}
+									?>
+								</select>&nbsp;日
+								<?php echo (!empty($_["err"]["birthday"]))? h($_["err"]["birthday"],0):"";?>
+							</div>
+						</div>
+						<div class="tblbox">
+							<div class="tblin">
+								<p class="th">お住まいの都道府県</p>
+							</div>
+							<div class="tblct2">
+								<div class="tlbx">
+									<div class="tbx">
+										<select class="swid5" name="prefecture">
+											<option value="">選択して下さい</option>
+											<?php
+											foreach($_["prefectures"] as $key=> $val){
+											    echo '<option ';
+												echo ($_["data"]["prefecture"]==$key)?' selected ':'';
+											    echo 'value="'.h($key).'">'.h($val["name"]).'</option>';
+											}
+											?>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tblbox">
+							<div class="tblin">
+								<p class="th">電話番号(携帯でも可)<span><img src="/callcenter/images/icn_his.png" alt="必須"></span>
+								<span class="hs">※(「-」ﾊｲﾌﾝ) なし</span>
+								</p>
+							</div>
+							<div class="tblct<?php echo (!empty($_["err"]["tel"]))?" error":"";?>">
+								<div class="m_b5"><input class="swid5 wid3" name="tel1" type="tel" value="<?php echo h($_["data"]["tel1"]); ?>" size="13" maxlength="13"></div>
+								<?php
+								/*
+								&nbsp;-&nbsp;
+								<input class="swid1 wid5" name="tel2" type="tel" value="<?php echo h($_["data"]["tel2"]); ?>" size="10" maxlength="4" >&nbsp;-&nbsp;
+								<input class="swid1 wid5" name="tel3" type="tel" value="<?php echo h($_["data"]["tel3"]); ?>" size="10" maxlength="4" >
+								*/
+								?>
+								<p class="example">例：09012345678</p>
+								<?php echo (!empty($_["err"]["tel"]))? h($_["err"]["tel"],0):"";?>
+							</div>
+						</div>
+						<div class="tblbox">
+							<div class="tblin">
+								<p class="th">メールアドレス<span><img src="/callcenter/images/icn_his.png" alt="必須"></span></p>
+							</div>
+							<div class="tblct<?php echo (!empty($_["err"]["mail"]))?" error":"";?>">
+								<div class="m_b5"><input class="swid5 wid3" name="mail" type="email" value="<?php echo h($_["data"]["mail"]); ?>" size="40" maxlength="100"></div>
+								<p class="example">例：aaa@bbb.cc.jp</p>
+								<?php echo (!empty($_["err"]["mail"]))? h($_["err"]["mail"],0):"";?>
+							</div>
+						</div>
+						<?php
+						/*
+						<div class="tblbox">
+							<div class="tblin">
+								<p class="th">その他</p>
+							</div>
+							<div class="tblct">
+								<textarea name="message" class="wid1"><?php echo h($_["data"]["message"]); ?></textarea>
+							</div>
+						</div>
+						*/
+						?>
+						<div class="tblbox">
+							<div class="tblin">
+								<p class="th">個人情報取扱規約<span><img src="/callcenter/images/icn_his.png" alt="必須"></span></p>
+							</div>
+							<div class="tblct<?php echo (!empty($_["err"]["agree"]))?" error":"";?>">
+								<textarea readonly class="pp wid1 m_b10"><?php
+								$jobtype_codes_li = explode(",",$_["jobdata"]["jobtype_codes"]);
+								if(
+								in_array("1",$jobtype_codes_li) or
+								in_array("4",$jobtype_codes_li)
+								){
+								    echo h($_["siteset"]["privacy"],0);
+								} else {
+								    echo h($_["siteset"]["privacy3"],0);
+								}
+								?></textarea>
+								<p class="lk com_checkbox m_b5"><input id="roule" name="agree" type="checkbox" value="1"<?php echo (!empty($_["data"]["agree"]))?' checked':''; ?>><label class="chk" for="roule">上記規約に同意する</label></p>
+								<?php echo (!empty($_["err"]["agree"]))? h($_["err"]["agree"],0):"";?>
+
+                                <!--
+                                <p class="nort sp_not">
+                                <span id="ss_gmo_img_wrapper_115-57_image_ja">
+<a href="https://jp.globalsign.com/" target="_blank" rel="nofollow">
+<img alt="SSL　GMOグローバルサインのサイトシール" border="0" id="ss_img" src="//seal.globalsign.com/SiteSeal/images/gs_noscript_115-57_ja.gif">
+</a>
+</span>
+<script type="text/javascript" src="//seal.globalsign.com/SiteSeal/gmogs_image_115-57_ja.js" defer></script>
+        						</p>
+                                -->
+
+							</div>
+						</div>
+					</div>
+					<div class="btnbox">
+						<p class="btn"><a href="javascript:void(0);" onclick="document.form_fm.submit();return false;"><img src="/callcenter/images/btn_conf_off.png" alt="確認する"><span>確認する</span></a></p>
+					</div>
+					<input type="hidden" name="cmf_btn_x" value="1" >
+					</form>
+				</div>
+			</section>
+			<section id="Sidebox">
+			<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/sidebox_entry.html'; ?>
+			</section>
+		</section>
+	</section>
+</article>
+<?php
+require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/footer.html';
+
+if($GLOBALS["DEVICE"]=="sp"){
+    require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/template/tag/sp_apply_index.html';
+} else {
+    require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/template/tag/apply_index.html';
+}
+?>
+</body>
+</html>

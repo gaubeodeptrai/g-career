@@ -1,0 +1,215 @@
+
+							<div class="slct">
+								<p class="tl">エリア</p>
+								<div class="sltbox">
+									<ul class="clearfix">
+										<li>
+											<select name="pref[]">
+												<option value="">都道府県を選択してください</option>
+												<?php
+												foreach($_["prefectures"] as $v){
+												    foreach($v as $v2){
+												        if(!empty($_["prefRec"][$v2["id"]])){
+												            echo '<option value="'.h($v2["id"]).'"';
+												            echo ($_["pmsPref"]==$v2["id"])?" selected":"";
+												            echo '>'.h($v2["name"]).'</option>';
+												        }
+												    }
+												}
+												?>
+											</select>
+										</li>
+            							<?php
+            							if(empty($_["pmsLines"]) and empty($_["pmsStas"]))
+            							{
+            							?>
+										<li>
+											<select name="city[]">
+												<option value="">市区町村を選択してください</option>
+												<?php
+												if(!empty($_["prefCities"][$_["pmsPref"]])){
+    												foreach($_["prefCities"][$_["pmsPref"]] as $v){
+												        if(!empty($_["cityRec"][$v["id"]])){
+												            echo '<option value="'.h($v["id"]).'"';
+												            echo ($_["pmsCity"]==$v["id"])?" selected":"";
+												            echo '>'.h($v["city"]).'</option>';
+												        }
+    												}
+												}
+												?>
+											</select>
+										</li>
+										<?php
+										}
+										?>
+									</ul>
+								</div>
+							</div>
+							<?php
+							if(!preg_match ("/^\/callcenter\/index.html$/u", $_SERVER["SCRIPT_NAME"]) and
+							(!empty($_["pmsLines"]) or !empty($_["pmsStas"]))
+							){
+							?>
+							<div class="slct" id="line">
+								<?php
+								$line = implode("-",$_["pmsLines2"]);
+								?>
+								<a href="/callcenter/sta/<?php echo h($_["pmsPref"]);?>/line-<?php echo h($line);?>/" class="link">
+								<div class="linkin">
+								<p class="tl wid2">路線・駅</p>
+								<div class="sltbox">
+<?php
+							if(!empty($_["pmsLineStr"]) || !empty($_["pmsStaStr"])){
+							    $nm = 0;
+							    if(!empty($_["pmsLineStr"])){
+								    foreach($_["pmsLineStr"] as $k =>$v){
+								        echo ($nm!=0)?"、":"";
+								        echo h($v);
+								        $nm++;
+								    }
+							    }
+							    if(!empty($_["pmsStaStr"])){
+								    $v2 = '';
+								    foreach($_["pmsStas"] as $k =>$v){
+								        if($v2!=$_["stations"][$v]["line_name"]){
+								            echo ($nm!=0)?"、":"";
+								            $nm++;
+								        }
+                                        if(!empty($_["stations"][$v]["name"])){
+								            echo ($v2==$_["stations"][$v]["line_name"])?"、":"";
+                                            echo h($_["stations"][$v]["name"])."駅";
+                                            $nm++;
+                                        }
+
+								        $v2 = $_["stations"][$v]["line_name"];
+								    }
+								    //echo "）";
+							    }
+							}
+
+							if(!empty($_["pmsLines"])){
+    							foreach($_["pmsLines"] as $v){
+    							    if(!empty($v)){
+    							        echo '<input type="hidden" name="line[]" value="'.h($v).'" >';
+    							    }
+    							}
+							}
+
+							if(!empty($_["pmsStas"])){
+    							foreach($_["pmsStas"] as $v){
+    							    if(!empty($v)){
+    							        echo '<input type="hidden" name="sta[]" value="'.h($v).'" >';
+    							    }
+    							}
+							}
+?>
+								</div>
+								</div>
+								</a>
+							</div>
+							<?php
+							}
+							?>
+							<div class="slct2">
+								<p class="tla"><a href="#"><span>業種</span></a></p>
+								<ul class="listbx com_checkbox">
+         									<?php
+         									foreach($_["jobIndustries"] as $k => $v){
+         									    if(!empty($_["indRec"][$k])){
+         									        echo '<li><input type="checkbox" ';
+         									        echo (!empty($_["pmsInds"]) and in_array($k,$_["pmsInds"]))?" checked":"";
+         									        echo ' id="sp_ind_'.h($k).'" name="ind[]" value="'.h($k).'"><label class="chk" for="sp_ind_'.h($k).'">'.h($v["name"]).'</label></li>';
+         									    }
+         									}
+         									?>
+								</ul>
+							</div>
+							<div class="slct2">
+								<p class="tla"><a href="#"><span>職種</span></a></p>
+								<ul class="listbx com_checkbox">
+         									<?php
+         									foreach($_["jobCategories"] as $k => $v){
+         									    if(!empty($_["cateRec"][$k])){
+         									        echo '<li><input type="checkbox" ';
+         									        echo (!empty($_["pmsCates"]) and in_array($k,$_["pmsCates"]))?" checked":"";
+         									        echo ' id="sp_c_'.h($k).'" name="cate[]" value="'.h($k).'"><label class="chk" for="sp_c_'.h($k).'">'.h($v["name"]).'</label></li>';
+         									    }
+         									}
+         									?>
+								</ul>
+							</div>
+							<div class="slct">
+								<p class="tl">給与</p>
+								<div class="sltbox">
+									<ul class="clearfix">
+										<li>
+											<select name="salary">
+												<option value="">給与を選択してください</option>
+												<?php
+                                                 foreach($_["salaries"] as $v){
+            									     if(!empty($_["salaryRec"][$v])){
+                                                         echo '<option ';
+                                                         echo (!empty($_["pmsSalaries"]) and in_array($v,$_["pmsSalaries"]))?" selected":"";
+                                                         echo ' value="'.h($v).'">'.h($v).'円以上</option>';
+                                                     }
+                                                 }
+												?>
+											</select>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="slct2">
+								<p class="tla"><a href="#"><span>雇用形態</span></a></p>
+								<ul class="listbx com_checkbox">
+         									<?php
+         									foreach($_["jobTypes"] as $k => $v){
+         									    if(!empty($_["typeRec"][$k])){
+        									        if($v["name"]=="その他"){
+        									            continue;
+        									        }
+         									        echo '<li><input type="checkbox" ';
+         									        echo (!empty($_["pmsTypes"]) and in_array($k,$_["pmsTypes"]))?" checked":"";
+         									        echo ' id="sp_ty_'.h($k).'" name="type[]" value="'.h($k).'"><label class="chk" for="sp_ty_'.h($k).'">'.h($v["name"]).'</label></li>';
+         									    }
+         									}
+         									?>
+								</ul>
+							</div>
+							<div class="slct2">
+								<p class="tla"><a href="#"><span>こだわり条件</span></a></p>
+								<ul class="listbx com_checkbox">
+         									<?php
+         									foreach($_["jobdays"] as $k => $v){
+         									    if(!empty($_["dayRec"][$k])){
+         									        echo '<li><input type="checkbox" ';
+         									        echo (!empty($_["pmsDays"]) and in_array($k,$_["pmsDays"]))?" checked":"";
+         									        echo ' id="sp_h1_'.h($k).'" name="day[]" value="'.h($k).'"><label class="chk" for="sp_h1_'.h($k).'">'.h($v["name"]).'</label></li>';
+         									    }
+         									}
+         									foreach($_["jobFeatures"] as $k => $v){
+         									    if(!empty($_["feaRec"][$k])){
+         									        echo '<li><input type="checkbox" ';
+         									        echo (!empty($_["pmsFeas"]) and in_array($k,$_["pmsFeas"]))?" checked":"";
+         									        echo ' id="sp_h3_'.h($k).'" name="fea[]" value="'.h($k).'"><label class="chk" for="sp_h3_'.h($k).'">'.h($v["name"]).'</label></li>';
+         									    }
+         									}
+         									?>
+								</ul>
+							</div>
+							<?php
+							if(!preg_match ("/^\/callcenter\/index.html$/u", $_SERVER["SCRIPT_NAME"])){
+							?>
+							<div class="slct bt">
+								<p class="tl wid2">フリーワード</p>
+								<div class="sltbox">
+									<input name="word" type="text" placeholder="路線・地域名など" value="<?php echo (!empty($_["pmsWordStr"]))?h($_["pmsWordStr"]):'';?>" placeholder="">
+								</div>
+							</div>
+							<?php
+							}
+							?>
+							<div class="btnbx">
+								<p class="btn"><a href="#" class="formSubmitBtn"><span>検索<span id="sp_count"></span></span></a></p>
+							</div>
+							<div class="btnarea"></div>

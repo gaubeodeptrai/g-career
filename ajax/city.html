@@ -1,0 +1,64 @@
+<?php
+require_once dirname($_SERVER['DOCUMENT_ROOT']). '/libs/inc.php';
+
+
+$_["pref"] = "";
+$_["html"] = "";
+$b_["city"] = "";
+
+if(!empty($_GET["pref"])){
+    $_["pref"] = $_GET["pref"];
+    $b_["city"] = $_GET["city"];
+    
+    if(!empty($_GET["html"])){
+        $_["html"] = $_GET["html"];
+    }
+    
+    if($_["html"]==1){
+
+        echo '<table>';
+        echo '<tr>';
+        echo '<th>コード</th>';
+        echo '<td class="tl">ラベル</td>';
+        echo '</tr>';
+        
+        foreach(Data::cities(array('w_pref'=>$_["pref"])) as $val){
+            echo '<tr>';
+            echo '<th>'.$val["id"].'</th>';
+            echo '<td>'.$val["city"].'</td>';
+            echo '</tr>';
+        }
+        echo '</table>';
+    }
+
+    if($_["html"]==2){
+
+        echo '<select name="city_code">';
+        
+        foreach(Data::cities(array('w_pref'=>$_["pref"])) as $val){
+            echo '<option ';
+            if($b_["city"]==$val["id"]){
+                echo "selected";
+            }
+            echo ' value="'.h($val["id"]).'">'.h($val["city"]).'</option>';
+        }
+        echo '</select>';
+    }
+
+    if($_["html"]==3){
+
+        echo '<select class="swid5" name="city">';
+        
+        foreach(Data::cities(array('w_pref'=>$_["pref"])) as $val){
+            echo '<option ';
+            if($b_["city"]==$val["id"]){
+                echo "selected";
+            }
+            echo ' value="'.h($val["id"]).'">'.h($val["city"]).'</option>';
+        }
+        echo '</select>';
+    }
+    
+}
+
+?>

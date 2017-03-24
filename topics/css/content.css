@@ -1,0 +1,1308 @@
+/* CSS Document */
+
+
+/*コール（ネイビー）*/
+#list_area01 p.list_ttl,#detail_area01 p.detail_ttl{
+}
+#list_area01 p.list_ttl a,#detail_area01 h3.detail_ttl{
+	color:#3E2900;
+}
+#list_area01 p.list_ttl a:hover,#detail_area01 h3.detail_ttl a:hover{
+	color:#006699;
+}
+
+
+/*背景設定*/
+#wrapper{
+	width:910px;
+	text-align:left;
+	background:#FFFFFF;
+	margin:0 auto;
+	padding-left:30px;
+}
+
+
+/*パンくず*/
+.pan {
+	font-size:11px;
+	color:#666;
+	padding:17px 0 14px 5px;
+}
+
+.pan a{text-decoration:none;}
+
+/*ページャー*/
+p#list_display{float:left;
+               font-size:120%;
+			   }
+
+#pager_top {
+	text-align:left;
+	float:left;
+	margin-top:4px;
+}
+
+#pager_top ul li{
+	display:inline;
+	font-size:110%;
+	padding:0px 6px 0 3px;
+	border-right:1px solid #666;
+	font-weight:bold;
+	margin:2px;
+}
+#pager_top ul li a{ font-weight:normal;}
+
+
+
+#pager {
+	text-align:right;
+	padding:0 10px;
+}
+#pager ul li{
+	display:inline;
+	font-size:110%;
+	padding:0px 6px 0 3px;
+	border-right:1px solid #666;
+	font-weight:bold;
+	margin:2px;
+}
+#pager ul li a{ font-weight:normal;}
+
+/*--------------------------------------------------------------------
+main
+-----------------------------------------------------------------------*/
+/*#main h3 {
+	clear:both;
+	background:url(../images/aboutus/branch/tokyo_menber_ttl.png) 0 0 no-repeat;
+	font-size:16px;
+	font-weight:bold;
+	color:#000033;
+	padding:6px 0 0 40px;
+	height:30px;
+}*/
+#main h3.h3{
+	clear:both;
+}
+#main p{
+	line-height:1.6em;
+}
+#main h4 {
+	clear:both;
+	font-size:14px;
+	background-color:#f2f2f2;
+	font-weight:bold;
+	color:#000033;
+	padding:3px 0 4px 20px;
+	margin-top:10px;
+	border:1px solid #ccc;
+}
+/*注釈テキストなど*/
+.textAreaB01{
+	padding:10px 5px;
+	font-weight:bold;
+}
+.textArea01{
+	padding:10px 5px 25px;
+}
+
+
+.addArea01 { margin:5px 5px 10px; text-align:right;}
+
+
+
+/*--------------------------------------------------------------------
+side
+-----------------------------------------------------------------------*/
+#content #side{
+	width:210px;
+	float:left;
+}
+
+#sidebanner_wrap img{margin-bottom:10px;}
+
+
+#side h3#left_ttl{
+	width:180px;
+	height:24px;
+	text-align:center;
+	padding-top:3px;
+	background:#666;
+	font-size:14px;
+	font-weight:bold;
+	color:#fff;
+}
+#side h3{
+	margin-bottom:7px;
+}
+
+.joinBtn{
+	margin-bottom:7px;
+}
+
+/*-----------------------------------------------------------------------
+index（トップページ）
+-------------------------------------------------------------------------*/
+
+
+
+
+
+
+
+/*indexのみ使用。ずれ防止*/
+.h3 {
+	clear:both;
+}
+
+
+
+
+/*--------------------------------------------------------------------
+company
+-----------------------------------------------------------------------*/
+#company_tbl {
+	margin:15px 0 30px;
+	border:1px solid #ccc;
+}
+#company_tbl th {
+	text-align:center;
+	padding:8px;
+	background-color:#ECE9D8;
+	margin:1px;
+}
+#company_tbl td {
+	padding:8px;
+	margin:1px;
+	border-bottom:1px dashed #e5e5e5;
+}
+
+/*-----------------------------------------------------------------------
+list,detail,reg_index,mypage
+-------------------------------------------------------------------------*/
+
+/*求人タイトル背景*/
+#list_area01{background:url(../images/list_area01_bg.png) 0 0 no-repeat;}
+
+
+
+/*ステップ*/
+#stepArea {
+	margin:15px 0 10px;
+}
+
+/*検索結果タイトル、結果件数*/
+
+#list_ttl_H2_wrap{width:640px;
+			 height:70px;
+			 background:url(../images/list_ttl_H2.png) 0 0 repeat;
+			 margin-bottom:5px;
+			  }
+			   
+h2#list_ttl_H2{float:left;}
+
+#list_ttl_H2_wrap h2#list_ttl_H2 {line-height:70px !important; font-size:22px !important; padding:4px 0 0 20px; margin:0; height:70px !important; clear:none; color:#FFFFFF;}
+
+#totalBox01 { float:right; width:272px; height:10px; padding:14px; background:url(../images/totalBox01_bg.png) 0 0 repeat; text-align:center; margin-right:16px; margin-top:16px;}
+#totalBox01 #num { font-size:16px;}
+
+
+h2#detail_ttl_H2{display:block;
+	         width:880px;
+			 height:67px !important;
+			 background:url(../images/detail_ttl_H2.png) 0 0 no-repeat;
+			 margin-bottom:15px;
+			 padding:3px 0 0 20px !important;
+			 line-height:67px !important; font-size:22px; color:#FFF !important;
+			 }
+
+
+
+/*追加検索エリア*/
+#add_search {
+	padding:0;
+}
+
+#add_search input {
+	margin:0 5px 5px;
+}
+#add_search input.freeword{
+	color:#666;
+}
+
+#add_search table tr th a.re-add_btn{float:right; width:54px; height:26px; margin:auto 0;}
+
+#add_search table tr th{
+	width:160px;
+	background-color:#ECE9D8;
+	padding:5px 5px 5px 10px;
+	line-height:26px;
+	font-weight:normal;
+	vertical-align:middle;
+	color:#333;
+	text-align:left;
+	border-left:1px solid #CDC698;
+	border-bottom:1px solid #fff;
+}
+#add_search table tr th.top{
+	border-top:1px solid #CDC698;
+}
+#add_search table tr th.bottom{
+	border-bottom:1px solid #CDC698;
+}
+
+#add_search table tr td{
+	padding:8px 10px;
+	vertical-align:middle;
+	border-right:1px solid #CDC698;
+	border-bottom:1px dashed #CDC698;
+}
+#add_search table tr td.top{
+	border-top:1px solid #CDC698;
+}
+#add_search table tr td.bottom{
+	border-bottom:1px solid #CDC698;
+}
+
+
+
+/*登録メリット、マイページ各種設定変更エリア*/
+
+#reg_merit {
+	padding:4px 8px 8px;
+}
+#settingArea {
+	padding:4px 0px 25px;
+}
+
+#reg_merit table tr th,#settingArea table tr th{
+	width:140px;
+	background-color:#ECE9D8;
+	padding:0 10px;
+	font-weight:bold;
+	vertical-align:middle;
+	color:#333;
+	text-align:left;
+	border-left:1px solid #ccc;
+	border-bottom:2px solid #fff;
+}
+#reg_merit table tr th.top,#settingArea table tr th.top{
+	border-top:1px solid #ccc;
+}
+#reg_merit table tr th.bottom,#settingArea table tr th.bottom{
+	border-bottom:1px solid #ccc;
+}
+
+#reg_merit table tr td,#settingArea table tr td{
+	padding:7px 10px;
+	vertical-align:middle;
+	border-right:1px solid #ccc;
+	border-bottom:1px dashed #ccc;
+}
+#reg_merit table tr td.top,#settingArea table tr td.top{
+	border-top:1px solid #ccc;
+}
+#reg_merit table tr td.bottom,#settingArea table tr td.bottom{
+	border-bottom:1px solid #ccc;
+}
+
+
+/*設定するボタンの右あわせ*/
+#settingArea table tr td p{
+	float:left;
+}
+#settingArea table tr td form{
+	float:left;
+}
+#settingArea table tr td p.btn_set02{
+	float:right;
+}
+#add_search table tr td ul li { list-style:none; float:left;}
+
+
+/*フォームとテキストの高さあわせ*/
+#add_search table tr td input,#add_search table tr td select{
+	vertical-align:middle;
+	height:18px;
+}
+
+/*こだわりリストプルダウン*/
+#add_search table tr .bottom div#choiceL #detail_area{
+	display:none;
+}
+#add_search table tr .bottom div#choiceL #detail_area .pc{
+	width:480px;
+	font-size:10px;
+	color:#666;
+	list-style:none;
+}
+#add_search table tr .bottom div#choiceL #detail_area .pc li{
+	float:left;
+	width:160px;
+	letter-spacing:-0.5pt;
+	margin-bottom:5px;
+}
+#add_search table tr .bottom div#choiceL #detail_area .pc input{
+	margin-right:2px;
+}
+
+/*追加検索ボタンを右位置へ*/
+div#list_btn_searchAdd {
+	float:right;
+	margin:0;
+}
+
+div#list_btn_searchAdd input{margin:0;}
+
+/*NEW,HOT,PICKUP*/
+div.iconArea01 img{
+	padding:10px 0 3px 5px;
+}
+
+/*--------------
+お仕事一覧、詳細
+---------------*/
+
+/*リストタイトルH3*/
+h3#list_ttl_H3{clear:both;
+	background:url(../images/list_ttl_H3.png) 0 0 no-repeat;
+	font-size:18px;
+	color:#0099CC;
+	padding:7px 0 0 32px;
+	height:24px;}
+
+
+
+/*勤務地・業種・路線から探す（H2タイトル、3つのタブ）*/
+
+#search_tab_wrap{width:860px;
+			 height:71px;
+			 background:url(../images/dot.png) 0 bottom repeat-x;
+			 margin-bottom:30px;
+			 margin-top:10px;
+			 padding-left:20px;		  }
+
+h2#search_ttl_H2 {line-height:0 !important; 
+                                      font-size:26px !important; 
+									  padding:0; 
+									  margin:0; 
+									  height:0 !important;
+									  text-indent:-9999px; 
+									  }
+
+
+#search_tab_wrap ul{width:880px; height:71px; }
+#search_tab_wrap ul li{float:left; width:220px; height:71px; list-style:none; display:block; margin-right:4px;}
+#search_tab_wrap ul li a{width:220px; height:71px; display:block; text-indent:-9999px;}
+
+#search_tab_wrap ul li#Tab_area_current a{background:url(../images/searchway_area_btn.png) 0 -142px no-repeat;}
+#search_tab_wrap ul li#Tab_job_current a {background:url(../images/searchway_job_btn.png) 0 -142px no-repeat;}
+#search_tab_wrap ul li#Tab_station_current a{background:url(../images/searchway_station_btn.png) 0 -142px no-repeat;}
+
+#search_tab_wrap ul li#Tab_area_link a{background:url(../images/searchway_area_btn.png) 0 0 no-repeat;}
+#search_tab_wrap ul li#Tab_job_link a{background:url(../images/searchway_job_btn.png) 0 0 no-repeat;}
+#search_tab_wrap ul li#Tab_station_link a{background:url(../images/searchway_station_btn.png) 0 0 no-repeat;}
+
+#search_tab_wrap ul li#Tab_area_link a:hover{background:url(../images/searchway_area_btn.png) 0 -71px no-repeat;}
+#search_tab_wrap ul li#Tab_job_link a:hover{background:url(../images/searchway_job_btn.png) 0 -71px no-repeat;}
+#search_tab_wrap ul li#Tab_station_link a:hover{background:url(../images/searchway_station_btn.png) 0 -71px no-repeat;}
+
+p.textArea01{ font-size:120%;}
+
+/*勤務地・業種・路線から探す*/
+#searchBox01 dl#area dt{ font-size:120%; font-weight:bold; color:#494949; border-bottom:1px dotted #ccc; float:left; width:130px; line-height:50px;}
+#searchBox01 dl#area{padding: 0 10px;}
+#searchBox01 dl#area dd {font-size:110%; list-style:none; float:left; width:100px; line-height:50px; border-bottom:1px dotted #ccc;}
+
+#searchBox01 dl#job dt {font-size:120%; font-weight:bold; color:#494949; border-bottom:1px dotted #ccc; padding-bottom:5px; margin-bottom:5px; margin-top:10px;}
+#searchBox01 dl#job {padding:10px;}
+#searchBox01 dl#job dd {font-size:110%; margin:15px 0px 0 15px; list-style:none; float:left; width:230px; line-height:1.4em;}
+
+#searchBox01 dl#line dt{ font-size:120%; font-weight:bold; color:#494949; border-bottom:1px dotted #ccc; padding-bottom:5px; margin-bottom:5px;}
+#searchBox01 dl#line{ padding:20px 10px;}
+#searchBox01 dl#line dd {font-size:110%; margin:10px 0px 10px 5px; list-style:none; float:left; width:180px; line-height:1.4em;}
+
+
+/*鉄道会社一覧*/
+#linelist { clear:both; padding:10px; margin:0 10px 10px 10px; background:#FFFFEE; border:1px solid #FFCC99;}
+#linelist h3 { background:none; font-size:12px; color:#372117; height:13px; border-left:5px solid #FF9900; padding:5px 10px;}
+#linelist ul li { float:left; width:150px; list-style:none; margin:5px 0px 5px 5px; line-height:1.2em;}
+#linelist ul li a{ background:url(../images/arrow_bot.gif) 0 0 no-repeat; padding-left:14px;}
+
+
+/*市区町村から探す*/
+#searchBox01 ul#pref { padding:20px 10px;}
+#searchBox01 ul#pref li { margin:10px 0; list-style:none; float:left; width:155px; line-height:1.4em;}
+.re-searchBox { text-align:right; padding-left:15px; margin-bottom:5px;}
+/*background:url(../images/search_icon.gif) 460px 1px no-repeat; */
+
+/*.re-subTtl { font-size:160%; padding-bottom:5px; margin-bottom:10px; border-bottom:3px solid #e5e5e5;}*/
+.re-subTtl { font-size:14px; padding-bottom:5px; margin-bottom:10px; border-bottom:3px solid #e5e5e5;}
+
+
+/*駅、勤務地チェックボックス*/
+#cityGroup li { float:left;}
+#stationGroup li { float:left;}
+
+
+/*求人情報エリア*/
+#list_area01 {
+	width:600px;
+	padding:20px;
+	border:1px solid #CCCCCC;
+	margin-bottom:30px;
+}
+
+
+#detail_area01 {
+	width:600px;
+	padding:20px 20px 40px 20px;
+	border:1px solid #CCCCCC;
+	margin-bottom:15px;
+	}
+
+/*求人タイトル*/
+#list_area01 p.list_ttl,#detail_area01 h3.detail_ttl{
+	padding:0 0 10px 0;
+	font-size:22px;
+	width:600px;
+	margin:0;
+	line-height:1.4em;
+	background:none;
+	font-weight:bold;
+	height:auto;
+}
+
+#list_area01 p.list_ttl a,#detail_area01 h3.detail_ttl a{
+    text-decoration:none;
+}
+
+/*求人一覧用タイトル*/
+#list_area01 p.list_list_ttl,#detail_area01 p.detail_list_ttl{
+	margin: -5px 0 0;
+	padding:0 0 10px 0;
+}
+
+
+/*仕事名、雇用形態アイコン*/
+#list_area01 .list_name,#detail_area01 .detail_name{
+	padding:13px 0 9px 5px;
+	font-size:15px;
+	color:#0099CC;
+	font-weight:500;
+	line-height:20px;
+}
+
+#list_area01 .iconArea01,#detail_area01 .iconArea01{
+	padding-bottom:10px;}
+
+
+
+#list_area01 .iconArea02,#detail_area01 .iconArea02{
+	float:right;
+	padding-right:5px;
+}
+#list_area01 .iconArea02 img,#detail_area01 .iconArea02 img{
+	padding:10px 5px 10px 0;
+}
+
+.list_name a {
+	text-decoration:none;
+}
+
+/*写真、待遇・条件アイコン*/
+
+#list_area01 .fIcon,#detail_area01 .fIcon{
+	text-align:left;
+	padding:10px 0;
+}
+#list_area01 .fIcon img {
+}
+
+
+
+#detail_area01 .fIcon{
+}
+#detail_area01 .fIcon img {
+}
+
+
+/*お仕事情報の要項テーブル*/
+#list_area01 #list_data{
+	float:left;
+}
+#list_area01 #list_data table tr th{
+	width:120px;
+	background-color:#00CCFF;
+	padding:11px 10px 9px 10px;
+	font-weight:bold;
+	color:#FFFFFF;
+	text-align:left;
+	border-left:1px solid #ccc;
+	border-bottom:1px solid #fff;
+}
+#list_area01 #list_data table tr th.top{
+	border-top:1px solid #ccc;
+}
+#list_area01 #list_data table tr th.bottom{
+	border-bottom:1px solid #ccc;
+}
+
+#list_area01 #list_data table tr td{
+	padding:11px 10px 9px 10px;
+	border-right:1px solid #ccc;
+	border-bottom:1px dashed #ccc;
+	color:#3E2900;
+}
+#list_area01 #list_data table tr td.top{
+	border-top:1px solid #ccc;
+}
+#list_area01 #list_data table tr td.bottom{
+	border-bottom:1px solid #ccc;
+}
+
+/*ボタンエリア*/
+#list_btnArea {
+	margin-top:10px;
+}
+
+
+#detail_btnArea{
+    width:210px;
+	float:left;
+	margin-left:30px;
+	position: relative;}
+
+#detail_btnArea img{padding-bottom:5px;
+}
+
+#nav{
+	width:210px;
+	height:429px;}
+
+.fixed {
+  position: fixed;
+  top: 20px;
+}
+
+
+
+/*--------------
+お仕事情報詳細
+---------------*/
+
+/*お仕事情報の要項テーブル*/
+#detail_data{
+	clear:both;
+	margin:0;
+	font-size:14px;
+	line-height: 130%;
+}
+#detail_data table tr th{
+	width:120px;
+	background-color:#00CCFF;
+	padding:11px 10px 9px 10px;
+	font-weight:bold;
+	color:#FFF;
+	text-align:left;
+	border-left:1px solid #ccc;
+	border-bottom:1px solid #fff;
+}
+#detail_data table tr th.top{
+	border-top:1px solid #ccc;
+}
+#detail_data table tr th.bottom{
+	border-bottom:1px solid #ccc;
+}
+
+#detail_data table tr td{
+	padding:11px 10px 9px 10px;
+	border-right:1px solid #ccc;
+	border-bottom:1px dashed #ccc;
+	color:#3E2900;
+}
+#detail_data table tr td.top{
+	border-top:1px solid #ccc;
+}
+#detail_data table tr td.bottom{
+	border-bottom:1px solid #ccc;
+}
+
+/*サポート情報*/
+#detail_cluboff_wrap{width:580px; height:844px; margin:0 0 10px 10px;}
+#detail_cluboff_wrap div{float:left; width:289px; height:280px;}
+#detail_cluboff_01{margin:0 2px 2px 0; background:url(../images/detail_cluboff_01.png) 0 0 no-repeat;}                     
+#detail_cluboff_02{margin:0 0 2px 0; background:url(../images/detail_cluboff_02.png) 0 0 no-repeat;} 
+#detail_cluboff_03{margin:0 2px 2px 0; background:url(../images/detail_cluboff_03.png) 0 0 no-repeat;}                     
+#detail_cluboff_04{margin:0 0 2px 0; background:url(../images/detail_cluboff_04.png) 0 0 no-repeat;} 
+#detail_cluboff_05{margin:0 2px 0 0; background:url(../images/detail_cluboff_05.png) 0 0 no-repeat;}                     
+#detail_cluboff_06{background:url(../images/detail_cluboff_06.png) 0 0 no-repeat;} 
+#detail_cluboff_wrap p{font-size:13px; color:#3E2900; padding:45px 12px 0 12px;}
+
+#detail_insurance{width:560px; height:250px; background:url(../images/detail_insurance.png) 0 0 no-repeat; margin-left:20px;} 
+#detail_insurance p{font-size:13px; color:#3E2900; padding:120px 12px 0 95px;}
+
+#detail_holiday{width:560px; height:auto; margin-left:20px; padding-bottom:50px;} 
+#detail_holiday p{font-size:13px; color:#3E2900; padding:0 0 10px 0;}
+
+#detail_training{width:560px; height:auto; margin-left:20px; padding-bottom:50px;}
+#detail_training img{float:right;} 
+#detail_training p{width:305px; font-size:13px; color:#3E2900; float:left;}
+
+
+/*応募からお仕事スタートまでの流れ*/
+.detail_flow_box{width:560px; height:135px; margin:14px 0 0 20px;} 
+.detail_flow_boxL{float:left; width:400px; height:134px; background:url(../images/detail_flow_arrow.png) 0 bottom no-repeat;}
+.detail_flow_boxLB{float:left; width:400px; height:134px;}
+.detail_flow_boxL p{font-size:13px; color:#3E2900; padding:10px 30px 0 55px;}
+.detail_flow_boxLB p{font-size:13px; color:#3E2900; padding:10px 30px 0 55px;}
+.detail_flow_boxR{float:left; width:160px; height:120px;}
+
+
+
+/*担当者からの声テーブル*/
+#voice_photo{
+	float:left;
+	padding:15px 0;
+}
+#voice_data{
+	float:left;
+	width:430px;
+	padding:15px 0;
+}
+#voice_data p{
+	width:400px;
+	padding:0 0 10px 10px;
+}
+
+#voice_tbl {
+	border:1px solid #ccc;
+	clear:both;
+	margin-bottom:5px;
+}
+#voice_tbl tr th{
+	font-size:14px;
+	width:100px;
+	background-color:#ECE9D8;
+	padding:5px 10px;
+	font-weight:bold;
+	color:#333;
+	text-align:left;
+	border:2px solid #fff;
+}
+#voice_tbl tr td{
+	font-size:12px;
+	padding:5px 10px;
+	border:2px solid #fff;
+}
+
+p.bottom_btn {
+	text-align:right;
+	padding:30px 0;
+}
+
+
+/*-----------------------------------------------------------------------
+apply
+-------------------------------------------------------------------------*/
+.staff_from{font-size:15px; margin:15px 0 20px 0;}
+.staff_from a{text-decoration:none;}
+#form_wrap_01{background-color:#F0F0F0; width:840px; padding:20px; margin-bottom:50px;}
+#form_wrap_02{background-color:#E0E0E0; width:814px; padding:5px 13px 13px 13px;}
+#form_wrap_02 p{font-size:15px; line-height:45px;}
+
+#form_tbl01,#form_tbl03{
+	padding:4px 8px 8px;
+	border:1px solid #E0E0E0;
+	border-collapse:collapse;
+}
+#form_tbl01 input,#form_tbl03 input {
+	margin-bottom:2px;
+}
+#form_tbl01 input.freeword,#form_tbl03 input.freeword{
+	color:#666;
+}
+#form_tbl01 tr th,#form_tbl03 tr th{
+	width:250px;
+	font-size:13px;
+	font-weight:normal;
+	line-height:18px;
+	background-color:#FFFFFF;
+	padding:16px 10px;
+	color:#333;
+	text-align:left;
+	border:1px solid #E0E0E0;
+	border-collapse:collapse;
+}
+
+/*応募ID・パスワード入力*/
+#form_tbl01 tr th.apply_ttl{
+	text-align:right;
+}
+
+/*職務経歴書のタイトル*/
+#form_tbl01 tr td.setTtl{
+	background-color:#E4DED6;
+	font-weight:bold;
+	text-align:center;
+}
+
+#form_tbl01 tr td,#form_tbl03 tr td{
+	padding:7px 20px;
+	border:1px solid #E0E0E0;
+	border-collapse:collapse;
+	background-color:#FFF;
+	clear:both;
+}
+
+/*お問い合わせのボタンを右位置へ*/
+#form_tbl03 tr td p{
+	float:left;
+	}
+p.btn_inq,p.btn_inq02{float:right !important;}
+
+
+/*フォームとテキストの高さあわせ*/
+#form_tbl03 tr td {
+	vertical-align:middle;
+	height:40px;
+}
+
+
+/*各種設定の項目「列」2当分に配置する*/
+#form_tbl01 ul li{
+	float:left;
+	width:190px;
+	padding-right:10px;
+	list-style:none;
+}
+
+/*必須マーク*/
+#form_tbl01 tr th.ne{
+	background:#FFF url(../images/common/hisu.png) right no-repeat;
+}
+
+/*フォームとテキストの高さあわせ*/
+#form_tbl01 tr td input,#form_tbl01 tr td select{
+	vertical-align:middle;
+}
+
+
+/*追加設定項目の囲い*/
+#input_btnArea04_wrap{background:url(../images/common/apply_open_bg.png) 0 top repeat-y; padding:10px 0;}
+#input_btnArea04_wrap p{margin:5px 0 10px 10px;}
+
+/*応募する（各種設定の表示・非表示）*/
+#app_skillArea {
+	display:none;
+}
+#app_businessArea {
+	display:none;
+}
+#app_careerArea {
+	display:none;
+}
+
+
+
+/*個人情報取扱規約*/
+.reg_pol{
+	margin:5px 0px;
+	font-size:12px;
+}
+
+
+/*入力フォームボタンエリア（1つボタン）*/
+.input_btnArea01{
+	text-align:center;
+	width:235px;
+	margin:40px auto;
+	height:48px;
+}
+/*入力フォームボタンエリア（2つボタン -小-）*/
+.input_btnArea02{
+	text-align:center;
+	width:420px;
+	margin:40px auto;
+	height:50px;
+}
+/*入力フォームボタンエリア（職務経歴書追加ボタン,応募完了のトップへボタン）*/
+.input_btnArea03{
+	text-align:center;
+	width:235px;
+	margin:40px auto 0px;
+	height:48px;
+}
+/*入力フォームボタンエリア（応募ページ　設定ボタン-小）*/
+#input_btnArea04{padding-left:10px;}
+
+#input_btnArea04 input{
+	margin:2px 0 10px 0;
+	width:196px;
+}
+/*入力フォームボタンエリア（応募ページ　会員ボタン）*/
+.input_btnArea05{
+	text-align:center;
+	width:235px;
+	margin:30px auto 0px;
+	height:48px;
+}
+/*入力フォームボタンエリア（応募ページ　非会員ボタン）*/
+.input_btnArea06{
+	text-align:center;
+	width:235px;
+	margin:5px auto 0px;
+	height:48px;
+	clear:both;
+}
+/*入力フォームボタンエリア（2つボタン -大:本登録完了-）*/
+.input_btnArea07{
+	text-align:center;
+	width:490px;
+	margin:40px auto;
+	height:48px;
+}
+
+/*修正するボタンエリア*/
+.back_btnArea{
+	width:200px;
+	float:left;
+	padding-right:20px;
+}
+/*右側ボタンエリア*/
+.input_btnR{
+	float:left;
+	width:200px;
+}
+
+
+/*完了エリア*/
+#execArea01{
+	width:794px;
+	background:#FFF;
+	padding:20px 10px;
+	margin:0;
+}
+
+.textArea02{
+	padding:30px 80px 10px 80px;
+	text-align:left;
+	width:634px;
+	line-height:26px !important;
+}
+#execArea01 .textArea03{
+	padding:10px 0;
+	text-align:center;
+	width:620px;
+}
+
+/*--------------------------------------------------------------------*/
+
+/*フォーム*/
+#form_tbl01 dl#applyLogin{
+	padding:0 15px;
+	margin-top:0px;
+	width:320px;
+}
+#form_tbl01 dl#applyLogin dt{
+	text-align:right;
+	width:68px;
+	float:left;
+	padding:2px 10px 3px 0;
+	font-weight:bold;
+}
+#form_tbl01 dl#applyLogin dd{
+	width:228px;
+	float:left;
+	padding-bottom:3px;
+}
+#form_tbl01 dl#applyLogin dd input{
+	width:228px;
+}
+
+/*自動ログイン*/
+#form_tbl01 dl#applyAuto{
+	clear:both;
+	margin-left:68px;
+	color:#666;
+	padding-bottom:5px;
+}
+#form_tbl01 dl#applyAuto dt{
+	width:25px;
+	float:left;
+}
+#form_tbl01 dl#applyAuto dd{
+	width:134px;
+	float:left;
+	font-size:10px;
+	margin-top:2px;
+	padding-bottom:4px;
+}
+
+
+
+/*-----------------------------------------------------------------------
+reg_index,reg_pass
+-------------------------------------------------------------------------*/
+#form_tbl01 ul.scout_area li {
+	float:left;
+	margin-top:6px;
+	padding-left:20px;
+	width:170px;
+	list-style:none;
+}
+#us_pwd {
+	width:160px;
+}
+
+/*-----------------------------------------------------------------------
+mypage
+-------------------------------------------------------------------------*/
+/*名前エリア*/
+#myname {
+	background:#ECE9D8 url(../common/images/name_top.gif) 0 top no-repeat;
+	width:640px;
+	margin-bottom:10px;
+}
+#myname p.myname{
+	font-size:18px;
+	font-weight:bold;
+	color:#333;
+	padding:10px 0 10px 15px;
+}
+#myname #infoArea #information {
+	float:left;
+	width:100px;
+	font-size:12px;
+	font-weight:bold;
+}
+#myname #infoArea #infoList {
+	float:right;
+	font-size:12px;
+}
+
+#main #myname div#infoArea {
+	float:left;
+	background:#fff;
+	padding:5px 10px;
+	margin:0 10px 0 10px;
+	width:408px;
+	border:1px solid #ccc;
+}
+
+/*お仕事ストック一覧へ*/
+#main #myname div#btn_myStock{
+	float:left;
+	width:180px;
+}
+
+/* IE6のpadding-left 5pxを確保*/
+* html #main #myname div#infoArea{
+	margin:0 10px 0 5px;
+}
+/* End hide from IE-mac */
+
+#main #myname #infoArea dl{
+	margin-top:0px;
+	padding-top:2px;
+	height:67px;
+	overflow:auto;
+	overflow-x: hidden;
+	overflow-y:auto;
+	scrollbar-track-color:white;
+	scrollbar-face-color:333;
+	scrollbar-arrow-color:#ccc;
+	scrollbar-shadow-color:#ccc;
+	scrollbar-highlight-color:#fff;
+	scrollbar-darkshadow-color:#fff;
+	scrollbar-3dlight-color:#ccc; 
+}
+#main #myname #infoArea dl dt{
+	float:left;
+	width:70px;
+	line-height:1.4em;
+}
+#main #myname #infoArea dl dd{
+	float:left;
+	width:320px;
+	line-height:1.4em;
+}
+#main #myname #nameBottom {
+	clear:both;
+	background:url(../common/images/name_bottom.gif) 0 bottom no-repeat;
+	height:10px;
+	width:640px;
+}
+
+/*テキストの位置を左側*/
+.left_textArea01{
+	float:left;
+	padding-left:15px;
+	width:460px;
+}
+
+/*ボタンの位置を右側*/
+.right_btnArea01{
+	float:right;
+	margin:10px;
+}
+
+/*ボタンの位置を中央*/
+.center_btnArea01{
+	margin:20px 0 20px 220px;
+	clear:both;
+	text-align:center;
+}
+
+*:first-child+html .center_btnArea01{
+	margin:20px auto;
+	clear:both;
+	text-align:center;
+}
+
+
+/*-----------------------------------------------------------------------
+inq
+-------------------------------------------------------------------------*/
+h2#inq_ttl{background:url(../images/inq_ttl.png) 0 0 no-repeat;
+	height:75px !important;
+	width:880px;
+	text-indent:-9999px;
+	padding:0 !important;
+	margin-bottom:30px;
+}
+
+#inq_table{}
+
+
+
+/*-----------------------------------------------------------------------
+stock,news
+-------------------------------------------------------------------------*/
+h2#stock_ttl{background:url(../images/stock_ttl.png) 0 0 no-repeat;
+	height:75px !important;
+	width:640px;
+	text-indent:-9999px;
+	padding:0 !important;
+	margin-bottom:30px;
+}
+
+#stockTbl{
+	padding:4px 8px 8px;
+	margin:10px 0 15px;
+	border:1px solid #ccc;
+	border-collapse:collapse;
+}
+#stockTbl input{
+	margin-bottom:2px;
+}
+#stockTbl tr th{
+	background-color:#F6F4F1;
+	padding:4px 3px;
+	font-weight:bold;
+	color:#333;
+	text-align:center;
+	border:1px solid #ccc;
+	border-collapse:collapse;
+}
+
+#stockTbl tr td{
+	padding:4px 3px;
+	border:1px solid #ccc;
+	border-collapse:collapse;
+	clear:both;
+}
+#stockTbl tr td.inputArea{
+	text-align:center;
+}
+
+
+#newsTbl{
+	padding:4px 8px 8px;
+	margin:10px 0 15px;
+	border-collapse:collapse;
+}
+#newsTbl tr th{
+	background-color:#F6F4F1;
+	padding:8px;
+	font-weight:bold;
+	color:#333;
+	text-align:center;
+	border:1px solid #ccc;
+	border-collapse:collapse;
+}
+#newsTbl tr td{
+	padding:8px;
+	border-bottom:1px dashed #ccc;
+	border-collapse:collapse;
+	clear:both;
+}
+
+
+
+/*ボタン*/
+ul.stock_btnArea{
+	width:600px;
+}
+ul.stock_btnArea li{
+	float:left;
+	margin-right:5px;
+	list-style:none;
+}
+
+/*-----------------------------------------------------------------------
+privacy
+-------------------------------------------------------------------------*/
+
+h2#privacy_ttl{background:url(../images/privacy_ttl.png) 0 0 no-repeat;
+	height:75px !important;
+	width:880px;
+	text-indent:-9999px;
+	padding:0 !important;
+	margin-bottom:15px;
+}
+
+h2#privacy_ttl02{background:url(../images/privacy_ttl02.png) 0 0 no-repeat;
+	height:75px !important;
+	width:880px;
+	text-indent:-9999px;
+	padding:0 !important;
+	margin:15px 0;
+}
+
+#pArea,vArea {
+	float:left;
+	width:300px;
+}
+#pArea img,#vArea img{
+	float:left;
+	padding-right:10px;
+}
+#pArea p,#vArea p{
+	float:left;
+	width:200px;
+	padding:0;
+}
+
+
+#privacy_wrap h3 {
+	clear:both;
+	background:url(../images/h3_ttl.gif) 0 0 no-repeat;
+	font-size:16px;
+	font-weight:bold;
+	color:#000033;
+	padding:4px 0 0 20px;
+	height:20px;
+}
+
+#privacy_wrap p{
+	line-height:24px;
+	font-size:15px;
+}
+#privacy_wrap h4 {
+	clear:both;
+	font-size:14px;
+	background-color:#f2f2f2;
+	font-weight:bold;
+	color:#000033;
+	padding:6px 0 4px 20px;
+	margin-top:10px;
+	border:1px solid #ccc;
+}
+
+.privacy_p10{padding-left:10px;}
+.privacy_p25{padding-left:25px;}
+
+
+
+
+
+/*モーダル*/
+/* Z-index of #mask must lower than #boxes .window */
+         #mask {
+            position:fixed;
+/*			width:100%;*/
+            left:0; top:0;
+            z-index:9000;
+            background-color:#000;
+            display:none;
+         }
+         .window {
+            position:absolute;
+			width:640px;
+/*            left:0; top:0;*/
+            display:none;
+            z-index:9999;
+            padding:10px 40px 10px 10px;
+			background:#fff;
+         }
+#dialog { padding:10px; background-color:#F7F7F7;}
+#jobdialog { padding:10px; background-color:#F7F7F7;}
+#stationdialog { padding:10px; background-color:#F7F7F7;}
+#detaildialog { padding:10px; background-color:#F7F7F7;}
+
+
+#state { background:#fef9fb; margin-bottom:10px; border-top:1px dashed #ccc; border-bottom:1px dashed #ccc;}
+#state dl{ clear:both; color:#000000; padding:5px;}
+#state dl dt{ margin-bottom:8px; padding-top:10px; height:20px; font-weight:bold; clear:both; border-bottom:2px dotted #ccc;}
+#state dl dd{ float:left; width:205px; margin:5px 0 10px 5px;}
+
+#state dl dt.otherArea { border-bottom:2px dotted #fff; margin:10px 10px 0;}
+#state dl dt.re-subTtl { border-bottom:2px dotted #fff; background:#F0F0F0; padding:5px; margin:5px;}
+
+.stationName input,#detailCheckbox dd input { margin-right:5px;}
+
+
+/*-----------------------------------------------------------------------
+sitemap
+-------------------------------------------------------------------------*/
+
+h2#sitemap_ttl{background:url(../images/sitemap_ttl.png) 0 0 no-repeat;
+	height:75px !important;
+	width:880px;
+	text-indent:-9999px;
+	padding:0 !important;
+	margin-bottom:30px;
+}
+
+
+div#sitemap-content-area {
+	margin-left: 15px;
+	width: 865px;
+	margin-top: 10px;
+}
+div#sitemap-content-area-left{display:block; width:50%; height:auto; float:left; margin-bottom:50px;}
+div#sitemap-content-area-right{float:right; width:50%; height:auto; margin-bottom:50px;}
+
+#sitemap-content-area ul {
+	margin:10px 0 0 10px;
+	padding:0 0 10px 0;
+	font-size: 16px;
+	font-weight:bold;
+	background-repeat: no-repeat;
+	background-position: 0% 10%;
+	text-indent:20px;
+}
+
+.ul_bgimg{
+	background-image:url(../images/sitemap-icon01.gif);
+}
+
+#sitemap-content-area ul li {
+	list-style-image:url(../images/sitemap-icon02.gif);
+	margin:0 0 0 35px;
+	padding:0 0 10px 0;
+	font-size: 12px;
+	font-weight:normal;
+	text-indent:5px;
+}
+
+
+
+
+
+
+
+
+
+
+

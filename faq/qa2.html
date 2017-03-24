@@ -1,0 +1,67 @@
+<?php
+require_once dirname($_SERVER['DOCUMENT_ROOT']). '/libs/inc.php';
+
+?><!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>登録・お仕事紹介｜Q&A｜<?php echo h($GLOBALS["PAGETITLE"]);?></title>
+<meta name="description" content="Q&Aの登録・お仕事紹介のページです。<?php echo h($GLOBALS["PAGDESCRIPTION"]);?>">
+<meta name="keywords" content="<?php echo h($GLOBALS["PAGEKEYWORDS"]);?>">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/head.html'; ?>
+</head>
+<body>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/header.html'; ?>
+<article id="Contents">
+	<section class="com_pnkzbox m_b10">
+		<ul class="clearfix" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+			<li><a href="<?php echo h($GLOBALS["PNKZURL"]);?>" itemprop="url"><span itemprop="title"><?php echo h($GLOBALS["PNKZTITLE"]);?></span></a></li>
+			<li>&gt;</span>&nbsp;&nbsp;<a href="/faq/" itemprop="url"><span itemprop="title">Q&A</span></a></li>
+			<li itemprop="title"><span class="clr_gr">&gt;</span>&nbsp;&nbsp;登録・お仕事紹介</li>
+		</ul>
+	</section>
+	<section id="FAQBX">
+		<section id="Clmbox" class="com_wid clearfix">
+			<section id="Mainbox">
+				<div class="qabox">
+					<h2 class="com_tlx"><img src="/callcenter/images/title_faq2.png" alt="Q&A 登録・お仕事紹介" ></h2>
+					<h2 class="com_spttl"><img src="/callcenter/images/sp_ttl_qa2.png" alt="Q&A 登録・お仕事紹介" height="26"></h2>
+					<div class="tabbox">
+						<ul class="clearfix">
+							<li><a href="index.html">派遣全般</a></li>
+							<li><a class="on" href="qa2.html">登録・お仕事紹介</a></li>
+							<li><a href="qa3.html">お金・休暇</a></li>
+							<li><a href="qa4.html">保険・福利厚生</a></li>
+						</ul>
+					</div>
+					<div class="qaboxin">
+						<div class="toglbox clearfix">
+							<ul class="clearfix">
+								<li class="open"><a href="#">全ての回答を開く</a></li>
+								<li class="close"><a href="#">全ての回答を閉じる</a></li>
+							</ul>
+						</div>
+						<?php
+						require_once dirname(dirname(dirname($_SERVER['DOCUMENT_ROOT']))).WWW_ROOT.'/template/faq/qa2.html';
+						?>
+						<div class="toglbox clearfix">
+							<ul class="clearfix">
+								<li class="open"><a href="#">全ての回答を開く</a></li>
+								<li class="close"><a href="#">全ての回答を閉じる</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section id="Sidebox">
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/sidebox.html'; ?>
+			</section>
+		</section>
+		<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/sp_bottom.html'; ?>
+	</section>
+</article>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/footer.html'; ?>
+</body>
+</html>

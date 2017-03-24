@@ -1,0 +1,319 @@
+<?php
+require_once dirname($_SERVER['DOCUMENT_ROOT']). '/libs/inc.php';
+
+
+
+$_ = array();
+$_pms_ = array();
+foreach(array(
+"pmsPrefs"                => array(),
+"pmsCities"               => array(),
+"pmsLines"                => array(),
+"pmsStas"                 => array(),
+"pmsCates"                => array(),
+"pmsInds"                 => array(),
+"pmsTypes"                => array(),
+"pmsSalaries"             => array(),
+"pmsDays"                 => array(),
+"pmsFeas"                 => array(),
+) as $k => $v){
+    $_pms[$k] = $v;
+}
+
+$_ = $_pms;
+
+foreach(array(
+"referer"              => "/callcenter/search/",
+"today"                   => date("Y-m-d"),
+"prefRec"                 => array(),
+"cityRec"                 => array(),
+"cateRec"                 => array(),
+"indRec"                  => array(),
+"typeRec"                 => array(),
+"salaryRec"               => array(),
+"feaRec"                  => array(),
+"dayRec"                  => array(),
+"nm"                      => "0",
+
+"areas"                   => array(),
+"prefectures"             => array(),
+"prefGroups"              => array(),
+"prefCities"              => array(),
+"jobCategories"           => array(),
+"jobFeatures"             => array(),
+"jobdays"                 => array(),
+"lines"                   => array(),
+"stations"                => array(),
+"salaries"                => array(),
+"jobIndustries"           => array(),
+"jobTypes"                => array(),
+
+//パラメータ
+"pmsPref"                 => "",
+"pmsCity"                 => "",
+"pmsLine"                 => "",
+"pmsSta"                  => "",
+"pmsCate"                 => "",
+"pmsInd"                  => "",
+"pmsType"                 => "",
+"pmsSalary"               => "",
+"pmsDay"                  => "",
+"pmsFea"                  => "",
+"pmsWord"                 => "",
+"pmsPage"                 => "",
+
+"pmsLines"                => array(),
+"pmsLines2"               => array(),
+"pmsStas"                 => array(),
+
+"pmsLineStr"              => "",
+"pmsStaStr"               => "",
+
+//パラメータ表示
+"pmsPrefStr"              => "",
+"pmsWordStr"              => "",
+) as $k => $v){
+    $_[$k] = $v;
+}
+
+if(preg_match ("/^\/callcenter\/searchdet\/.+$/u", $_SERVER["SCRIPT_NAME"])){
+    if(!empty($_SESSION["kaigoi"]["pms"])){
+        foreach($_SESSION["kaigoi"]["pms"] as $k => $v){
+            $_[$k] = "";
+        }
+        unset($_SESSION["kaigoi"]["pms"]);
+    }
+}
+
+
+//条件変更遷移フラグ
+$_SESSION["kaigoi"]["sp_select"] = "1";
+
+if(!empty($_SESSION["kaigoi"]["pms"])){
+    foreach($_SESSION["kaigoi"]["pms"] as $k => $v){
+        $_[$k] = $v;
+    }
+}
+
+if(!empty($_["pmsWord"])){
+    $_["pmsWord"] = urldecode($_["pmsWord"]);
+    $_["pmsWord"] = srcMix($_["pmsWord"]);
+    $_["pmsWord"] = implode(" ",$_["pmsWord"]);
+    $_["pmsWordStr"] = $_["pmsWord"];
+}
+
+if(!empty($_["pmsPrefs"])){
+    foreach($_["pmsPrefs"] as $v){
+        $_["pmsPref"] = $v;
+    }
+}
+if(!empty($_["pmsCities"])){
+    foreach($_["pmsCities"] as $v){
+        $_["pmsCity"] = $v;
+    }
+}
+
+if(!empty($_REQUEST["pref"])){
+    $_["pmsPref"] = $_REQUEST["pref"];
+}
+
+//都道府県
+foreach(Data::prefectures(array('w_status'=>'1')) as $v){
+    $_["areas"][$v["id"]] = $v;
+    $_["prefectures"][$v["gp_id"]][$v["id"]] = $v;
+    $_["prefGroups"][$v["gp_id"]] = $v;
+}
+
+if(!empty($_["pmsPref"])){
+
+    $_["pmsPrefStr"] = $_["areas"][$_["pmsPref"]]["name"];
+    
+   //市区町村
+    foreach(Data::cities(array('w_pref'=>$_["pmsPrefStr"])) as $v){
+        $_["prefCities"][$_["pmsPref"]][$v["id"]] = $v;
+    }
+    if(!empty($_REQUEST["city"])){
+        $_["pmsCity"] = $_REQUEST["city"];
+    }
+
+}
+
+
+foreach(Data::stations() as $v) {
+    $_["lines"][$v["line_id"]] = $v;
+    $_["stations"][$v["id"]] = $v;
+}
+
+
+if(!empty($_["pmsSta"]) or !empty($_["pmsLine"])){
+
+    foreach($_["pmsPrefs"] as $val){
+        foreach(Data::stations(array('w_pref'=>$val)) as $v){
+            $_["stationGpDate"][$v["idg"]][] = $v["id"];
+        }
+    }
+}
+
+
+if(!empty($_["pmsLines"])){
+    
+    //駅
+    foreach(Data::stations(array('lineids'=>$_["pmsLines"])) as $v) {
+        $_["lineStas"][] = $v["id"];
+        $_["pmsStas"][]  = $v["id"];
+        $_["pmsStasGp"][]  = $v["idg"];
+    }
+    
+    foreach($_["pmsLines"] as $v){
+        if(!empty($_["lines"][$v]["line_name"])){
+            $_["pmsLineStr"][] = $_["lines"][$v]["line_name"];
+        }
+    }
+    $_["pmsLines2"] = $_["pmsLines"];
+}
+
+if(!empty($_["pmsStas"])){
+
+
+    if(!empty($_["pmsLines"])){
+        foreach($_["lineStas"] as $del){
+            if(($key = array_search($del, $_["pmsStas"])) !== false) {
+                unset($_["pmsStas"][$key]);
+            } 
+        }
+    }
+    
+    foreach($_["pmsStas"] as $v){
+        if(!empty($_["stations"][$v]["name"])){
+            $_["pmsStaStr"][] = $_["stations"][$v]["name"];
+            $_["pmsLines2"][] = $_["stations"][$v]["line_id"];
+        }
+    }
+    $_["pmsLines2"] = array_unique($_["pmsLines2"]);
+}
+
+
+
+//募集職種
+$_["jobCategories"] = Data::jobCategories_CC(array('s'=>'1','w_status'=>'1'));
+
+//業種
+$_["jobIndustries"] = Data::jobIndustry_CC(array('s'=>'1','w_status'=>'1'));
+
+//雇用形態
+$_["jobTypes"] = Data::jobtypes(array('s'=>'1','w_status'=>'1'));
+
+//給与
+$_["salaries"] = Data::salarytime();
+
+//特色フラグ
+$_["jobFeatures"] = Data::jobFeatures_CC(array('s'=>'1','w_status'=>'1'));
+
+//勤務日数
+$_["jobdays"] = Data::jobdays(array('s'=>'1','w_status'=>'1'));
+
+
+//求人
+foreach(DataCcRec::recruits(array('s'=> '1','w_status'=> 'OPEN','w_startdate'=> $_["today"])) as $v){
+    $_["prefRec"][$v["pref_code"]][] = $v["id"];
+    $_["cityRec"][$v["city_code"]][] = $v["id"];
+
+    if(!empty($_["pmsPref"]) and $v["pref_code"]!=$_["pmsPref"]){
+        continue;
+    }
+    if(!empty($_["pmsCity"]) and $v["city_code"]!=$_["pmsCity"]){
+        continue;
+    }
+        
+    $v["cate_codes"] =  explode(",", $v["cate_codes"]);
+    foreach($v["cate_codes"] as $r){
+        $_["cateRec"][$r][] = $v["id"];
+    }
+
+    $v["industry_code"] =  explode(",", $v["industry_code"]);
+    foreach($v["industry_code"] as $r){
+        $_["indRec"][$r][] = $v["id"];
+    }
+
+    $v["jobtype_codes"] =  explode(",", $v["jobtype_codes"]);
+    foreach($v["jobtype_codes"] as $r){
+        $_["typeRec"][$r][] = $v["id"];
+    }
+
+    $_["salaryRec"][$v["salarytime_low"]][] = $v["salarytime_low"];
+    
+    $v["feature_codes"] =  explode(",", $v["feature_codes"]);
+    foreach($v["feature_codes"] as $r){
+        $_["feaRec"][$r][] = $v["id"];
+    }
+
+    $v["jobday_codes"] =  explode(",", $v["jobday_codes"]);
+    foreach($v["jobday_codes"] as $r){
+        $_["dayRec"][$r][] = $v["id"];
+    }
+
+}
+
+$matchurl = $_SERVER["SERVER_NAME"]."\/callcenter\/search\/";
+if(preg_match("/{$matchurl}/u", $_SERVER["HTTP_REFERER"], $match)){
+    $_["referer"] = $_SERVER["HTTP_REFERER"];
+}
+
+?><!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>特徴から探す｜<?php echo h($GLOBALS["PAGETITLE"]);?></title>
+<meta name="description" content="求人検索の特徴から探すのページです。<?php echo h($GLOBALS["PAGDESCRIPTION"]);?>">
+<meta name="keywords" content="<?php echo h($GLOBALS["PAGEKEYWORDS"]);?>">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/head.html'; ?>
+<script type="text/javascript" src="/callcenter/common/js/top.js"></script>
+</head>
+<body>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/header.html'; ?>
+<article id="Contents">
+	<section class="com_pnkzbox m_b10">
+		<ul class="clearfix" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+			<li><a href="<?php echo h($GLOBALS["PNKZURL"]);?>" itemprop="url"><span itemprop="title"><?php echo h($GLOBALS["PNKZTITLE"]);?></span></a></li>
+			<li itemprop="title"><span class="clr_gr">&gt;</span>&nbsp;&nbsp;特徴から探す</li>
+		</ul>
+	</section>
+	<section id="TOPBX">
+		<section id="Clmbox" class="com_wid clearfix">
+			<section id="Mainbox">
+				<div class="contentbox contentbox_select searchdet">
+					<?php
+                    if(preg_match ("/^\/callcenter\/search\/select\.html$/u", $_SERVER["REQUEST_URI"])){
+                	?><p class="com_sp btn_detailsback"><a href="<?php echo h($_["referer"]);?>">一覧に戻る</a></p>
+					<?php
+					}
+					?>
+					<h2 class="com_tlx"><img src="/callcenter/images/title_searchdet.png" alt="特徴から探す" ></h2>
+					<h2 class="com_spttl"><img src="/callcenter/images/sp_top_ttl_choice.png" alt="条件を指定して探す" height="26"></h2>
+					<form method="post" action="/search/">
+					<div class="com_pc com_box bortp" id="searchbox">
+					<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/searchbox.html'; ?>
+					</div>
+					</form>
+					<!--//spソース-->
+					<form method="post" action="/search/">
+					<div class="sp_selctbx com_sp" id="Searchbox_sp">
+					<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/searchbox_sp.html'; ?>
+					</div>
+					</form>
+					<!--spソース//-->
+				
+				</div>
+			</section>
+			<section id="Sidebox">
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/sidebox.html'; ?>
+			</section>
+		</section>
+		<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/sp_bottom.html'; ?>
+	</section>
+</article>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/footer.html'; ?>
+</body>
+</html>

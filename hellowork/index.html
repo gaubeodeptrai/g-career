@@ -1,0 +1,139 @@
+<?php
+require_once dirname($_SERVER['DOCUMENT_ROOT']). '/libs/inc.php';
+
+//都道府県
+foreach(Data::prefectures(array('w_status'=>'1','o_select'=>'1')) as $v){
+    $_["areas"][$v["id"]] = $v;
+    $_["prefectures"][$v["gp_id"]][$v["id"]] = $v;
+    $_["prefGroups"][$v["gp_id"]] = $v;
+    $_["groupsPref"][$v["id"]] = $v["gp_id"];
+}
+
+?><!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>ハローワークの求人を探す｜<?php echo h($GLOBALS["PAGETITLE"]);?></title>
+<meta name="description" content="ハローワークの求人を探すページです。<?php echo h($GLOBALS["PAGDESCRIPTION"]);?>">
+<meta name="keywords" content="ハローワーク,<?php echo h($GLOBALS["PAGEKEYWORDS"]);?>">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/head.html'; ?>
+<script type="text/javascript">
+$(function spAreaSlide(){
+    $("#TOPBX .contentbox .hw_areabox dl dt").click(function(){
+        var w = $(window).width();
+        var x = 700
+        if (w < x) {
+            if($(this).next("dd").is(":hidden")){
+                 $(this).next("dd").slideDown();
+                 $(this).addClass("on");
+            } else {
+                 $(this).next("dd").hide();
+                 $(this).removeClass("on");
+            }
+        }
+        return false;
+    });
+});
+</script>
+</head>
+<body>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/header.html'; ?>
+<article id="Contents">
+	<section class="com_pnkzbox m_b10">
+		<ul class="clearfix" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+			<li><a href="<?php echo h($GLOBALS["PNKZURL"]);?>" itemprop="url"><span itemprop="title"><?php echo h($GLOBALS["PNKZTITLE"]);?></span></a></li>
+			<li itemprop="title"><span class="clr_gr">&gt;</span>&nbsp;&nbsp;ハローワーク求人検索</li>
+		</ul>
+	</section>
+	<section id="TOPBX">
+		<section id="Clmbox" class="com_wid clearfix">
+			<section id="Mainbox">
+				<h2 class="com_tlx"><img src="/callcenter/images/title_hellowork.png" alt="ハローワークの求人を探す" ></h2>
+				<h2 class="com_spttl"><img src="/callcenter/images/sp_ttl_hellowork.png" alt="ハローワークの求人を探す" height="26"></h2>
+
+				<div class="contentbox">
+					<div class="ttlbox area bortp">
+						<h3 class="com_pc"><img src="/callcenter/images/top_ttl_area.png" alt="エリアから探す"></h3>
+					<!--//spソース-->
+						<h2 class="com_sp">エリアから探す</h2>
+					<!--spソース//-->
+					</div>
+					<div class="com_box hw_areabox">
+						<?php
+						foreach($_["prefGroups"] as $t){
+						    echo '<dl><dt><span>'.h($t["gp_name"]).'</span></dt>';
+						    echo '<dd class="clearfix"><ul>';
+							foreach($_["prefectures"][$t["gp_id"]] as $v){
+							        echo '<li><a href="/callcenter/hellowork/search/pref-';
+							        echo h($v["id"]).'/"><span>'.h($v["name"]).'</span></a></li>';
+							}
+						    echo '</ul></dd></dl>';
+						}
+						?>
+					</div>
+				</div>
+
+
+				<div class="contentbox">
+					<div class="ttlbox info">
+						<h3 class="com_pc"><img src="/callcenter/images/top_ttl_hwabout.png" alt="ハローワークとは"></h3>
+					<!--//spソース-->
+						<h2 class="com_sp">ハローワークとは</h2>
+					<!--spソース//-->
+					</div>
+					<div class="com_box hw_abbox">
+						<p class="m_b10">ハローワーク【公共職業安定所】は、国が所管している職業紹介事業機関で、職業紹介や就職支援サービスを無料で行っています。</p>
+<p>その他ハローワークでは、雇用保険に関する各種の手当、助成金の支給や公共職業訓練の斡旋、職業安定関係の業務なども行っており、障害をお持ちの方々の為にも、専門職員・相談員を配置して登録から就職後のアフターケアーまで、職業紹介や就業指導等を行っています。</p>
+					</div>
+				</div>
+
+
+				<div class="contentbox">
+					<div class="ttlbox info bortp">
+						<h3 class="com_pc"><img src="/callcenter/images/top_ttl_hwinfo.png" alt="ハローワーク情報"></h3>
+					<!--//spソース-->
+						<h2 class="com_sp">ハローワーク情報</h2>
+					<!--spソース//-->
+					</div>
+					<div class="com_box hw_abbox">
+						<div class="ltbx">
+						    <h4>ハローワークの利用方法</h4>
+						    <dl>
+						        <dt>求職申し込みをする</dt>
+						        <dd>ハローワークを利用して求職活動を行っていただくためには求職申込みが必要です。最寄のハローワークで求職申込書の記入を行ってください。 </dd>
+						    </dl>
+						    <dl>
+						        <dt>就職相談・求人紹介</dt>
+						        <dd>求職申込みが終わり、ハローワークから「ハローワークカード」を受取りますと、就職の相談や希望求人の紹介が受けれます。</dd>
+						    </dl>
+                            
+                            <dl>
+						        <dt>職業相談</dt>
+						        <dd>
+                                ハローワークの窓口では、就職についての様々な相談も行っています。<br>
+                                ・どんな仕事がよいのか決められない。<br>
+                                ・具体的な求職活動の仕方が分からない。<br>
+                                ・就職する上で相談したいことがある。<br>
+                                ・応募書類の書き方や面接の受け方について知りたい。<br>
+                                就職に関するどの様々な相談もハローワークでご相談出来ます。<br>
+                                オンラインシステムを使って、全国の求人から探すこともできます。
+                                </dd>
+						    </dl>
+                            
+						</div>
+					</div>
+				</div>
+				
+			</section>
+			<section id="Sidebox">
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/sidebox.html'; ?>
+			</section>
+		</section>
+		<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/sp_bottom.html'; ?>
+	</section>
+</article>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/footer.html'; ?>
+</body>
+</html>

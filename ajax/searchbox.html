@@ -1,0 +1,136 @@
+<?php
+require_once dirname($_SERVER['DOCUMENT_ROOT']). '/libs/inc.php';
+
+
+$_ = array();
+foreach(array(
+"today"                   => date("Y-m-d"),
+"prefRec"                 => array(),
+"cityRec"                 => array(),
+"srvRec"                 => array(),
+"skillRec"                 => array(),
+"expRec"                 => array(),
+"feaRec"                 => array(),
+"timeRec"                 => array(),
+"dayRec"                 => array(),
+"nm"                      => "0",
+
+"areas"             => array(),
+"prefectures"             => array(),
+"prefCities"             => array(),
+"jobCategories"        => array(),
+"jobServices"          => array(),
+"jobFeatures"          => array(),
+"jobtimes"             => array(),
+"jobdays"              => array(),
+
+//パラメータ
+"pmsPref"                => "",
+"pmsCity"                => "",
+"pmsLine"                => "",
+"pmsSta"                 => "",
+"pmsCate"                => "",
+"pmsSrv"                 => "",
+"pmsSkill"               => "",
+"pmsExp"                 => "",
+"pmsTime"                => "",
+"pmsDay"                 => "",
+"pmsFea"                 => "",
+"pmsWord"                => "",
+"pmsPage"                => "",
+
+//パラメータ表示
+"pmsPrefStr"                => "",
+) as $k => $v){
+    $_[$k] = $v;
+}
+
+if(!empty($_REQUEST["pref"])){
+    $_["pmsPref"] = $_REQUEST["pref"];
+}
+
+//都道府県
+foreach(Data::prefectures(array('w_status'=>'1')) as $v){
+    $_["areas"][$v["id"]] = $v;
+    $_["prefectures"][$v["gp_id"]][$v["id"]] = $v;
+}
+
+if(!empty($_REQUEST["pref"])){
+    $_["pmsPref"] = $_REQUEST["pref"];
+
+    $_["pmsPrefStr"] = $_["areas"][$_["pmsPref"]]["name"];
+    
+   //市区町村
+    foreach(Data::cities(array('w_pref'=>$_["pmsPrefStr"])) as $v){
+        $_["prefCities"][$_["pmsPref"]][$v["id"]] = $v;
+    }
+    if(!empty($_REQUEST["city"])){
+        $_["pmsCity"] = $_REQUEST["city"];
+    }
+
+}
+
+
+//募集職種
+$_["jobCategories"] = Data::jobCategories(array('s'=>'1','w_status'=>'1'));
+
+//サービス種類
+$_["jobServices"] = Data::jobServices(array('s'=>'1','w_status'=>'1'));
+
+//特色フラグ
+$_["jobFeatures"] = Data::jobFeatures(array('s'=>'1','w_status'=>'1'));
+
+//勤務時間
+$_["jobtimes"] = Data::jobtimes(array('s'=>'1','w_status'=>'1'));
+
+//勤務日数
+$_["jobdays"] = Data::jobdays(array('s'=>'1','w_status'=>'1'));
+
+
+//求人
+foreach(Data::recruits(array('s'=> '1','w_status'=> 'OPEN','w_startdate'=> $_["today"])) as $v){
+    $_["prefRec"][$v["pref_code"]][] = $v["id"];
+    $_["cityRec"][$v["city_code"]][] = $v["id"];
+
+    if(!empty($_["pmsPref"]) and $v["pref_code"]!=$_["pmsPref"]){
+        continue;
+    }
+    if(!empty($_["pmsCity"]) and $v["city_code"]!=$_["pmsCity"]){
+        continue;
+    }
+        
+    $v["cate_codes"] =  explode(",", $v["cate_codes"]);
+    foreach($v["cate_codes"] as $r){
+        $_["cateRec"][$r][] = $v["id"];
+    }
+    $v["service_code"] =  explode(",", $v["service_code"]);
+    foreach($v["service_code"] as $r){
+        $_["srvRec"][$r][] = $v["id"];
+    }
+
+    $_["skillRec"][$v["skill_flg"]][] = $v["id"];
+    $_["expRec"][$v["exp_flg"]][] = $v["id"];
+
+    $v["feature_codes"] =  explode(",", $v["feature_codes"]);
+    foreach($v["feature_codes"] as $r){
+        $_["feaRec"][$r][] = $v["id"];
+    }
+
+    $v["jobday_codes"] =  explode(",", $v["jobday_codes"]);
+    foreach($v["jobday_codes"] as $r){
+        $_["dayRec"][$r][] = $v["id"];
+    }
+
+    $_["timeRec"][$v["jobtime1_code"]][] = $v["id"];
+    $_["timeRec"][$v["jobtime2_code"]][] = $v["id"];
+    $_["timeRec"][$v["jobtime3_code"]][] = $v["id"];
+    $_["timeRec"][$v["jobtime4_code"]][] = $v["id"];
+    
+}
+
+
+require_once $_SERVER['DOCUMENT_ROOT'].'/include/searchbox.html';
+    
+
+
+?>

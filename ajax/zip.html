@@ -1,0 +1,72 @@
+<?php
+require_once dirname($_SERVER['DOCUMENT_ROOT']). '/libs/inc.php';
+
+
+$_["zip"] = "";
+$_["prefectures"] = array();
+$_["pref"] = "";
+$_["city"] = "";
+$_["town"] = "";
+
+if(!empty($_GET["zip"])){
+
+
+    $_["zip"] = $_GET["zip"];
+    
+    foreach(Data::cities(array('w_zip'=>$_["zip"],'s_town'=>"1")) as $k => $v){
+        $_["pref"] = $v["pref"];
+        $_["city"] = $v["id"];
+        $_["town"] = $v["town"];
+    }
+    
+    
+    $_["prefectures"] = Data::prefectures(array('s'=>'1','w_status'=>'1'));
+    
+    if(!empty($_GET["html"])){
+        $_["html"] = $_GET["html"];
+    }
+
+    if($_["html"]==1){
+    ?>
+			<div class="tlbx">
+				<p class="tl">都道府県</p>
+				<div class="tbx">
+					<select class="swid5" name="prefecture">
+						<option value="">選択して下さい</option>
+						<?php
+						foreach($_["prefectures"] as $key=> $val){
+						    echo '<option ';
+						    echo ($_["pref"] == $val["name"])?" selected":"";
+						    echo ' value="'.h($key).'" >'.h($val["name"]).'</option>';
+						}
+						?>
+					</select>
+				</div>
+			</div>
+			<div class="tlbx">
+				<p class="tl">市区町村</p>
+				<div class="tbx">
+<?php
+        echo '<select class="swid5" name="city">';
+        
+        foreach(Data::cities() as $val){
+            echo '<option ';
+            echo ($_["city"] == $val["id"])?" selected":"";
+            echo ' value="'.h($val["id"]).'">'.h($val["city"]).'</option>';
+        }
+        echo '</select>';
+?>
+				</div>
+			</div>
+			<div class="tlbx">
+				<p class="tl">番地・<br>建物名</p>
+				<div class="tbx">
+					<input class="wid3" name="address" type="text" value="<?php echo h($_["town"]); ?>" size="40" maxlength="100" >
+				</div>
+			</div>
+	<?php		
+    }
+    
+}
+
+?>

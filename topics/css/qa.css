@@ -1,0 +1,361 @@
+/* =============================================== */
+/* Q&Aページ　TOPページ（index.html） */
+/* =============================================== */
+
+h2#qa_cc {
+	background-repeat: no-repeat !important;
+	margin-top: 0px !important;
+	background-image: url(../images/support/qa/qa_top_ttl.jpg)!important;
+	padding-left: 50px !important;
+	color: #3C3C3C;
+	margin-bottom: 10px;
+}
+
+
+
+#qa_index_p1_navi {
+	background-image: url(../images/support/qa/qa_p1_list_bg-img.gif);
+	margin-top: 0px;
+	width: 640px;
+	height: 233px;
+	background-repeat: no-repeat;
+	margin-bottom: 20px;
+}
+
+#qa_index_p2_navi {
+	background-image: url(../images/support/qa/qa_p2_list_bg-img.gif);
+	margin-top: 0px;
+	width: 640px;
+	height: 325px;
+	background-repeat: no-repeat;
+	margin-bottom: 20px;
+}
+
+#qa_index_p3_navi {
+	background-image: url(../images/support/qa/qa_p3-4_list_bg-img.gif);
+	margin-top: 0px;
+	width: 640px;
+	height: 160px;
+	background-repeat: no-repeat;
+	margin-bottom: 20px;
+}
+
+#qa_index_p4_navi {
+	background-image: url(../images/support/qa/qa_p3-4_list_bg-img.gif);
+	margin-top: 0px;
+	width: 640px;
+	height: 160px;
+	background-repeat: no-repeat;
+	margin-bottom: 20px;
+}
+
+/* ======================SA共通TOPへ戻るボタン======================= */
+#SA_backbtn {
+	padding: 0px;
+	height: 26px;
+	width: 149px;
+	margin-top: 26px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	margin-left: 0px;
+	background-image: url(../images/contents_common/sa_backbtn_before.gif);
+	background-repeat: no-repeat;
+	display: block;
+	text-indent: -9999px;
+	float: right;
+}
+
+/* =============================================== */
+/* Q&Aページ　その1 */
+/* =============================================== */
+
+#qa_p1_h3 {
+	margin-bottom: 10px;
+}
+
+h2#qa_title {
+	background-repeat: no-repeat !important;
+	margin-top: 0px !important;
+	background-image: url(../images/support/qa/qa_icon_orange_h2.gif) !important;
+	padding-left: 30px !important;
+	padding-bottom: 0px !important;
+	padding-top: 5px;
+	color: #3C3C3C;
+}
+
+#qa_p1_navi {
+	background-image: url(../images/support/qa/qa_p1_list_bg-img.gif);
+	margin-top: 0px;
+	width: 640px;
+	height: 233px;
+	background-repeat: no-repeat;
+	margin-bottom: 10px;
+}
+
+#qa_p1_navi_btn {
+	margin-bottom: 0px;
+}
+
+#qa_p1_list {
+	margin-left: 30px;
+	line-height: 24px;
+	margin-bottom: 20px;
+	margin-top: 10px;
+}
+
+#qa_p1_txt {
+	font-family: "ＭＳ Ｐゴシック", Osaka, "ヒラギノ角ゴ Pro W3";
+	font-size: 12px;
+	line-height: 18px;
+	color: #333333;
+	width: 640px;
+	margin-bottom: 30px;
+}
+
+#qa_p1_01_img {
+	margin-bottom: 30px;
+	width: 349px;
+	height: 269px;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+#qa_p1_01_toTop {
+	font-family: "ＭＳ Ｐゴシック", Osaka, "ヒラギノ角ゴ Pro W3";
+	font-size: 12px;
+	line-height: 18px;
+	color: #333333;
+	float: right;
+	width: 77px;
+	margin-bottom: 20px;
+}
+
+#qa_p1_compare01 {
+	margin-bottom: 20px;
+	font-size: 10px;
+	color: #333333;
+}
+
+#qa_p1_compare02 {
+	margin-bottom: 20px;
+	font-size: 10px;
+	color: #333333;
+}
+
+
+
+/* =============================================== */
+/* Q&Aページ　その2 */
+/* =============================================== */
+
+#qa_p2_h3 {
+	margin-bottom: 10px;
+}
+
+h2#qa_title {
+	background-repeat: no-repeat !important;
+	margin-top: 0px !important;
+	background-image: url(../images/support/qa/qa_icon_orange_h2.gif) !important;
+	padding-left: 30px !important;
+	padding-bottom: 0px !important;
+	padding-top: 5px;
+	color: #3C3C3C;
+}
+
+#qa_p2_navi {
+	background-image: url(../images/support/qa/qa_p2_list_bg-img.gif);
+	margin-top: 0px;
+	width: 640px;
+	height: 325px;
+	background-repeat: no-repeat;
+	margin-bottom: 10px;
+}
+
+#qa_p2_navi_btn {
+	margin-bottom: 0px;
+}
+
+#qa_p2_list {
+	margin-left: 30px;
+	line-height: 24px;
+	margin-bottom: 20px;
+	margin-top: 10px;
+}
+
+#qa_p2_txt {
+	font-family: "ＭＳ Ｐゴシック", Osaka, "ヒラギノ角ゴ Pro W3";
+	font-size: 12px;
+	line-height: 18px;
+	color: #333333;
+	width: 640px;
+	margin-bottom: 30px;
+}
+
+#qa_p2_01_img {
+	margin-bottom: 30px;
+	width: 349px;
+	height: 269px;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+#qa_p2_01_toTop {
+	font-family: "ＭＳ Ｐゴシック", Osaka, "ヒラギノ角ゴ Pro W3";
+	font-size: 12px;
+	line-height: 18px;
+	color: #333333;
+	float: right;
+	width: 77px;
+	margin-bottom: 20px;
+}
+
+#qa_p2_step {
+	margin-bottom: 20px;
+	font-size: 12px;
+	color: #333333;
+	line-height: 140%;
+}
+
+
+
+/* =============================================== */
+/* Q&Aページ　その3 */
+/* =============================================== */
+
+#qa_p3_h3 {
+	margin-bottom: 10px;
+}
+
+h2#qa_title {
+	background-repeat: no-repeat !important;
+	margin-top: 0px !important;
+	background-image: url(../images/support/qa/qa_icon_orange_h2.gif) !important;
+	padding-left: 30px !important;
+	padding-bottom: 0px !important;
+	padding-top: 5px;
+	color: #3C3C3C;
+}
+
+#qa_p3_navi {
+	background-image: url(../images/support/qa/qa_p3-4_list_bg-img.gif);
+	margin-top: 0px;
+	width: 640px;
+	height: 160px;
+	background-repeat: no-repeat;
+	margin-bottom: 10px;
+}
+
+#qa_p3_navi_btn {
+	margin-bottom: 0px;
+}
+
+#qa_p3_list {
+	margin-left: 30px;
+	line-height: 24px;
+	margin-bottom: 20px;
+	margin-top: 10px;
+}
+
+#qa_p3_txt {
+	font-family: "ＭＳ Ｐゴシック", Osaka, "ヒラギノ角ゴ Pro W3";
+	font-size: 12px;
+	line-height: 18px;
+	color: #333333;
+	width: 640px;
+	margin-bottom: 30px;
+}
+
+#qa_p3_01_img {
+	margin-bottom: 30px;
+	width: 349px;
+	height: 269px;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+#qa_p3_01_toTop {
+	font-family: "ＭＳ Ｐゴシック", Osaka, "ヒラギノ角ゴ Pro W3";
+	font-size: 12px;
+	line-height: 18px;
+	color: #333333;
+	float: right;
+	width: 77px;
+	margin-bottom: 20px;
+}
+
+
+
+/* =============================================== */
+/* Q&Aページ　その4 */
+/* =============================================== */
+
+#qa_p4_h3 {
+	margin-bottom: 10px;
+}
+
+h2#qa_title {
+	background-repeat: no-repeat !important;
+	margin-top: 0px !important;
+	background-image: url(../images/support/qa/qa_icon_orange_h2.gif) !important;
+	padding-left: 30px !important;
+	padding-bottom: 0px !important;
+	padding-top: 5px;
+	color: #3C3C3C;
+}
+
+#qa_p4_navi {
+	background-image: url(../images/support/qa/qa_p3-4_list_bg-img.gif);
+	margin-top: 0px;
+	width: 640px;
+	height: 160px;
+	background-repeat: no-repeat;
+	margin-bottom: 10px;
+}
+
+#qa_p4_navi_btn {
+	margin-bottom: 0px;
+}
+
+#qa_p4_list {
+	margin-left: 30px;
+	line-height: 24px;
+	margin-bottom: 20px;
+	margin-top: 10px;
+}
+
+#qa_p4_txt {
+	font-family: "ＭＳ Ｐゴシック", Osaka, "ヒラギノ角ゴ Pro W3";
+	font-size: 12px;
+	line-height: 18px;
+	color: #333333;
+	width: 640px;
+	margin-bottom: 30px;
+}
+
+#qa_p4_01_img {
+	margin-bottom: 30px;
+	width: 349px;
+	height: 269px;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+#qa_p4_01_toTop {
+	font-family: "ＭＳ Ｐゴシック", Osaka, "ヒラギノ角ゴ Pro W3";
+	font-size: 12px;
+	line-height: 18px;
+	color: #333333;
+	float: right;
+	width: 77px;
+	margin-bottom: 20px;
+}
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,1833 @@
+<?php
+require_once dirname($_SERVER['DOCUMENT_ROOT']). '/libs/inc.php';
+
+
+$_ = array();
+foreach(array(
+"referer"              => "/callcenter/search/",
+"id"                   => "",
+"data"                 => array(),
+"jobid"                => array(),
+"error"                => "0",
+"today"                => date("Y-m-d"),
+"newflg"               => "0",
+"citiesData"           => array(),
+"stationsData"         => array(),
+"picturesData"         => array(),
+"jobIndustries"        => array(),
+"jobIndustriesStr"     => array(),
+"jobCategories"        => array(),
+"jobServices"          => array(),
+"jobFeatures"          => array(),
+"jobtimes"             => array(),
+"jobdays"              => array(),
+"jobweeks"             => array(),
+"jobtypes"             => array(),
+"prefectures"          => array(),
+"cities"               => array(),
+"stations"             => array(),
+"pictures"             => array(),
+
+"favlist"              => array(),
+"randdata"             => array(),
+"historydata"          => array(),
+"history"              => array(),
+
+"prefCode"             => array(),
+"prefData"             => array(),
+"cityData"             => array(),
+"prefRec"              => array(),
+"cityRec"              => array(),
+"cityIndRec"              => array(),
+
+"stationGpDate"        => array(),
+"stationGpDatePt"      => array(),
+"stationData"          => array(),
+"stationRec"           => array(),
+
+"recruitsAccessLi"     => array(),
+"recruitsAccessAllLi"  => array(),
+"recruitsAreaLi"       => array(),
+
+) as $k => $v){
+    $_[$k] = $v;
+}
+
+$_["id"] = (!empty($_REQUEST["id"]))?$_REQUEST["id"]:"";
+
+if(empty($_["id"])){
+   $_["error"] = 1;
+}
+
+if(
+!empty($_SESSION["kaigoi"]["admin"])
+) {
+    //求人データ取得
+    $_["data"] = DataCcRec::recruits(array(
+        'id'=> $_["id"]));
+    $_["error"] = 0;
+    
+} else {
+
+    //求人データ取得
+    $_["data"] = DataCcRec::recruits(array(
+        'id'=> $_["id"],
+        'w_status'=> array('OPEN','CLOSED'),
+        'w_startdate'=> $_["today"]));
+
+    if(empty(DataCcRec::$dataTotal)){
+       $_["error"] = 1;
+    }
+
+}
+
+if(
+!empty($_POST["admin_preview_flg"])
+){
+   $_["error"] = 0;
+   $_SESSION["kaigoi"]["admin"]["recruits"] = $_POST;
+   $_["data"] = $_POST;
+   foreach($_["data"] as $k => $v){
+       if(is_array($v)){
+           $_["data"][$k] = implode(",",$v);
+       }
+   }
+   $_["jobid"] = (empty($_["jobid"]))?"登録完了後表示":"";
+} else {
+   unset($_SESSION["kaigoi"]["admin"]["recruits"]);
+}
+
+
+//案件番号
+if(!empty($_["data"]["id"])){
+    $_["jobid"] = sprintf('%06d', $_["data"]["id"]);
+}
+
+if(!empty($_["error"])){
+    header("Location: /callcenter/search/");
+    exit;
+}
+
+//新着判別
+$_["newflg"] = newFlg($_["data"]["startdate"]);
+
+
+//募集職種
+$_["jobCategories"] = Data::jobCategories_CC(array('s'=>'1','w_status'=>'1'));
+
+//業種
+$_["jobIndustries"] = Data::jobIndustry_CC(array('s'=>'1','w_status'=>'1'));
+
+foreach($_["jobIndustries"] as $k=>$v){
+    $_["jobIndustriesStr"][$v["name"]] = $v["id"];
+}
+
+//雇用形態
+$_["jobTypes"] = Data::jobtypes(array('s'=>'1','w_status'=>'1'));
+
+//雇用形態略文言
+$_["jobTypesS"] = Data::jobtypes_S();
+
+//雇用形態略文言
+$_["jobTypesSS"] = Data::jobtypes_SS();
+
+//給与
+$_["salaries"] = Data::salarytime();
+
+//特色フラグ
+$_["jobFeatures"] = Data::jobFeatures_CC(array('s'=>'1','w_status'=>'1'));
+
+//勤務日数
+$_["jobdays"] = Data::jobdays(array('s'=>'1','w_status'=>'1'));
+
+//勤務曜日
+$_["jobweeks"] = Data::jobweeks(array('s'=>'1','w_status'=>'1'));
+
+//都道府県
+$_["prefectures"] = Data::prefectures(array('s'=>'1','w_status'=>'1'));
+
+//市区町村
+$_["citiesData"][] = $_["data"]["city_code"];
+$_["cities"] = Data::cities();
+
+//駅
+for($i=1;$i<=5;$i++){
+    $_["stationsData"][] = $_["data"]["st{$i}_code"];
+}
+$_["stations"] = Data::stations(array('ids'=>$_["stationsData"]));
+
+
+//画像
+for($i=1;$i<=3;$i++){
+    $_["picturesData"][] = $_["data"]["pic{$i}_code"];
+}
+foreach(Data::pictures(array("s"=>1,'ids'=>$_["picturesData"])) as $v){
+    $_["pictures"][$v["id"]] = $v["pic"];
+}
+
+
+//検討中取得
+if(!empty($_COOKIE["favlist"])){
+    $_["favlist"] = explode("|",$_COOKIE["favlist"]);
+    foreach($_["favlist"] as $k=>$v){
+        $favlist = mb_split(",", $v);
+        $_["favlist"][$k] = $favlist[0];
+    }
+}
+
+//オススメ求人
+$_["randdata"] = DataCcRec::recruits(array('w_status'=> 'OPEN','w_startdate'=> $_["today"],'w_pref'=> $_["data"]["pref_code"],'w_city'=> $_["data"]["city_code"]
+,'o_rand'=>'1','limitStart'=>'0','limitEnd'=>'20',));
+
+
+$GLOBALS["PAGEH1"] = "【";
+$GLOBALS["PAGEH1"] .= (!empty($_["prefectures"][$_["data"]["pref_code"]]["name"]))? h($_["prefectures"][$_["data"]["pref_code"]]["name"]):"";
+$GLOBALS["PAGEH1"] .= "】".h($_["data"]["title"])."｜".h($GLOBALS["PAGETITLE"]);
+
+/*サイドメニュー近隣表示*/
+$_["prefCode"][] = $_["data"]["pref_code"];
+//都道府県
+$_["prefData"] = Data::prefectures(array('ids'=>$_["prefCode"],'s'=>'1','w_status'=>'1'));
+//市区町村
+$_["cityData"] = Data::cities(array('w_pref'=>$_["prefData"][$_["prefCode"][0]]["name"]));
+
+//駅
+foreach(Data::stations(array(
+    'w_pref'=>$_["data"]["pref_code"])) as $v){
+    
+
+    $_["stationData"][$v["id"]] = $v["name"];
+    $_["stationData"][$v["idg"]] = $v["name"];
+    $_["stationGpDate"][$v["id"]][] = $v["idg"];
+}
+
+//求人
+foreach(DataCcRec::recruits(array('s'=> '1','w_status'=> 'OPEN','w_startdate'=> $_["today"])) as $v){
+    $_["cityRec"][$v["city_code"]][] = $v["id"];
+    $_["prefRec"][$v["pref_code"]][] = $v["id"];
+
+    for($i=1;$i<=5;$i++){
+        if(!empty($_["stationGpDate"][$v["st{$i}_code"]])){
+            $_["stationGpDatePt"][$v["id"]] = $_["stationGpDate"][$v["st{$i}_code"]];
+        }
+    }
+    
+    $v["industry_code"] =  explode(",", $v["industry_code"]);
+    $_["indStr"] = array();
+    foreach($v["industry_code"] as $r){
+        $_["indStr"][] = $_["jobIndustries"][$r][name];
+    }
+    
+    if(!empty($_["stationGpDatePt"][$v["id"]])){
+        
+        foreach($_["stationGpDatePt"][$v["id"]] as $v2){
+
+            if(!empty($v2)){
+                $_["stationRec"][$v2][] = $v2;
+            }
+        
+        }
+        
+    }
+    
+}
+
+
+$matchurl = $_SERVER["SERVER_NAME"]."\/callcenter\/search\/";
+if(preg_match("/{$matchurl}/u", $_SERVER["HTTP_REFERER"], $match)){
+    $_["referer"] = $_SERVER["HTTP_REFERER"];
+}
+
+
+$_["company"] = array();
+if(!empty($_["data"]["company_flg"]) and !empty($_["data"]["company_code"])){
+    $_["company"] = Data::company(array('id'=>$_["data"]["company_code"],'w_status'=>'1'));
+}
+
+$_["center"] = array();
+if(!empty($_["data"]["center_flg"]) and !empty($_["data"]["center_code"])){
+    $_["center"] = Data::center(array('id'=>$_["data"]["center_code"],'w_status'=>'1'));
+}
+
+
+
+//アクセス登録
+if(empty($_SESSION["callcenter"]["detail"][$_["id"]])){
+
+    DataCcRec::recruitsAccess(array('id'=>$_["id"],'pref'=>$_["data"]["pref_code"]));
+    
+    $nowday = date("YmdHis");
+    unset($_SESSION["callcenter"]["detail"]);
+    $_SESSION["callcenter"]["detail"][$_["id"]] = $nowday;
+}
+
+//アクセス取得
+$_["recruitsAccessLi"] = DataCcRec::recruitsAccessGet(array('pref'=>$_["data"]["pref_code"]));
+
+if(empty($_["recruitsAccessLi"])){
+
+    //地域別取得
+    $_["recruitsAreaLi"] = DataCcRec::recruits(array('w_status'=> 'OPEN','w_startdate'=> $_["today"],'no_ids'=> array($_["id"]),'w_pref'=> $_["data"]["pref_code"]
+    ,'o_updated'=>'1','limitStart'=>'0','limitEnd'=>'5',));
+    
+    if(empty($_["recruitsAreaLi"])){
+
+        //アクセス取得全体
+        $_["recruitsAccessAllLi"] = DataCcRec::recruitsAccessGet(array('id'=>$_["id"]));
+    }
+    
+}
+
+?><!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title><?php
+if(!empty($_["data"]["tag_title"])){
+    echo h($_["data"]["tag_title"]);
+} else {
+    echo "【";
+    echo (!empty($_["prefectures"][$_["data"]["pref_code"]]["name"]))? h($_["prefectures"][$_["data"]["pref_code"]]["name"]):"";
+    echo "】".h($_["data"]["title"])."｜".h($GLOBALS["PAGETITLE"]);
+}
+?></title>
+<meta name="description" content="<?php
+if(!empty($_["data"]["tag_description"])){
+    echo h($_["data"]["tag_description"]);
+} else {
+    echo h($_["data"]["title"]).h($GLOBALS["PAGDESCRIPTION"]);
+}
+?>">
+<meta name="keywords" content="<?php
+echo (!empty($_["prefectures"][$_["data"]["pref_code"]]["name"]))? h($_["prefectures"][$_["data"]["pref_code"]]["name"]).",":"";
+if(!empty($_["data"]["tag_keywords"])){
+    echo h($_["data"]["tag_keywords"]);
+} else {
+    echo h($GLOBALS["PAGEKEYWORDS"]);
+}
+?>">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/head.html'; ?>
+<link rel="stylesheet" type="text/css" href="/callcenter/common/css/jquery.bxslider.css" media="all" />
+<script type="text/javascript" src="/callcenter/common/js/jquery.bxslider.min.js"></script>
+<script type="text/javascript" src="/callcenter/common/js/jquery.flatheights.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function($){
+	var w = $(window).width();
+	var x = 700
+	if (w <= x) {
+  $('#reco_slider, #reco_slider2, #reco_slider3').bxSlider({
+		controls: true,
+		auto: true,
+		pause: 8000,
+		speed: 1000,
+		pager: false,
+		minSlides: 1,
+		maxSlides: 1,
+		moveSlides: 1
+  });
+	} else {
+  $('#reco_slider, #reco_slider2, #reco_slider3').bxSlider({
+		controls: true,
+		slideWidth: 240,
+		auto: true,
+		pause: 8000,
+		speed: 1000,
+		pager: true,
+		slideMargin: 60,
+		minSlides: 3,
+		maxSlides: 3,
+		moveSlides: 3
+  });
+    }
+});
+$(function flatHeights(){
+    var sets = [], temp = [];
+    $('#Slidebox .recobox .slidebox ul li .detbox .detin').each(function(i) {
+        temp.push(this);
+    });
+    if (temp.length) sets.push(temp);
+
+    $.each(sets, function() {
+        $(this).flatHeights();
+    });
+});
+$(function(){
+    $("#SRCBX .searchbox .srcdetbox .databox .listct .datebook .tpbx .tlbx2").click(function(){
+    	var w = $(window).width();
+    	var x = 700
+    	if (w <= x) {
+    	    if($(this).parents(".listct").find(".dtbx2").is(":hidden")){
+    	        $(this).parents(".listct").find(".dtbx2").show();
+    	        $(this).addClass("on");
+    	    } else {
+    	        $(this).parents(".listct").find(".dtbx2").hide();
+    	        $(this).removeClass("on");
+    	    }
+    	}
+    });
+});
+</script>
+<!--[if lt IE 9]>
+<style>
+.com_canvas_chart {display:none !important;}
+.ie_chart_data {display:block !important;}
+</style>
+<![endif]-->
+</head>
+<body id="detail">
+<script src="//d.adlpo.com/121/1392/js/smartadlpo.js" type="text/javascript"></script>
+<?php
+if(!empty($_SESSION["kaigoi"]["admin"])){
+    echo '<div style="background:#d21212;color:#fff;padding:7px;text-align:center;">管理モードで閲覧しています</div>';
+}
+?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/header_short.html'; ?>
+
+<article id="Contents">
+	<section class="com_pnkzbox m_b10">
+		<ul class="clearfix" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+			<li><a href="<?php echo h($GLOBALS["PNKZURL"]);?>" itemprop="url"><span itemprop="title"><?php echo h($GLOBALS["PNKZTITLE"]);?></span></a></li>
+			<?php
+			if(!empty($_["prefectures"][$_["data"]["pref_code"]]["name"])){
+			    echo '<li><span class="clr_gr">&gt;</span>&nbsp;&nbsp;<a href="/callcenter/search/pref-'.h($_["data"]["pref_code"]).'/"><span itemprop="title">'.h($_["prefectures"][$_["data"]["pref_code"]]["name"]).'の求人</span></a></li>';
+			}
+			if(!empty($_["cities"][$_["data"]["city_code"]]["city"])){
+			    echo '<li><span class="clr_gr">&gt;</span>&nbsp;&nbsp;<a href="/callcenter/search/pref-'.h($_["data"]["pref_code"]).'/city-'.h($_["data"]["city_code"]).'/"><span itemprop="title">'.h($_["cities"][$_["data"]["city_code"]]["city"]).'の求人</span></a></li>';
+			}
+			?>
+			<li itemprop="title"><span class="clr_gr">&gt;</span>&nbsp;&nbsp;<?php echo (!empty($_["data"]["title"]))? h($_["data"]["title"]) :""; ?></li>
+		</ul>
+	</section>
+	<section id="SRCBX">
+		<section id="Clmbox" class="com_wid clearfix agt">
+			<section id="Mainbox">
+				<div class="searchbox">
+					<div class="srcdetbox">
+					<p class="com_sp btn_detailsback"><a href="<?php echo h($_["referer"]);?>">一覧に戻る</a></p>
+						<div class="databox">
+							<div class="listct">
+
+								<div class="com_sp ttlbx clearfix <?php echo (!empty($_["newflg"]))? 'new':""; ?>">
+									<h2><?php echo (!empty($_["data"]["title"]))? h($_["data"]["title"]) :""; ?></h2>
+									<?php
+									echo (!empty($_["newflg"]))? '<p class="new_icn"><span class="com_sp"><img src="/callcenter/images/icn_src_new_sp.png" alt="NEW"></span></p>':""; ?>
+								</div>
+									
+								<div class="datebook com_pc">
+									<?php
+									echo (!empty($_["newflg"]))? '<p class="new_icn"><span class="com_pc"><img src="/callcenter/images/icn_src_new.png" alt="NEW"></span></p>':""; ?>
+									<div class="tpbx">
+										<div class="tlbx">
+											<div class="ttl clearfix">
+											<div class="ct">
+											    <?php
+											    if(!empty($_["data"]["jobtype_codes"])){
+											    ?>
+											    <p class="icn"><?php
+													$jobtypeCodesLi = explode(",", $_["data"]["jobtype_codes"]);
+													foreach($jobtypeCodesLi as $k => $t){
+														if(!empty($_["jobTypes"][$t]["name"])){
+															$jobTypesName = $_["jobTypes"][$t]["name"];
+														}
+													}
+                    								echo h($_["jobTypesS"][$jobTypesName],"0");
+												?></p>
+												<?php
+												}
+												?>
+											    <?php
+													if(!empty($_["data"]["industry_code"])){
+												?>
+												<p class="job"><?php
+												echo h($_["jobIndustries"][$_["data"]["industry_code"]]["name"]);
+
+												if(!empty($_["data"]["cate_codes"])){
+													echo " / ";
+													$cateCodeLI = explode(",", $_["data"]["cate_codes"]);
+													foreach($cateCodeLI as $k => $r){
+														if(!empty($_["jobCategories"][$r]["name"])){
+															echo ($k!=0)?" / ":"";
+															echo h($_["jobCategories"][$r]["name"]);
+														}
+													}
+												}
+												?></p>
+            								    <?php
+            								    }
+											    ?>
+											</div>
+										    <h2><?php echo (!empty($_["data"]["title"]))? h($_["data"]["title"]) :""; ?></h2>
+											</div>
+    										<?php
+                                                for($i=1;$i<=1;$i++){
+                                                if(!empty($_["pictures"][$_["data"]["pic{$i}_code"]]) and !empty($_["data"]["pic{$i}_flg"])){
+                                                        $pic = preg_replace("/\.(jpg|jpeg|png)$/ui", "_tr220x165.$1", $_["pictures"][$_["data"]["pic{$i}_code"]]);
+                                                ?><p class="img"><img src="<?php echo h(IMG_PATH);?>tmp/recruit/img/<?php echo h($pic); ?>" width="220" alt="<?php echo (!empty($_["data"]["title"]))? h($_["data"]["title"]) :""; ?>"></p>
+                                                <?php
+                                                }
+                                                }
+                                             ?>
+										</div>
+									</div>
+								</div><!-- /.datebook /.com_pc -->
+								<div class="datebook_sp com_sp">
+									<div class="tpbx clearfix">
+    									<div class="imgbx">
+    									<?php
+                                        $nm = 0;
+                                        for($i=1;$i<=3;$i++){
+                                        if(!empty($_["pictures"][$_["data"]["pic{$i}_code"]]) and !empty($_["data"]["pic{$i}_flg"]) && $nm==0){
+                                            $nm++;
+                                            $pic = preg_replace("/\.(jpg|jpeg|png)$/ui", "_tr220x165.$1", $_["pictures"][$_["data"]["pic{$i}_code"]]);
+                                            ?><div class="img"><img src="<?php echo h(IMG_PATH);?>/tmp/recruit/img/<?php echo h($pic); ?>" width="220" alt="<?php echo (!empty($_["data"]["title"]))? h($_["data"]["title"]) :""; ?>"></div>
+                                        <?php
+                                        }
+                                        }
+										?>
+											<div class="com_sp ctbx">
+											    <p class="icn"><?php
+                    								    $jobtypeCodesLi = explode(",", $_["data"]["jobtype_codes"]);
+                    								    foreach($jobtypeCodesLi as $k => $t){
+                    								        if(!empty($_["jobTypes"][$t]["name"])){
+                    								            $jobTypesName = $_["jobTypes"][$t]["name"];
+                    								        }
+                    								    }
+                    								    echo h($_["jobTypesS"][$jobTypesName],"0");
+													    ?></p>
+											    <p class="job"><?php
+                    								    echo h($_["jobIndustries"][$_["data"]["industry_code"]]["name"]);
+
+														if(!empty($_["data"]["cate_codes"])){
+														    echo " / ";
+														    $cateCodeLI = explode(",", $_["data"]["cate_codes"]);
+														    foreach($cateCodeLI as $k => $r){
+														        if(!empty($_["jobCategories"][$r]["name"])){
+														            echo ($k!=0)?" / ":"";
+														            echo h($_["jobCategories"][$r]["name"]);
+														        }
+														    }
+														}
+                    								    ?></p>
+											</div>
+										</div>
+										<div class="tpin">
+											<?php
+											if(
+											!empty($_["data"]["salary_flg"]) and
+											(
+											!empty($_["data"]["salarytime_low"]) or
+											!empty($_["data"]["salary"])
+											)
+											){
+											?>
+											<dl class="dta salary">
+												<dt>給与</dt>
+												<dd><?php
+												echo (!empty($_["data"]["salarytime_low"]) or !empty($_["data"]["salarytime_high"]))? '時給':"";
+												echo (!empty($_["data"]["salarytime_low"]))? h($_["data"]["salarytime_low"])."円":"";
+												echo (!empty($_["data"]["salarytime_low"]) or !empty($_["data"]["salarytime_high"]))? '～':"";
+												echo (!empty($_["data"]["salarytime_high"]))? h($_["data"]["salarytime_high"])."円":"";
+												if(!empty($_["data"]["salary"])){
+												    echo (!empty($_["data"]["salarytime_low"]) or !empty($_["data"]["salarytime_high"]))? '<br>':"";
+												    echo nl2br(h($_["data"]["salary"]));
+												}
+												?></dd>
+											</dl>
+											<?php
+											}
+											?>
+											<dl class="dta area">
+												<dt>勤務地</dt>
+												<dd><?php
+												echo (!empty($_["prefectures"][$_["data"]["pref_code"]]["name"]))? h($_["prefectures"][$_["data"]["pref_code"]]["name"]):"";
+												echo (!empty($_["cities"][$_["data"]["city_code"]]["city"]))? h($_["cities"][$_["data"]["city_code"]]["city"]):"";
+												?></dd>
+											</dl>
+											<?php
+											if(
+											!empty($_["data"]["st1_code"]) ||
+											!empty($_["data"]["st2_code"]) ||
+											!empty($_["data"]["st3_code"]) ||
+											!empty($_["data"]["st4_code"]) ||
+											!empty($_["data"]["st5_code"])
+											){
+											?>
+											<dl class="dta access">
+												<dt>アクセス</dt>
+												<dd><?php
+														for($i=1;$i<=5;$i++){
+															if(!empty($_["data"]["st{$i}_code"])){
+														        if(!empty($_["stations"][$_["data"]["st{$i}_code"]]["name"])){
+														            echo h($_["stations"][$_["data"]["st{$i}_code"]]["cmp_name"]).h($_["stations"][$_["data"]["st{$i}_code"]]["line_name"]).h($_["stations"][$_["data"]["st{$i}_code"]]["name"])."駅";
+														            if(!empty($_["data"]["st{$i}out"])){
+														                echo h($_["data"]["st{$i}out"]);
+														            }
+														            if(!empty($_["data"]["st{$i}way_code"])){
+														                echo h(Data::accesshow($_["data"]["st{$i}way_code"]));
+														                if($_["data"]["st{$i}way_code"]==1){
+														                    echo h($_["data"]["st{$i}walktime"])."分";
+														                } elseif($_["data"]["st{$i}way_code"]==2){
+														                    echo h($_["data"]["st{$i}bus"]).h($_["data"]["st{$i}bustime"])."分";
+														                }
+														            }
+														            echo '<br>';
+														        }
+															}
+														}
+														echo (!empty($_["data"]["busetc"]))? nl2br(h($_["data"]["busetc"])):"";
+														?></dd>
+											</dl>
+											<?php
+											}
+											if(
+											!empty($_["data"]["jobday_codes"]) or
+											!empty($_["data"]["jobday"])
+											){
+											?>
+											<dl class="dta jobday">
+												<dt>勤務日</dt>
+												<dd><?php
+														    if(!empty($_["data"]["jobday_codes"])){
+														    $_["data"]["jobday_codes"] = explode(",", $_["data"]["jobday_codes"]);
+														    $nm = 1;
+														    foreach($_["jobdays"] as $r){
+														        if(in_array($r["id"],$_["data"]["jobday_codes"])){
+															        echo ($nm!=1)?" / ":"";
+														            echo h($r["name"]);
+															        $nm++;
+														        }
+														    }
+													    }
+														if(!empty($_["data"]["jobday"])){
+						    								echo nl2br(h($_["data"]["jobday"]));
+														}
+														?></dd>
+											</dl>
+											<?php
+											}
+											?>
+										</div>
+									</div>
+								</div><!-- /.datebook_sp /.com_sp -->
+    							<?php
+								if(!empty($_["data"]["catchcopy"])){
+								?><dl class="ptbx clearfix">
+    							    <dt><img src="/callcenter/images/src_det_ttl_pt.png" alt="POINT"></dt>
+    							    <dd><?php echo nl2br(h($_["data"]["catchcopy"]));?></dd>
+    							</dl>
+    							<?php
+    							}
+    							?>
+								<?php
+								if(!empty($_["data"]["feature_codes"])){
+								?><div class="listbx sp_tagbox">
+									<ul class="clearfix">
+										<?php
+									    $_["data"]["feature_codes"] = explode(",", $_["data"]["feature_codes"]);
+									    foreach($_["data"]["feature_codes"] as $k => $v){
+									        if(!empty($_["jobFeatures"][$v]["name"])){
+									            $nm = mb_strlen($_["jobFeatures"][$v]["name"],"UTF-8");
+									            if($nm==7){
+									                echo "<li class='stm'><span>";
+									            } else if($nm>=8){
+									                echo "<li class='stx'><span>";
+									            } else {
+									                echo "<li><span>";
+									            }
+									            echo h($_["jobFeatures"][$v]["name"])."</span></li>";
+									        }
+									    }
+										?>
+									</ul>
+								</div>
+								<?php
+								}
+    							?>
+    							<?php
+    							if($_["data"]["status"]=="CLOSED"){
+    							?>
+								<div class="com_sp sp_entbx closed"></div>
+    							<?php
+    							} else {
+    							?>
+    							<div class="dlpo_btn01">
+									<div class="com_sp sp_entbx">
+										<p class="ent s"><a href="/callcenter/apply/<?php echo (!empty($_["data"]["id"]))? h($_["data"]["id"]):""; ?>/index.html" onClick="ga('ccnaviTracker.send','event','link','click','apply_btn01');"><span>応募画面に進む</span></a></p>
+										<div class="btnbx clearfix">
+										<?php
+										if(!empty($_["favlist"]) and in_array($_["data"]["id"],$_["favlist"])){
+											echo '<p class="lbt on"><a href="/callcenter/scrap/" onclick="detailScrapSp('.h($_["data"]["id"]).', this); return false;" data-prm="'.h($_["data"]["id"]).'" data-type="save" data-status="on" class="save_btn"><span>検討中BOXに追加済<span>クリックで削除</span></span></a>
+											</p><p class="scrap"><a href="/callcenter/scrap/"><span>検討中BOX</span></a></p>';
+										} else {
+											echo '<p class="lbt off"><a href="/callcenter/scrap/" onclick="detailScrapSp('.h($_["data"]["id"]).', this); return false;" data-prm="'.h($_["data"]["id"]).'" data-type="save" data-status="off" class="save_btn"><span>検討中BOXへ追加</span></a></p>';
+										}
+										?>
+										</div>
+									</div>
+								</div><!-- /.dlpo_btn01 -->
+    							<?php
+    							}
+    							?>
+    							
+    							<div class="dtbx m_b20">
+    							    <dl class="tp cate">
+    							        <dt><span>業種・職種</span></dt>
+    							        <dd><?php
+    								    echo h($_["jobIndustries"][$_["data"]["industry_code"]]["name"]);
+
+										if(!empty($_["data"]["cate_codes"])){
+										    echo " / ";
+										    $cateCodeLI = explode(",", $_["data"]["cate_codes"]);
+										    foreach($cateCodeLI as $k => $r){
+										        if(!empty($_["jobCategories"][$r]["name"])){
+										            echo ($k!=0)?" / ":"";
+										            echo h($_["jobCategories"][$r]["name"]);
+										        }
+										    }
+										}
+    								    ?></dd>
+    							    </dl>
+    							    <dl class="cnt">
+    							        <dt><span>仕事内容</span></dt>
+    							        <dd><?php echo nl2br(h($_["data"]["contents"]));?></dd>
+    							    </dl>
+									<?php
+									if(!empty($_["data"]["shopname"])){
+    							    ?>
+    							    <dl class="shop">
+    							        <dt><span>ショップ・店舗名</span></dt>
+    							        <dd><?php echo nl2br(h($_["data"]["shopname"]));?></dd>
+    							    </dl>
+    							    <?php
+    							    }
+    							    ?>
+    							    <dl class="access">
+    							        <dt><span>勤務地・アクセス</span></dt>
+    							        <dd><?php
+												echo (!empty($_["prefectures"][$_["data"]["pref_code"]]["name"]))? h($_["prefectures"][$_["data"]["pref_code"]]["name"]):"";
+												echo (!empty($_["cities"][$_["data"]["city_code"]]["city"]))? h($_["cities"][$_["data"]["city_code"]]["city"]):"";
+
+												?><br>
+									<?php
+									for($i=1;$i<=5;$i++){
+										if(!empty($_["data"]["st{$i}_code"])){
+									        if(!empty($_["stations"][$_["data"]["st{$i}_code"]]["name"])){
+									            echo h($_["stations"][$_["data"]["st{$i}_code"]]["cmp_name"]).h($_["stations"][$_["data"]["st{$i}_code"]]["line_name"]).h($_["stations"][$_["data"]["st{$i}_code"]]["name"])."駅";
+									            if(!empty($_["data"]["st{$i}out"])){
+									                echo h($_["data"]["st{$i}out"]);
+									            }
+									            if(!empty($_["data"]["st{$i}way_code"])){
+									                echo h(Data::accesshow($_["data"]["st{$i}way_code"]));
+									                if($_["data"]["st{$i}way_code"]==1){
+									                    echo h($_["data"]["st{$i}walktime"])."分";
+									                } elseif($_["data"]["st{$i}way_code"]==2){
+									                    echo h($_["data"]["st{$i}bus"]).h($_["data"]["st{$i}bustime"])."分";
+									                }
+									            }
+									            echo '<br>';
+									        }
+										}
+									}
+									echo (!empty($_["data"]["busetc"]))? nl2br(h($_["data"]["busetc"])):"";
+									echo (!empty($_["data"]["jobway"]))? "<br>[通勤手段]<br>".nl2br(h($_["data"]["jobway"])):"";
+									?></dd>
+    							    </dl>
+    							    <dl class="type">
+    							        <dt><span>雇用形態</span></dt>
+    							        <dd><?php
+    								    $jobtypeCodesLi = explode(",", $_["data"]["jobtype_codes"]);
+    								    foreach($jobtypeCodesLi as $k => $t){
+    								        if(!empty($_["jobTypes"][$t]["name"])){
+    								            $jobTypesName = $_["jobTypes"][$t]["name"];
+    								        }
+    								    }
+    								    echo h($jobTypesName);
+									    ?></dd>
+    							    </dl>
+									<?php
+									if(
+									!empty($_["data"]["salary_flg"]) and
+									(
+									!empty($_["data"]["salarytime_low"]) or
+									!empty($_["data"]["salary"])
+									)
+									){
+									?>
+    							    <dl class="yen">
+										<dt><span>給与</span></dt>
+										<dd><?php
+										echo (!empty($_["data"]["salarytime_low"]) or !empty($_["data"]["salarytime_high"]))? '時給':"";
+										echo (!empty($_["data"]["salarytime_low"]))? h($_["data"]["salarytime_low"])."円":"";
+										echo (!empty($_["data"]["salarytime_low"]) or !empty($_["data"]["salarytime_high"]))? '～':"";
+										echo (!empty($_["data"]["salarytime_high"]))? h($_["data"]["salarytime_high"])."円":"";
+										if(!empty($_["data"]["salary"])){
+										    echo (!empty($_["data"]["salarytime_low"]) or !empty($_["data"]["salarytime_high"]))? '<br>':"";
+										    echo nl2br(h($_["data"]["salary"]));
+										}
+										?></dd>
+									</dl>
+									<?php
+									}
+									if(
+									!empty($_["data"]["jobday_codes"]) or
+									!empty($_["data"]["jobday"]) or
+									!empty($_["data"]["jobtime"])
+									){
+									?>
+    							    <dl class="jobday">
+    							        <dt><span>勤務日/時間</span></dt>
+    							        <dd><?php
+										    if(!empty($_["data"]["jobday_codes"])){
+										    $nm = 1;
+										    foreach($_["jobdays"] as $r){
+										        if(in_array($r["id"],$_["data"]["jobday_codes"])){
+											        echo ($nm!=1)?" / ":"";
+										            echo h($r["name"]);
+											        $nm++;
+										        }
+										    }
+									    }
+										if(!empty($_["data"]["jobday"])){
+						    				echo (!empty($_["data"]["jobday_codes"]))? '<br>':"";
+		    								echo nl2br(h($_["data"]["jobday"]));
+										}
+    									if(!empty($_["data"]["jobtime"])){
+										    echo (!empty($_["data"]["jobday_codes"]) or !empty($_["data"]["jobday"]))? '<br>':"";
+    	    								echo nl2br(h($_["data"]["jobtime"]));
+    									}
+										
+    							        ?></dd>
+    							    </dl>
+    							    <?php
+    							    }
+									if(
+									!empty($_["data"]["jobweek_codes"]) or
+									!empty($_["data"]["jobweek"])
+									){
+									?>
+    							    <dl class="jobweek">
+    							        <dt><span>勤務曜日</span></dt>
+    							        <dd><?php
+										    if(!empty($_["data"]["jobweek_codes"])){
+										    $nm = 1;
+    								        $jobweekCodesLi = explode(",", $_["data"]["jobweek_codes"]);
+										    foreach($_["jobweeks"] as $r){
+										        if(in_array($r["id"],$jobweekCodesLi)){
+											        echo ($nm!=1)?" / ":"";
+										            echo h($r["name"]);
+											        $nm++;
+										        }
+										    }
+									    }
+										if(!empty($_["data"]["jobweek"])){
+										    echo (!empty($_["data"]["jobweek_codes"]))? '<br>':"";
+		    								echo nl2br(h($_["data"]["jobweek"]));
+										}
+										
+    							        ?></dd>
+    							    </dl>
+    							    <?php
+    							    }
+									if(!empty($_["data"]["holiday"])){
+    							    ?>
+    							    <dl class="holiday">
+    							        <dt><span>休日休暇</span></dt>
+    							        <dd><?php echo nl2br(h($_["data"]["holiday"]));?></dd>
+    							    </dl>
+    							    <?php
+    							    }
+									if(!empty($_["data"]["welfare"])){
+    							    ?>
+    							    <dl class="welfare">
+    							        <dt><span>待遇</span></dt>
+    							        <dd><?php echo nl2br(h($_["data"]["welfare"]));?></dd>
+    							    </dl>
+    							    <?php
+									}
+									?>
+									<?php
+									if($_["data"]["status"]=="CLOSED"){
+									?>
+									<div class="com_sp sp_entbx closed"></div>
+									<?php
+									} else {
+									?>
+									<div class="dlpo_btn02">
+										<div class="com_sp sp_entbx">
+											<p class="ent s"><a href="/callcenter/apply/<?php echo (!empty($_["data"]["id"]))? h($_["data"]["id"]):""; ?>/index.html" onClick="ga('ccnaviTracker.send','event','link','click','apply_btn02');"><span>応募画面に進む</span></a></p>
+										</div>
+									</div><!-- /.dlpo_btn02 -->
+    							    <?php
+    							    }
+									if(!empty($_["data"]["othercond"])){
+    							    ?>
+    							    <dl class="skill">
+    							        <dt><span>応募資格</span></dt>
+    							        <dd><?php
+    							        echo nl2br(h($_["data"]["othercond"]));
+    							        
+    							        if(!empty($_["data"]["exp"])){
+										    echo (!empty($_["data"]["othercond"]))? '<br>':"";
+    							            echo '[必要経験]<br>';
+    							            echo nl2br(h($_["data"]["exp"]));
+    							        }
+    							        if(!empty($_["data"]["skill"])){
+										    echo (!empty($_["data"]["othercond"]) or !empty($_["data"]["exp"]))? '<br>':"";
+    							            echo '[必要資格]<br>';
+    							            echo nl2br(h($_["data"]["skill"]));
+    							        }
+    							        ?></dd>
+    							    </dl>
+    							    <?php
+    							    }
+									if(!empty($_["data"]["flow"])){
+    							    ?>
+    							    <dl class="flow">
+    							        <dt><span>応募選考について</span></dt>
+    							        <dd><?php echo nl2br(h($_["data"]["flow"]));?></dd>
+    							    </dl>
+    							    <?php
+    							    }
+									if(!empty($_["data"]["other"])){
+    							    ?>
+    							    <dl class="other">
+    							        <dt><span>その他</span></dt>
+    							        <dd><?php
+    							        echo nl2br(h($_["data"]["other"]));
+    							        ?></dd>
+    							    </dl>
+    							    <?php
+    							    }
+    							    ?>
+    							</div>
+                                
+                                <!-- レーダーチャートエリア -->
+                                <?php
+                                /*
+    							<div class="chartbx com_pc">
+    							<div id="chart" class="com_canvas_chart" height="450" width="450"></div>
+    							<div class="ie_chart_data">
+    							<?php
+                                for($i=1;$i<=5;$i++){
+                                    if(empty($_["data"]["chart{$i}"])){
+                                        $_["data"]["chart{$i}"] = "0";
+                                    }
+                                }
+    							?>
+									<table>
+										<tr>
+										<th>スキルアップ度</th>
+										<td><?php echo h($_["data"]["chart1"]);?></td>
+										<th>仲間が出来る度</th>
+										<td><?php echo h($_["data"]["chart2"]);?></td>
+										</tr>
+										<tr>
+										<th>仕事の覚えやすさ</th>
+										<td><?php echo h($_["data"]["chart3"]);?></td>
+										<th>キャリアアップ度</th>
+										<td><?php echo h($_["data"]["chart4"]);?></td>
+										</tr>
+										<tr>
+										<th>体力がつく度</th>
+										<td colspan="3"><?php echo h($_["data"]["chart5"]);?></td>
+										</tr>
+									</table>
+    							</div>
+    							</div>
+    							<div class="chartbx com_sp">
+									<div id="chart_sp" class="com_canvas_chart" height="450" width="450"></div>
+    							</div>
+                                */
+                                ?>
+                                <!-- レーダーチャートエリア End -->
+                                
+    							<?php
+    							if($_["data"]["status"]=="CLOSED"){
+    							?>
+    							<p class="com_nobox ver2">現在この求人の募集は終了しています。 </p>
+    							<?php
+    							} else {
+    							?>
+    							<div class="com_pc entbx">
+									<p><a href="/callcenter/apply/<?php echo (!empty($_["data"]["id"]))? h($_["data"]["id"]):""; ?>/index.html"><img src="/callcenter/images/btn_src_det_req_off.png" alt="応募画面に進む"></a></p>
+									<div class="btnbx clearfix">
+										<?php
+									if(!empty($_["favlist"]) and in_array($_["data"]["id"],$_["favlist"])){
+										echo '<p class="lbt"><img src="/callcenter/images/btn_src_review.png" alt="検討中BOXへ追加済み"></p>';
+									} else {
+										echo '<p class="lbt"><a href="/callcenter/scrap/" onclick="scrapDet('.h($_["data"]["id"]).', this); return false;"><img src="/callcenter/images/btn_src_det_add_off.png" alt="検討中BOXへ追加"></a></p>';
+									}
+									?>
+										<p class="rgt"><a href="<?php echo h($_["referer"]);?>"><img src="/callcenter/images/btn_src_det_bk_off.png" alt="一覧に戻る"></a></p>
+									</div>
+    							</div>
+    							<div class="com_sp sp_entbx">
+									<p class="ent s"><a href="/callcenter/apply/<?php echo (!empty($_["data"]["id"]))? h($_["data"]["id"]):""; ?>/index.html" onClick="ga('ccnaviTracker.send','event','link','click','apply_btn03');"><span>応募画面に進む</span></a></p>
+									<div class="btnbx clearfix">
+									<?php
+									/*
+										<p class="tel"><a href="tel:0120106914" onclick="ga('send', 'event', '電話リンク', 'タップ');"><span>TEL</span></a></p>                                    
+									*/
+									?>
+									<?php
+									if(!empty($_["favlist"]) and in_array($_["data"]["id"],$_["favlist"])){
+										echo '<p class="lbt on"><a href="/callcenter/scrap/" onclick="detailScrapSp('.h($_["data"]["id"]).', this); return false;" data-prm="'.h($_["data"]["id"]).'" data-type="save" data-status="on" class="save_btn"><span>検討中BOXに追加済<span>クリックで削除</span></span></a>
+										</p><p class="scrap"><a href="/callcenter/scrap/"><span>検討中BOX</span></a></p>';
+									} else {
+										echo '<p class="lbt off"><a href="/callcenter/scrap/" onclick="detailScrapSp('.h($_["data"]["id"]).', this); return false;" data-prm="'.h($_["data"]["id"]).'" data-type="save" data-status="off" class="save_btn"><span>検討中BOXへ追加</span></a></p>';									}
+									?>
+									</div>
+    							</div>
+    							<?php
+    							}
+    							?>
+							</div>
+							<?php
+							/*
+							<!--holiday info-->
+							<div class="clearfix com_sp" style="width:auto; box-sizing:border-box; margin:15px; padding:1em; text-align:left; border:1px solid #ccc; line-height:1.8; background:#fff; font-size:12px;">
+							</div>
+							<!--/holiday info sp-->
+							*/
+							?>
+						</div>
+						
+						<?php
+						if(!empty($_["company"])){
+						?><div class="databox lw">
+							<div class="listct">
+								<div class="datebook">
+									<div class="tpbx clearfix">
+									    <div class="tlbx2">
+									        <h3><img src="/callcenter/images/src_det_ttl_company.png" alt="企業情報" class="com_pc"><span class="com_sp">企業情報</span></h3>
+									    </div>
+									</div>
+								</div>
+								<div class="dtbx2">
+								    <dl class="tp">
+								        <dt>企業名</dt>
+								        <dd><?php
+								            echo h($_["company"]["name"]);
+											echo (!empty($_["company"]["namekana"]))? "（".nl2br(h($_["company"]["namekana"]))."）":"";
+									    ?></dd>
+								    </dl>
+								    <dl>
+								        <dt>業種</dt>
+								        <dd><?php
+										echo (!empty($_["company"]["industry"]))? nl2br(h($_["company"]["industry"])):"";
+								        ?></dd>
+								    </dl>
+								    <dl>
+								        <dt>事業内容</dt>
+								        <dd><?php
+										echo (!empty($_["company"]["business"]))? nl2br(h($_["company"]["business"])):"";
+								        ?></dd>
+								    </dl>
+								    <?php
+								    if(!empty($_["company"]["office"])){
+								    ?><dl>
+								        <dt>事業所</dt>
+								        <dd><?php
+										echo nl2br(h($_["company"]["office"]));
+								        ?></dd>
+								    </dl>
+								    <?php
+								    }
+								    ?>
+								    <dl>
+								        <dt>所在地</dt>
+								        <dd><?php
+										echo (!empty($_["prefectures"][$_["company"]["pref_code"]]["name"]))? h($_["prefectures"][$_["company"]["pref_code"]]["name"]):"";
+										echo (!empty($_["company"]["address"]))? nl2br(h($_["company"]["address"])):"";
+										echo (!empty($_["company"]["address2"]))? nl2br(h($_["company"]["address2"])):"";
+								        ?></dd>
+								    </dl>
+								    <?php
+								    if(!empty($_["company"]["establishment"])){
+								    ?><dl>
+								        <dt>設立</dt>
+								        <dd><?php
+										echo nl2br(h($_["company"]["establishment"]));
+								        ?></dd>
+								    </dl>
+								    <?php
+								    }
+								    ?>
+								    <?php
+								    if(!empty($_["company"]["ceo"])){
+								    ?><dl>
+								        <dt>代表者</dt>
+								        <dd><?php
+										echo nl2br(h($_["company"]["ceo"]));
+								        ?></dd>
+								    </dl>
+								    <?php
+								    }
+								    ?>
+								    <?php
+								    if(!empty($_["company"]["staff"])){
+								    ?><dl>
+								        <dt>従業員数</dt>
+								        <dd><?php
+										echo nl2br(h($_["company"]["staff"]));
+								        ?></dd>
+								    </dl>
+								    <?php
+								    }
+								    ?>
+								    <?php
+								    if(!empty($_["company"]["capital"])){
+								    ?><dl>
+								        <dt>資本金</dt>
+								        <dd><?php
+										echo nl2br(h($_["company"]["capital"]));
+								        ?></dd>
+								    </dl>
+								    <?php
+								    }
+								    ?>
+								    <?php
+								    if(!empty($_["company"]["sales"])){
+								    ?><dl>
+								        <dt>売上高</dt>
+								        <dd><?php
+										echo nl2br(h($_["company"]["sales"]));
+								        ?></dd>
+								    </dl>
+								    <?php
+								    }
+								    ?>
+								    <?php
+								    if(!empty($_["company"]["url"])){
+								    ?><dl>
+								        <dt>企業URL</dt>
+								        <dd><?php
+										echo "<a href='".h($_["company"]["url"])."' target='_blank'>".nl2br(h($_["company"]["url"]))."</a>";
+								        ?></dd>
+								    </dl>
+								    <?php
+								    }
+								    ?>
+								    <?php
+								    if(!empty($_["company"]["feature"])){
+								    ?><dl>
+								        <dt>企業の特徴</dt>
+								        <dd><?php
+										echo nl2br(h($_["company"]["feature"]));
+								        ?></dd>
+								    </dl>
+								    <?php
+								    }
+								    ?>
+								    <?php
+								    if(!empty($_["company"]["remarks"])){
+								    ?><dl>
+								        <dt>備考</dt>
+								        <dd><?php
+										echo nl2br(h($_["company"]["remarks"]));
+								        ?></dd>
+								    </dl>
+								    <?php
+								    }
+								    ?>
+								    <?php
+								    if(!empty($_["company"]["remarks2"])){
+								    ?><dl>
+								        <dt>備考2</dt>
+								        <dd><?php
+										echo nl2br(h($_["company"]["remarks2"]));
+								        ?></dd>
+								    </dl>
+								    <?php
+								    }
+								    ?>
+									</div>
+							</div>
+						</div>
+						<?php
+						}
+						?>
+
+						<?php
+						if(!empty($_["center"])){
+						?><div class="databox lw">
+							<div class="listct">
+								<div class="datebook">
+									<div class="tpbx clearfix">
+									    <div class="tlbx2 cnt">
+									        <h3><img src="/callcenter/images/src_det_ttl_center.png" alt="センター情報" class="com_pc"><span class="com_sp">センター情報</span></h3>
+									    </div>
+									</div>
+								</div>
+								<div class="dtbx2">
+								    <dl class="tp">
+								        <dt>センター名</dt>
+								        <dd><?php
+								            echo h($_["center"]["name"]);
+									    ?></dd>
+								    </dl>
+								    <dl>
+								        <dt>所在地</dt>
+								        <dd><?php
+										echo (!empty($_["prefectures"][$_["center"]["pref_code"]]["name"]))? h($_["prefectures"][$_["center"]["pref_code"]]["name"]):"";
+										echo (!empty($_["center"]["address"]))? nl2br(h($_["center"]["address"])):"";
+										echo (!empty($_["center"]["address2"]))? nl2br(h($_["center"]["address2"])):"";
+										echo (!empty($_["center"]["map"]))? "<p class='map'><a href='".h($_["center"]["map"],0)."' target='_blank'>地図を表示</a></p>":"";
+								        ?></dd>
+								    </dl>
+								    <?php
+								    if(!empty($_["center"]["workenv"])){
+								    ?><dl>
+								        <dt>就業環境</dt>
+								        <dd><?php
+										echo nl2br(h($_["center"]["workenv"]));
+								        ?></dd>
+								    </dl>
+								    <?php
+								    }
+								    ?>
+								    <?php
+								    if(!empty($_["center"]["arroundenv"])){
+								    ?><dl>
+								        <dt>周辺環境</dt>
+								        <dd><?php
+										echo nl2br(h($_["center"]["arroundenv"]));
+								        ?></dd>
+								    </dl>
+								    <?php
+								    }
+								    ?>
+								    <?php
+								    if(!empty($_["center"]["sexratio"])){
+								    ?><dl>
+								        <dt>男女比</dt>
+								        <dd><?php
+										echo nl2br(h($_["center"]["sexratio"]));
+								        ?></dd>
+								    </dl>
+								    <?php
+								    }
+								    ?>
+								    <?php
+								    if(!empty($_["center"]["agerange"])){
+								    ?><dl>
+								        <dt>平均年齢</dt>
+								        <dd><?php
+										echo nl2br(h($_["center"]["agerange"]));
+								        ?></dd>
+								    </dl>
+								    <?php
+								    }
+								    ?>
+								    <?php
+								    if(!empty($_["center"]["education"])){
+								    ?><dl>
+								        <dt>教育体制</dt>
+								        <dd><?php
+										echo nl2br(h($_["center"]["education"]));
+								        ?></dd>
+								    </dl>
+								    <?php
+								    }
+								    ?>
+								    <?php
+								    if(!empty($_["center"]["team"])){
+								    ?><dl>
+								        <dt>チーム体制</dt>
+								        <dd><?php
+										echo nl2br(h($_["center"]["team"]));
+								        ?></dd>
+								    </dl>
+								    <?php
+								    }
+								    ?>
+								    <?php
+								    if(!empty($_["center"]["interview"])){
+								    ?><dl>
+								        <dt>インタビュー</dt>
+								        <dd><?php
+										echo nl2br(h($_["center"]["interview"]));
+								        ?></dd>
+								    </dl>
+								    <?php
+								    }
+								    ?>
+								    <?php
+								    if(!empty($_["center"]["introduction"])){
+								    ?><dl>
+								        <dt>センター紹介文</dt>
+								        <dd><?php
+										echo nl2br(h($_["center"]["introduction"]));
+								        ?></dd>
+								    </dl>
+								    <?php
+								    }
+								    ?>
+								    <?php
+								    if(!empty($_["center"]["feature"])){
+								    ?><dl>
+								        <dt>特徴</dt>
+								        <dd><?php
+										echo nl2br(h($_["center"]["feature"]));
+								        ?></dd>
+								    </dl>
+								    <?php
+								    }
+								    ?>
+								    <?php
+								    if(!empty($_["center"]["remarks"])){
+								    ?><dl>
+								        <dt>備考</dt>
+								        <dd><?php
+										echo nl2br(h($_["center"]["remarks"]));
+								        ?></dd>
+								    </dl>
+								    <?php
+								    }
+								    ?>
+								    <?php
+								    if(!empty($_["center"]["remarks2"])){
+								    ?><dl>
+								        <dt>備考2</dt>
+								        <dd><?php
+										echo nl2br(h($_["center"]["remarks2"]));
+								        ?></dd>
+								    </dl>
+								    <?php
+								    }
+								    ?>
+									</div>
+							</div>
+						</div>
+						<?php
+						}
+						?>
+						
+					</div>
+						
+					<div class="dtentbx">
+					    <p class="ttl"><span>ぴったりなお仕事が見つからない場合は、<br>登録会に参加して相談してみよう！</span><img src="/callcenter/images/src_det_entry_gra.png" alt="ぴったりなお仕事が見つからない場合は"></p>
+					    <p class="txt">登録会にご参加頂ければ、<br>当社コーディネーターがあなたの希望を伺い、<span>コールセンターのピッタリなお仕事をご提案します！お気軽に相談してくださいね。</span></p>
+					    <p class="btn"><a href="/callcenter/entry/?consult=1"><span>スタッフ登録会に応募</span><img src="/callcenter/images/src_det_entry_btn_off.png" alt="相談する"></a></p>
+					</div>
+
+
+		<?php
+		if(!empty($_["randdata"])){
+		?>
+		<section id="Slidebox2" class="com_wid com_sp">
+			<div class="recobox">
+				<div class="slidebox2 bt">
+				<p class="ttl">おすすめ求人</p>
+				<div class="slidein">
+					<ul id="reco_slider2">
+						<?php       
+					    foreach($_["randdata"] as $v){
+						?>
+						<li>
+							<div class="detbox">
+								<div class="detin">
+								<p class="tl"><span><a href="/callcenter/details/<?php echo h($v["id"]);?>/"><?php echo (!empty($v["title"]))? h($v["title"]) :""; ?></a></span>[<?php
+                    								    $jobtypeCodesLi = explode(",", $v["jobtype_codes"]);
+                    								    foreach($jobtypeCodesLi as $k => $t){
+                    								        if(!empty($_["jobTypes"][$t]["name"])){
+                    								            $jobTypesName = $_["jobTypes"][$t]["name"];
+                    								        }
+                    								    }
+                    								    echo h($_["jobTypesSS"][$jobTypesName],"0");
+													    ?>]<?php
+                    								    echo h($_["jobIndustries"][$v["industry_code"]]["name"]);
+
+														if(!empty($v["cate_codes"])){
+														    $v["cate_codes"] = explode(",", $v["cate_codes"]);
+														    foreach($v["cate_codes"] as $k => $r){
+														        if(!empty($_["jobCategories"][$r]["name"])){
+														            echo " / ";
+														            echo h($_["jobCategories"][$r]["name"]);
+														        }
+														    }
+														}
+                    								    ?></p>
+								<dl class="area">
+									<dt>勤務地</dt>
+									<dd><?php
+
+									if(!empty($_["prefectures"][$v["pref_code"]]["name"]) && !empty($_["cities"][$v["city_code"]]["city"])){
+									    echo '<a href="/callcenter/search/pref-'.h($v["pref_code"]).'/city-'.h($v["city_code"]).'/">';
+									}
+									
+									echo (!empty($_["prefectures"][$v["pref_code"]]["name"]))? h($_["prefectures"][$v["pref_code"]]["name"]):"";
+									echo (!empty($_["cities"][$v["city_code"]]["city"]))? h($_["cities"][$v["city_code"]]["city"]):"";
+
+									if(!empty($_["prefectures"][$v["pref_code"]]["name"]) && !empty($_["cities"][$v["city_code"]]["city"])){
+									    echo '</a>';
+									}
+									
+									?></dd>
+								</dl>
+								<?php
+								if(!empty($v["salary_flg"])){
+								?>
+								<dl class="yen">
+									<dt>給与</dt>
+									<dd><?php
+									echo (!empty($v["salarytime_low"]) or !empty($v["salarytime_high"]))? '時給':"";
+									echo (!empty($v["salarytime_low"]))? h($v["salarytime_low"])."円":"";
+									echo (!empty($v["salarytime_low"]) or !empty($v["salarytime_high"]))? '～':"";
+									echo (!empty($v["salarytime_high"]))? h($v["salarytime_high"])."円":"";
+									if(!empty($v["salary"])){
+									    echo (!empty($v["salarytime_low"]) or !empty($v["salarytime_high"]))? '<br>':"";
+									    echo nl2br(h($v["salary"]));
+									}
+									?></dd>
+								</dl>
+								<?php
+								}
+								?>
+								<dl class="day">
+									<dt>勤務日</dt>
+									<dd><?php
+									    if(!empty($v["jobday_codes"])){
+									    $v["jobday_codes"] = explode(",", $v["jobday_codes"]);
+									    $nm = 1;
+									    foreach($_["jobdays"] as $r){
+									        if(in_array($r["id"],$v["jobday_codes"])){
+										        echo ($nm!=1)?" / ":"";
+									            echo h($r["name"]);
+										        $nm++;
+									        }
+									    }
+								    }
+									if(!empty($v["jobday"])){
+									    echo (!empty($v["jobday_codes"]))? '<br>':"";
+	    								echo nl2br(h($v["jobday"]));
+									}
+									?></dd>
+								</dl>
+								</div>
+								<p class="com_sp_btn mr0"><a href="/callcenter/details/<?php echo h($v["id"]);?>/"><span>詳しく見る</span></a></p>
+							</div>
+						</li>
+						<?php
+						}
+						?>
+					</ul>
+				</div>
+				</div>
+			</div>
+		</section>
+		<?php
+		}
+		?>
+
+		<section id="Slidebox2" class="com_wid com_sp">
+			<div class="recobox rank">
+				<div class="slidebox2">
+                <?php
+                if(!empty($_["prefectures"][$_["data"]["pref_code"]]["name"])){
+					if(!empty($_["recruitsAreaLi"])){
+                        echo '<p class="ttl">'.h($_["prefectures"][$_["data"]["pref_code"]]["name"]).'の新着求人</p>';
+                    } else if(!empty($_["recruitsAccessAllLi"])) {
+                        echo '<p class="ttl">全ての求人で見られている求人</p>';
+                    }  else {
+                        echo '<p class="ttl">'.h($_["prefectures"][$_["data"]["pref_code"]]["name"]).'で見られている求人</p>';
+                    }
+                }
+                ?>
+				<div class="slidein">
+					<ul id="reco_slider3">
+						<?php       
+						if(!empty($_["recruitsAreaLi"])){
+						    $_["recruitsAccessLi"] = $_["recruitsAreaLi"];
+						}
+						if(!empty($_["recruitsAccessAllLi"])){
+						    $_["recruitsAccessLi"] = $_["recruitsAccessAllLi"];
+						}
+					    foreach($_["recruitsAccessLi"] as $v){
+						?>
+						<li>
+							<div class="detbox">
+								<div class="detin">
+								<p class="tl"><span><a href="/callcenter/details/<?php echo h($v["id"]);?>/"><?php echo (!empty($v["title"]))? h($v["title"]) :""; ?></a></span>[<?php
+                    								    $jobtypeCodesLi = explode(",", $v["jobtype_codes"]);
+                    								    foreach($jobtypeCodesLi as $k => $t){
+                    								        if(!empty($_["jobTypes"][$t]["name"])){
+                    								            $jobTypesName = $_["jobTypes"][$t]["name"];
+                    								        }
+                    								    }
+                    								    echo h($_["jobTypesSS"][$jobTypesName],"0");
+													    ?>]<?php
+                    								    echo h($_["jobIndustries"][$v["industry_code"]]["name"]);
+
+														if(!empty($v["cate_codes"])){
+														    $v["cate_codes"] = explode(",", $v["cate_codes"]);
+														    foreach($v["cate_codes"] as $k => $r){
+														        if(!empty($_["jobCategories"][$r]["name"])){
+														            echo " / ";
+														            echo h($_["jobCategories"][$r]["name"]);
+														        }
+														    }
+														}
+                    								    ?></p>
+								<dl class="area">
+									<dt>勤務地</dt>
+									<dd><?php
+
+									echo (!empty($_["areas"][$v["pref_code"]]["name"]))? h($_["areas"][$v["pref_code"]]["name"]):"";
+									echo (!empty($_["cities"][$v["city_code"]]["city"]))? h($_["cities"][$v["city_code"]]["city"]):"";
+									?></dd>
+								</dl>
+								<?php
+								if(!empty($v["salary_flg"])){
+								?>
+								<dl class="yen">
+									<dt>給与</dt>
+									<dd><?php
+									echo (!empty($v["salarytime_low"]) or !empty($v["salarytime_high"]))? '時給':"";
+									echo (!empty($v["salarytime_low"]))? h($v["salarytime_low"])."円":"";
+									echo (!empty($v["salarytime_low"]) or !empty($v["salarytime_high"]))? '～':"";
+									echo (!empty($v["salarytime_high"]))? h($v["salarytime_high"])."円":"";
+									if(!empty($v["salary"])){
+									    echo (!empty($v["salarytime_low"]) or !empty($v["salarytime_high"]))? '<br>':"";
+									    echo nl2br(h($v["salary"]));
+									}
+									?></dd>
+								</dl>
+								<?php
+								}
+								?>
+								<dl class="day">
+									<dt>勤務日</dt>
+									<dd><?php
+									    if(!empty($v["jobday_codes"])){
+									    $v["jobday_codes"] = explode(",", $v["jobday_codes"]);
+									    $nm = 1;
+									    foreach($_["jobdays"] as $r){
+									        if(in_array($r["id"],$v["jobday_codes"])){
+										        echo ($nm!=1)?" / ":"";
+									            echo h($r["name"]);
+										        $nm++;
+									        }
+									    }
+								    }
+									if(!empty($v["jobday"])){
+									    echo (!empty($v["jobday_codes"]))? '<br>':"";
+	    								echo nl2br(h($v["jobday"]));
+									}
+									?></dd>
+								</dl>
+								</div>
+								<p class="com_sp_btn mr0"><a href="/callcenter/details/<?php echo h($v["id"]);?>/"><span>詳しく見る</span></a></p>
+							</div>
+						</li>
+						<?php
+						}
+						?>
+					</ul>
+				</div>
+				</div>
+			</div>
+		</section>
+		
+		
+		<div class="txtdetbx">
+		    <div class="ttl"><p><span>コールセンター求人をお探しならコールセンター求人ナビ</span><br><strong><?php
+if(!empty($_["data"]["tag_title"])){
+    echo h($_["data"]["tag_title"]);
+} else {
+    echo "【";
+    echo (!empty($_["prefectures"][$_["data"]["pref_code"]]["name"]))? h($_["prefectures"][$_["data"]["pref_code"]]["name"]):"";
+    echo "】".h($_["data"]["title"]);
+}
+?></strong>の求人情報ページをご覧のみなさま</p></div>
+		    <p class="tx">コールセンター求人ナビは、大手企業の駅チカ求人や、高時給・未経験OK・経験者歓迎のコールセンターお仕事情報が満載です。</p>
+		</div>		
+
+							<div class="relatebox">
+								<div class="ttlbox">
+									<h3 class="com_pc m_b0"><img src="/callcenter/images/top_ttl_relatesrc.png" alt="関連する求人を探す"></h3>
+								<!--//spソース-->
+									<h3 class="com_sp">関連する求人を探す</h3>
+								<!--spソース//-->
+								</div>
+								<div class="com_box">
+							    <div class="relatein">
+							        <div class="tbbx">
+							            <dl class="tp">
+							                <dt><span>業種</span></dt>
+							                <dd>
+							                <ul class="clearfix">
+         									<?php
+         									$indCodeLI = explode(",", $_["data"]["industry_code"]);
+         									foreach($_["jobIndustries"] as $k => $v){
+         									    if(in_array($k,$indCodeLI)){
+         									        echo '<li><a href="/callcenter/search';
+         									        echo '/ind-'.h($k).'/"><span>'.h($v["name"]).'</span></a></li>';
+         									    }
+         									}
+         									?>
+							                </ul>
+							                </dd>
+							            </dl>
+							            <dl>
+							                <dt><span>職種</span></dt>
+							                <dd>
+							                <ul class="clearfix">
+         									<?php
+         									$cateCodeLI = explode(",", $_["data"]["cate_codes"]);
+         									foreach($_["jobCategories"] as $k => $v){
+         									    if(in_array($k,$cateCodeLI)){
+         									        echo '<li><a href="/callcenter/search';
+         									        echo '/cate-'.h($k).'/"><span>'.h($v["name"]).'</span></a></li>';
+         									    }
+         									}
+         									?>
+							                </ul>
+							                </dd>
+							            </dl>
+    									<?php
+    									if(!empty($_["data"]["salary_flg"])){
+    									?>
+							            <dl>
+							                <dt><span>給与</span></dt>
+							                <dd>
+							                <ul class="clearfix">
+         									<?php
+         									foreach($_["salaries"] as $v){
+         									    if($_["data"]["salarytime_low"]==$v){
+         									        echo '<li><a href="/callcenter/search';
+         									        echo '/salary-'.h($v).'/"><span>時給'.h($v).'円以上</span></a></li>';
+         									    }
+         									}
+         									?>
+							                </ul>
+							                </dd>
+							            </dl>
+							            <?php
+							            }
+							            ?>
+							            <dl>
+							                <dt><span>雇用形態</span></dt>
+							                <dd>
+							                <ul class="clearfix">
+         									<?php
+         									$jobtypeCodeLI = explode(",", $_["data"]["jobtype_codes"]);
+         									foreach($_["jobTypes"] as $k => $v){
+         									    if(in_array($k,$jobtypeCodeLI)){
+         									        echo '<li><a href="/callcenter/search';
+         									        echo '/type-'.h($k).'/"><span>'.h($v["name"]).'</span></a></li>';
+         									    }
+         									}
+         									?>
+							                </ul>
+							                </dd>
+							            </dl>
+							            <dl>
+							                <dt><span>こだわり条件</span></dt>
+							                <dd>
+							                <ul class="clearfix">
+         									<?php
+         									if(!empty($_["data"]["jobday_codes"])){
+             									foreach($_["jobdays"] as $k => $v){
+             									    if(in_array($k,$_["data"]["jobday_codes"])){
+             									        echo '<li><a href="/callcenter/search';
+             									        echo '/day-'.h($k).'/"><span>'.h($v["name"]).'</span></a></li>';
+             									    }
+             									}
+         									}
+         									if(!empty($_["data"]["feature_codes"])){
+             									foreach($_["jobFeatures"] as $k => $v){
+             									    if(in_array($k,$_["data"]["feature_codes"])){
+             									        echo '<li><a href="/callcenter/search';
+             									        echo '/fea-'.h($k).'/"><span>'.h($v["name"]).'</span></a></li>';
+             									    }
+             									}
+         									}
+         									?>
+							                </ul>
+							                </dd>
+							            </dl>
+							        </div>
+							    </div>
+								</div>
+							</div>
+							<section class="relatebox com_sp">
+							    <h3>近隣の求人を探す</h3>
+							    <div class="relatein">
+							        <div class="tbbx">
+        					            <ul class="lnkbx">
+        					                <li><a href="/callcenter/callcenter/area/<?php echo h($_["data"]["pref_code"]); ?>/"><span><?php echo h($_["prefectures"][$_["data"]["pref_code"]]["name"]);?>の市区町村から絞り込む</span></a></li>
+        					                <li><a href="/callcenter/line/<?php echo h($_["data"]["pref_code"]); ?>/"><span><?php echo h($_["prefectures"][$_["data"]["pref_code"]]["name"]);?>の駅から絞り込む</span></a></li>
+        					            </ul>
+        					         </div>
+        					     </div>
+						   </section>
+				</div>
+			</section>
+			<section id="Sidebox">
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/sidebox.html'; ?>
+			</section>
+		</section>
+
+		<?php
+		if(!empty($_["randdata"])){
+		?>
+		<section id="Slidebox" class="com_wid com_pc">
+			<div class="recobox">
+				<div class="slidebox">
+				<div class="slidein">
+				<p class="ttl"><img src="/callcenter/images/top_reco_ttl.png" alt="おすすめ求人"></p>
+					<ul id="reco_slider">
+						<?php       
+					    foreach($_["randdata"] as $v){
+						?>
+						<li>
+							<div class="detbox">
+								<div class="detin">
+								<p class="tl"><span><a href="/callcenter/details/<?php echo h($v["id"]);?>/"><?php echo (!empty($v["title"]))? h($v["title"]) :""; ?></a></span>[<?php
+                    								    $jobtypeCodesLi = explode(",", $v["jobtype_codes"]);
+                    								    foreach($jobtypeCodesLi as $k => $t){
+                    								        if(!empty($_["jobTypes"][$t]["name"])){
+                    								            $jobTypesName = $_["jobTypes"][$t]["name"];
+                    								        }
+                    								    }
+                    								    echo h($_["jobTypesSS"][$jobTypesName],"0");
+													    ?>]<?php
+                    								    echo h($_["jobIndustries"][$v["industry_code"]]["name"]);
+
+														if(!empty($v["cate_codes"])){
+														    $v["cate_codes"] = explode(",", $v["cate_codes"]);
+														    foreach($v["cate_codes"] as $k => $r){
+														        if(!empty($_["jobCategories"][$r]["name"])){
+														            echo " / ";
+														            echo h($_["jobCategories"][$r]["name"]);
+														        }
+														    }
+														}
+                    								    ?></p>
+								<dl class="area">
+									<dt>勤務地</dt>
+									<dd><?php
+									
+									if(!empty($_["prefectures"][$v["pref_code"]]["name"]) && !empty($_["cities"][$v["city_code"]]["city"])){
+									    echo '<a href="/callcenter/search/pref-'.h($v["pref_code"]).'/city-'.h($v["city_code"]).'/">';
+									}
+									
+									echo (!empty($_["prefectures"][$v["pref_code"]]["name"]))? h($_["prefectures"][$v["pref_code"]]["name"]):"";
+									echo (!empty($_["cities"][$v["city_code"]]["city"]))? h($_["cities"][$v["city_code"]]["city"]):"";
+
+									if(!empty($_["prefectures"][$v["pref_code"]]["name"]) && !empty($_["cities"][$v["city_code"]]["city"])){
+									    echo '</a>';
+									}
+									
+									?></dd>
+								</dl>
+								<?php
+								if(!empty($v["salary_flg"])){
+								?>
+								<dl class="yen">
+									<dt>給与</dt>
+									<dd><?php
+									echo (!empty($v["salarytime_low"]) or !empty($v["salarytime_high"]))? '時給':"";
+									echo (!empty($v["salarytime_low"]))? h($v["salarytime_low"])."円":"";
+									echo (!empty($v["salarytime_low"]) or !empty($v["salarytime_high"]))? '～':"";
+									echo (!empty($v["salarytime_high"]))? h($v["salarytime_high"])."円":"";
+									if(!empty($v["salary"])){
+									    echo (!empty($v["salarytime_low"]) or !empty($v["salarytime_high"]))? '<br>':"";
+									    echo nl2br(h($v["salary"]));
+									}
+									?></dd>
+								</dl>
+								<?php
+								}
+								?>
+								<dl class="day">
+									<dt>勤務日</dt>
+									<dd><?php
+									    if(!empty($v["jobday_codes"])){
+									    $v["jobday_codes"] = explode(",", $v["jobday_codes"]);
+									    $nm = 1;
+									    foreach($_["jobdays"] as $r){
+									        if(in_array($r["id"],$v["jobday_codes"])){
+										        echo ($nm!=1)?" / ":"";
+									            echo h($r["name"]);
+										        $nm++;
+									        }
+									    }
+								    }
+									if(!empty($v["jobday"])){
+									    echo (!empty($v["jobday_codes"]))? '<br>':"";
+	    								echo nl2br(h($v["jobday"]));
+									}
+									?></dd>
+								</dl>
+								</div>
+								<p class="btn"><a href="/callcenter/details/<?php echo h($v["id"]);?>/">詳しく見る</a></p>
+							</div>
+						</li>
+						<?php
+						}
+						?>
+					</ul>
+				</div>
+				</div>
+			</div>
+		</section>
+		<?php
+		}
+		?>
+		
+		<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/sp_bottom.html'; ?>
+	</section>
+</article>
+<script type="text/javascript" src="/callcenter/common/js/Chart.js"></script>
+<script type="text/javascript">
+$(function() {
+	// デフォルト変数
+	var chart_i   = 0;
+	var chart_ii  = 0;
+	canvas_object = [];
+	// オブジェクト生成
+	$('.com_canvas_chart').each(function() {
+		canvas_object[chart_ii] = {id:$(this).attr('id'), key: 0};
+		chart_ii++;
+	});
+	$(window).scroll(function() {
+		$('.com_canvas_chart').each(function() {
+			var this_canvas        = $(this);
+			var this_canvas_offset = this_canvas.offset();
+			var this_gnition_point = (this_canvas_offset.top - $(window).height());
+			var this_emporary_id   = this_canvas.attr('id');
+			var chart_check_id     = this_canvas.attr('chart_check');
+			// 可視の場所に来たら
+			if($(window).scrollTop() > this_gnition_point) {
+				// まだチャートを表示していない場合
+				if(chart_check_id != 'TRUE') {
+					chart_i++;
+					this_canvas.attr('chart_check', 'TRUE');
+					this_canvas.attr('id', this_emporary_id + '_' + chart_i);
+					// 外部チャート読み込み
+					$('#' + this_emporary_id + '_' + chart_i).load('/details/'+ this_emporary_id + '.html?id=<?php echo h($_["id"]);?>', function() {
+						$('#' + this_emporary_id).css('opacity','0');
+						$('#' + this_emporary_id).animate({opacity: '1'}, 1500);
+					}); // $('#' + this_emporary_id + '_' + chart_i).load(this_emporary_id + '.html', function() {
+				} // if(f_id != 'TRUE') {
+			} // if($(window).scrollTop() > this_gnition_point) {
+		}); // $('.com_canvas_chart').each(function() {
+	}); // $(window).scroll(function() {
+});
+</script>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/footer.html'; ?>
+
+<!-- 20160223 ブレイクフィールド社 imobile リタゲ 求人詳細用 -->
+<script type="text/javascript">
+  imobile_adv_sid = "14757";
+  imobile_adv_cq = "detail=1";
+  document.write(unescape("%3Cscript src='" + ((document.location.protocol == "http:") ? "http" : "https") + "://spcnv.i-mobile.co.jp/script/adv.js?20120316'" + "%20type='text/javascript'%3E%3C/script%3E"));
+</script>
+<!-- 20160223 ブレイクフィールド社 imobile リタゲ 求人詳細用 End -->
+
+</body>
+</html>

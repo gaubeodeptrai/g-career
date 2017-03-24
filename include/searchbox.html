@@ -1,0 +1,204 @@
+<?php
+if(!empty($_REQUEST["ajax"]) and !empty($_REQUEST["ajax_type"]) and $_REQUEST["ajax_type"]==1){
+?>
+<script type="text/javascript">
+$(function SlideSrc() {
+	$("#searchbox .srcin .srct").each(function(){
+
+		var hght = $(this).find("ul").css("height");
+		hght = hght.replace(/px/g,'');
+		if(parseInt(hght)<="70"){
+			$(this).parents(".srcin").find(".btn").hide();
+		} else {
+			$(this).parents(".srcin").find(".btn").show();
+		}
+	});
+});
+</script>
+<?php
+}
+?>
+							<div class="srcbox">
+								<div class="srcin dt01">
+									<div class="srct">
+										<p class="tl"><img src="images/tpsrc_ttl_area.png" alt="エリア"></p>
+										<div class="sltbox">
+											<ul class="clearfix">
+												<li>
+													<select name="pref[]">
+														<option value="">都道府県を選択してください</option>
+    												<?php
+    												foreach($_["prefectures"] as $v){
+    												    foreach($v as $v2){
+    												        if(!empty($_["prefRec"][$v2["id"]])){
+    												            echo '<option value="'.h($v2["id"]).'"';
+    												            echo ($_["pmsPref"]==$v2["id"])?" selected":"";
+    												            echo '>'.h($v2["name"])."（".h(count($_["prefRec"][$v2["id"]])).'）</option>';
+    												        }
+    												    }
+    												}
+    												?>
+    												</select>
+    											</li>
+												<li>
+													<select name="city[]">
+														<option value="">市区町村を選択してください</option>
+													<?php
+													if(!empty($_["prefCities"][$_["pmsPref"]])){
+        												foreach($_["prefCities"][$_["pmsPref"]] as $v){
+    												        if(!empty($_["cityRec"][$v["id"]])){
+    												            echo '<option value="'.h($v["id"]).'"';
+    												            echo ($_["pmsCity"]==$v["id"])?" selected":"";
+    												            echo '>'.h($v["city"])."（".h(count($_["cityRec"][$v["id"]])).'）</option>';
+    												        }
+        												}
+													}
+													?>
+													</select>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="srcin">
+									<div class="srct">
+										<p class="tl"><img src="images/tpsrc_ttl_ind.png" alt="業種"></p>
+										<div class="listbox">
+											<ul class="clearfix">
+         									<?php
+         									foreach($_["jobIndustries"] as $k => $v){
+         									    if(!empty($_["indRec"][$k])){
+         									        echo '<li><input type="checkbox" id="ind_'.h($k).'" name="ind[]" value="'.h($k).'"><label class="chk" for="ind_'.h($k).'"><a href="search';
+         									        if(!empty($_["pmsPref"])){
+         									            echo '/pref-'.$_["pmsPref"];
+         									        }
+         									        if(!empty($_["pmsCity"])){
+         									            echo '/city-'.$_["pmsCity"];
+         									        }
+         									        echo '/ind-'.h($k).'/">'.h($v["name"]).' ('.count($_["indRec"][$k]).')</a></label></li>';
+         									    }
+         									}
+         									?>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="srcin">
+									<div class="srct">
+										<p class="tl"><img src="images/tpsrc_ttl_cate.png" alt="職種"></p>
+										<div class="listbox">
+											<ul class="clearfix">
+         									<?php
+         									foreach($_["jobCategories"] as $k => $v){
+         									    if(!empty($_["cateRec"][$k])){
+         									        echo '<li><input type="checkbox" id="c_'.h($k).'" name="cate[]" value="'.h($k).'"><label class="chk" for="c_'.h($k).'"><a href="search';
+         									        if(!empty($_["pmsPref"])){
+         									            echo '/pref-'.$_["pmsPref"];
+         									        }
+         									        if(!empty($_["pmsCity"])){
+         									            echo '/city-'.$_["pmsCity"];
+         									        }
+         									        echo '/cate-'.h($k).'/">'.h($v["name"]).' ('.count($_["cateRec"][$k]).')</a></label></li>';
+         									    }
+         									}
+         									?>
+         									</ul>
+         								</div>
+									</div>
+								</div>
+								<div class="srcin dt01">
+									<div class="srct">
+										<p class="tl"><img src="images/tpsrc_ttl_salary.png" alt="給与"></p>
+										<div class="sltbox">
+         										<select name="salary">
+         										<option value="">給与を選択してください</option>
+         										<?php
+                                                 foreach($_["salaries"] as $v){
+            									     if(!empty($_["salaryRec"][$v])){
+                                                         echo '<option ';
+                                                         echo ($_["pmsSalary"]==$v["id"])?" selected":"";
+                                                         echo ' value="'.h($v).'">'.h($v).'円以上</option>';
+                                                     }
+                                                 }
+                                                 ?>
+         										</select>
+         								</div>
+									</div>
+								</div>
+								<div class="srcin dt02">
+									<div class="srct">
+										<p class="tl"><img src="images/tpsrc_ttl_jobcate.png" alt="雇用形態"></p>
+										<div class="listbox">
+											<ul class="clearfix">
+            									<?php
+            									foreach($_["jobTypes"] as $k => $v){
+            									    if(!empty($_["typeRec"][$k])){
+	        									        if($v["name"]=="その他"){
+	        									            continue;
+	        									        }
+            									        echo '<li><input type="checkbox" id="type_'.h($k).'" name="type[]" value="'.h($k).'"><label class="chk" for="type_'.h($k).'"><a href="search';
+            									        if(!empty($_["pmsPref"])){
+            									            echo '/pref-'.$_["pmsPref"];
+            									        }
+            									        if(!empty($_["pmsCity"])){
+            									            echo '/city-'.$_["pmsCity"];
+            									        }
+            									        echo '/type-'.h($k).'/">'.h($v["name"]).' ('.count($_["typeRec"][$k]).')</a></label></li>';
+            									    }
+            									}
+            									?>
+         									</ul>
+										</div>
+									</div>
+								</div>
+								<div class="srcin<?php
+                                    if(
+                                    !preg_match ("/^\/callcenter\/searchdet\/$/u", $_SERVER["REQUEST_URI"])
+                                    ){
+                                         echo ' flt';
+                                    }
+                                    ?>">
+									<div class="srct">
+										<p class="tl"><img src="images/tpsrc_ttl_dt.png" alt="こだわり条件"></p>
+										<div class="listbox">
+											<ul class="clearfix">
+         									<?php
+         									foreach($_["jobdays"] as $k => $v){
+         									    if(!empty($_["dayRec"][$k])){
+         									        echo '<li><input type="checkbox" id="h1_'.h($k).'" name="day[]" value="'.h($k).'"><label class="chk" for="h1_'.h($k).'"><a href="search';
+         									        if(!empty($_["pmsPref"])){
+         									            echo '/pref-'.$_["pmsPref"];
+         									        }
+         									        if(!empty($_["pmsCity"])){
+         									            echo '/city-'.$_["pmsCity"];
+         									        }
+         									        echo '/day-'.h($k).'/">'.h($v["name"]).' ('.count($_["dayRec"][$k]).')</a></label></li>';
+         									    }
+         									}
+         									foreach($_["jobFeatures"] as $k => $v){
+         									    if(!empty($_["feaRec"][$k])){
+         									        echo '<li><input type="checkbox" id="h3_'.h($k).'" name="fea[]" value="'.h($k).'"><label class="chk" for="h3_'.h($k).'"><a href="search';
+         									        if(!empty($_["pmsPref"])){
+         									            echo '/pref-'.$_["pmsPref"];
+         									        }
+         									        if(!empty($_["pmsCity"])){
+         									            echo '/city-'.$_["pmsCity"];
+         									        }
+         									        echo '/fea-'.h($k).'/">'.h($v["name"]).' ('.count($_["feaRec"][$k]).')</a></label></li>';
+         									    }
+         									}
+         									?>
+         									</ul>
+										</div>
+									</div>
+                                    <?php
+                                    if(
+                                    !preg_match ("/^\/callcenter\/searchdet\/$/u", $_SERVER["REQUEST_URI"])
+                                    ){
+                                    ?><p class="btn"><a href="#">もっと見る</a></p>
+                                    <?php
+                                    }
+                                    ?>
+								</div>
+								<p class="src_btn"><a href="#" class="formSubmitBtn"><img src="images/btn_top_serach_l_off.png" alt="この条件で求人検索"></a></p>
+							</div>

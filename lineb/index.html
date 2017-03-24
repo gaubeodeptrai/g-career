@@ -1,0 +1,250 @@
+<?php
+require_once dirname($_SERVER['DOCUMENT_ROOT']). '/libs/inc.php';
+
+
+$_ = array();
+foreach(array(
+"today"                   => date("Y-m-d"),
+"prefRec"                 => array(),
+"cityRec"                 => array(),
+"srvRec"                  => array(),
+"skillRec"                => array(),
+"expRec"                  => array(),
+"feaRec"                  => array(),
+"timeRec"                 => array(),
+"dayRec"                  => array(),
+"nm"                      => "0",
+
+"areas"                   => array(),
+"prefectures"             => array(),
+"prefGroups"              => array(),
+"prefCities"              => array(),
+"jobCategories"           => array(),
+"jobServices"             => array(),
+"jobFeatures"             => array(),
+"jobtimes"                => array(),
+"jobdays"                 => array(),
+
+//パラメータ
+"pmsPref"                 => "",
+"pmsCity"                 => "",
+"pmsLine"                 => "",
+"pmsSta"                  => "",
+"pmsCate"                 => "",
+"pmsSrv"                  => "",
+"pmsSkill"                => "",
+"pmsExp"                  => "",
+"pmsTime"                 => "",
+"pmsDay"                  => "",
+"pmsFea"                  => "",
+"pmsWord"                 => "",
+"pmsPage"                 => "",
+
+"pmsPrefs"                => array(),
+"pmsCities"               => array(),
+"pmsLines"                => array(),
+"pmsStas"                 => array(),
+"pmsCates"                => array(),
+"pmsSrvs"                 => array(),
+"pmsSkills"               => array(),
+"pmsExps"                 => array(),
+"pmsTimes"                => array(),
+"pmsDays"                 => array(),
+"pmsFeas"                 => array(),
+
+//パラメータ表示
+"pmsPrefStr"              => "",
+) as $k => $v){
+    $_[$k] = $v;
+}
+
+
+if(!empty($_SESSION["kaigoi"]["pms"])){
+    foreach($_SESSION["kaigoi"]["pms"] as $k => $v){
+        $_[$k] = $v;
+    }
+}
+
+if(!empty($_["pmsPrefs"])){
+    foreach($_["pmsPrefs"] as $v){
+        $_["pmsPref"] = $v;
+    }
+}
+if(!empty($_["pmsCities"])){
+    foreach($_["pmsCities"] as $v){
+        $_["pmsCity"] = $v;
+    }
+}
+
+if(!empty($_REQUEST["pref"])){
+    $_["pmsPref"] = $_REQUEST["pref"];
+}
+
+//都道府県
+foreach(Data::prefectures(array('w_status'=>'1','o_select'=>'1')) as $v){
+    $_["areas"][$v["id"]] = $v;
+    $_["prefectures"][$v["gp_id"]][$v["id"]] = $v;
+    $_["prefGroups"][$v["gp_id"]] = $v;
+}
+
+if(!empty($_REQUEST["pref"])){
+    $_["pmsPref"] = $_REQUEST["pref"];
+
+    $_["pmsPrefStr"] = $_["areas"][$_["pmsPref"]]["name"];
+    
+   //市区町村
+    foreach(Data::cities(array('w_pref'=>$_["pmsPrefStr"])) as $v){
+        $_["prefCities"][$_["pmsPref"]][$v["id"]] = $v;
+    }
+    if(!empty($_REQUEST["city"])){
+        $_["pmsCity"] = $_REQUEST["city"];
+    }
+
+}
+
+
+//募集職種
+$_["jobCategories"] = Data::jobCategories(array('s'=>'1','w_status'=>'1'));
+
+//サービス種類
+$_["jobServices"] = Data::jobServices(array('s'=>'1','w_status'=>'1'));
+
+//特色フラグ
+$_["jobFeatures"] = Data::jobFeatures(array('s'=>'1','w_status'=>'1'));
+
+//勤務時間
+$_["jobtimes"] = Data::jobtimes(array('s'=>'1','w_status'=>'1'));
+
+//勤務日数
+$_["jobdays"] = Data::jobdays(array('s'=>'1','w_status'=>'1'));
+
+
+//求人
+foreach(DataCcRec::recruits(array('s'=> '1','w_status'=> 'OPEN','w_startdate'=> $_["today"])) as $v){
+    $_["prefRec"][$v["pref_code"]][] = $v["id"];
+    $_["cityRec"][$v["city_code"]][] = $v["id"];
+
+    if(!empty($_["pmsPref"]) and $v["pref_code"]!=$_["pmsPref"]){
+        continue;
+    }
+    if(!empty($_["pmsCity"]) and $v["city_code"]!=$_["pmsCity"]){
+        continue;
+    }
+        
+    $v["cate_codes"] =  explode(",", $v["cate_codes"]);
+    foreach($v["cate_codes"] as $r){
+        $_["cateRec"][$r][] = $v["id"];
+    }
+    $v["service_code"] =  explode(",", $v["service_code"]);
+    foreach($v["service_code"] as $r){
+        $_["srvRec"][$r][] = $v["id"];
+    }
+
+    $_["skillRec"][$v["skill_flg"]][] = $v["id"];
+    $_["expRec"][$v["exp_flg"]][] = $v["id"];
+
+    $v["feature_codes"] =  explode(",", $v["feature_codes"]);
+    foreach($v["feature_codes"] as $r){
+        $_["feaRec"][$r][] = $v["id"];
+    }
+
+    $v["jobday_codes"] =  explode(",", $v["jobday_codes"]);
+    foreach($v["jobday_codes"] as $r){
+        $_["dayRec"][$r][] = $v["id"];
+    }
+
+    $_["timeRec"][$v["jobtime1_code"]][] = $v["id"];
+    $_["timeRec"][$v["jobtime2_code"]][] = $v["id"];
+    $_["timeRec"][$v["jobtime3_code"]][] = $v["id"];
+    $_["timeRec"][$v["jobtime4_code"]][] = $v["id"];
+    
+}
+
+if(!empty($_REQUEST["ajax"]) and !empty($_REQUEST["ajax_type"]) and $_REQUEST["ajax_type"]==1){
+    require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/searchbox.html';
+    exit;
+}
+if(!empty($_REQUEST["ajax"]) and !empty($_REQUEST["ajax_type"]) and $_REQUEST["ajax_type"]==2){
+    require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/searchbox_sp.html';
+    exit;
+}
+
+//条件変更遷移フラグ
+unset($_SESSION["kaigoi"]["sp_select"]);
+
+?><!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>駅・路線から探す｜<?php echo h($GLOBALS["PAGETITLE"]);?></title>
+<meta name="description" content="駅・路線から探すのページです。<?php echo h($GLOBALS["PAGDESCRIPTION"]);?>">
+<meta name="keywords" content="<?php echo h($GLOBALS["PAGEKEYWORDS"]);?>">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/head.html'; ?>
+<script type="text/javascript" src="/callcenter/common/js/top.js"></script>
+</head>
+<body>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/header.html'; ?>
+<article id="Contents">
+	<section class="com_pnkzbox m_b10">
+		<ul class="clearfix" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+			<li><a href="<?php echo h($GLOBALS["PNKZURL"]);?>" itemprop="url"><span itemprop="title"><?php echo h($GLOBALS["PNKZTITLE"]);?></span></a></li>
+			<li itemprop="title"><span class="clr_gr">&gt;</span>&nbsp;&nbsp;駅・路線から探す</li>
+		</ul>
+	</section>
+	<section id="SRCBX">
+		<section id="Clmbox" class="com_wid clearfix">
+			<section id="Mainbox">
+					<div class="searchbox">
+					<div class="srclistbox">
+					
+						<h2 class="com_tlx m_b25"><img src="/callcenter/images/title_line.png" alt="駅・路線から探す" ></h2>
+						<h2 class="com_spttl"><img src="/callcenter/images/sp_top_ttl_line.png" alt="駅・路線から探す" height="26"></h2>
+
+    					<div class="areawkbx com_pc clearfix">
+    						<?php
+    						foreach($_["prefGroups"] as $t){
+    						    echo '<dl><dt><span>'.h($t["gp_name"]).'</span></dt>';
+    						    echo '<dd><ul class="clearfix">';
+    							foreach($_["prefectures"][$t["gp_id"]] as $v){
+    							    if(!empty($_["prefRec"][$v["id"]])){
+    							        echo '<li><a href="/callcenter/line';
+    							        echo '/'.h($v["id"]).'/"><span>'.h($v["name"]).'</span></a></li>';
+    							    }
+    							}
+    						    echo '</ul></dd></dl>';
+    						}
+    						?>
+    					</div>
+						<!--//spソース-->
+    					<div class="sp_srcbox area com_sp">
+    						<dl>
+    						<?php
+    						foreach($_["prefGroups"] as $t){
+    						    echo '<dt><a href="#"><span>'.h($t["gp_name"]).'</span></a></dt>';
+    						    echo '<dd><ul>';
+    							foreach($_["prefectures"][$t["gp_id"]] as $v){
+    							    if(!empty($_["prefRec"][$v["id"]])){
+    							        echo '<li><a href="/callcenter/line';
+    							        echo '/'.h($v["id"]).'/"><span>'.h($v["name"]).'</span></a></li>';
+    							    }
+    							}
+    						    echo '</ul></dd>';
+    						}
+    						?>
+    						</dl>
+    					</div>
+					</div>
+					</div>
+			</section>
+			<section id="Sidebox">
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/sidebox.html'; ?>
+			</section>
+		</section>
+		<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/sp_bottom.html'; ?>
+	</section>
+</article>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/footer.html'; ?>
+</body>
+</html>

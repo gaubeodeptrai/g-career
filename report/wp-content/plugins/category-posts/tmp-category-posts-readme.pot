@@ -1,0 +1,258 @@
+msgid ""
+msgstr "MIME-Version: 1.0\n"
+
+#. Name.
+msgid "Category Posts Widget"
+msgstr ""
+
+#. Short description.
+msgid "Adds a widget that shows the most recent posts from a single category."
+msgstr ""
+
+#. Screenshot description.
+msgid "The widget configuration dialog."
+msgstr ""
+
+#. Screenshot description.
+msgid "Front end of the widget using a default WordPress Theme."
+msgstr ""
+
+#. Found in description header.
+msgid "Features"
+msgstr ""
+
+#. Found in description header.
+msgid "Contribute"
+msgstr ""
+
+#. Found in description list item.
+msgid "Option to change ordering of posts."
+msgstr ""
+
+#. Found in description list item.
+msgid "Option to show post thumbnail &amp; set dimension by width &amp; height."
+msgstr ""
+
+#. Found in description list item.
+msgid "Option to put thumbnail on top"
+msgstr ""
+
+#. Found in description list item.
+msgid "Set how many posts to show."
+msgstr ""
+
+#. Found in description list item.
+msgid "Set which category the posts should come form."
+msgstr ""
+
+#. Found in description list item.
+msgid "Option to show the post excerpt and how long the excerpt should be."
+msgstr ""
+
+#. Found in description list item.
+msgid "Option to show the post date."
+msgstr ""
+
+#. Found in description list item.
+msgid "Option to show the comment count."
+msgstr ""
+
+#. Found in description list item.
+msgid "Option to make the widget title link to the category page."
+msgstr ""
+
+#. Found in description list item.
+msgid "Option to hide the title"
+msgstr ""
+
+#. Found in description list item.
+msgid "Multiple widgets."
+msgstr ""
+
+#. Found in description paragraph.
+msgid "Category Posts Widget is a light widget designed to do one thing and do it well: display the most recent posts from a certain category."
+msgstr ""
+
+#. Found in installation header.
+msgid "Automatic installation"
+msgstr ""
+
+#. Found in installation header.
+msgid "Manual installation"
+msgstr ""
+
+#. Found in installation list item.
+msgid "log in to your WordPress dashboard, navigate to the Plugins menu and click Add New. "
+msgstr ""
+
+#. Found in installation list item.
+msgid "In the search field type “Category Posts Widget” and click Search Plugins. "
+msgstr ""
+
+#. Found in installation list item.
+msgid "Once you’ve found plugin, you can install it by simply clicking “Install Now”. "
+msgstr ""
+
+#. Found in installation list item.
+msgid "Then, go to plugins page of WordPress admin activate the plugin. "
+msgstr ""
+
+#. Found in installation list item.
+msgid "Now, goto the Widgets page of the Appearance section and configure the Category Posts widget."
+msgstr ""
+
+#. Found in installation list item.
+msgid "Download the plugin."
+msgstr ""
+
+#. Found in installation list item.
+msgid "Upload it to the plugins folder of your blog."
+msgstr ""
+
+#. Found in installation list item.
+msgid "Activate the plugin through the 'Plugins' menu in WordPress"
+msgstr ""
+
+#. Found in installation paragraph.
+msgid "Automatic installation is the easiest option as WordPress handles the file transfers itself and you don’t need to leave your web browser. To do an automatic install of Category Posts Widget,"
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Fixed hide title bug."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Added option to put thumbnail on top"
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Added option to hide the title"
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Fixed no background bug."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Added PHP5 Constructor "
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Added Option to allow/disallow widget CSS"
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Now, compatible with WordPress 4.3"
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Meet new plugin author <a href=\"https://profiles.wordpress.org/kometschuh\">kometschuh</a>"
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Added CSS file for post styling "
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Now compaitable with latest versions of WordPress"
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Fixed random sort bug."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Added option to change ordering of posts. Defaults to showing newest posts first."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Fixed a bug in the thumbnail size registration routine."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Added support for WP 2.9's post thumbnail feature."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Removed support for Simple Post Thumbnails plugin."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Added option to show the post date."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Added option to set the excerpt length."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Added option to show the number of comments."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Really tried to fix bug where wp_query global was getting over written by manually instantiating a WP_Query object"
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Fixed bug where wp_query global was getting over written."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Updated to use the WP 2.8 widget API."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Added support for <a href=\"http://wordpress.org/extend/plugins/simple-post-thumbnails/\">Simple Post Thumbnails plugin</a>."
+msgstr ""
+
+#. Found in changelog paragraph.
+msgid "4.1.2"
+msgstr ""
+
+#. Found in changelog paragraph.
+msgid "4.1.1"
+msgstr ""
+
+#. Found in changelog paragraph.
+msgid "4.1.0"
+msgstr ""
+
+#. Found in changelog paragraph.
+msgid "4.0"
+msgstr ""
+
+#. Found in changelog paragraph.
+msgid "3.3"
+msgstr ""
+
+#. Found in changelog paragraph.
+msgid "3.2"
+msgstr ""
+
+#. Found in changelog paragraph.
+msgid "3.1"
+msgstr ""
+
+#. Found in changelog paragraph.
+msgid "3.0"
+msgstr ""
+
+#. Found in changelog paragraph.
+msgid "2.3"
+msgstr ""
+
+#. Found in changelog paragraph.
+msgid "2.1"
+msgstr ""
+
+#. Found in changelog paragraph.
+msgid "2.0"
+msgstr ""
+
+#. Found in faq header.
+msgid "The font-size is different from that of other widgets?"
+msgstr ""
+
+#. Found in faq paragraph.
+msgid "Please use the option: \"Disable widget CSS\"."
+msgstr ""

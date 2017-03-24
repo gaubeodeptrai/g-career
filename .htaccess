@@ -1,0 +1,33 @@
+AddType application/x-httpd-php .php .htm .html
+
+#��������
+#AuthUserFile /home/g-career/g-career00001/www/.htpasswd
+#AuthGroupFile /dev/null
+#AuthName "Please enter your ID and password"
+#AuthType Basic
+#Require valid-user
+#order deny,allow
+#�����܂ł��폜
+
+php_value memory_limit 256M
+
+<IfModule mod_rewrite.c>
+    RewriteRule ^search/([^/]+-.+/)+$ search/ [QSA,L]
+	RewriteRule ^area/([0-9]+)/?$ area/index.html?id=$1 [QSA,L]
+    RewriteRule ^prefecture/([^/]+-[^/]+/)+$ prefecture/ [QSA,L]
+	RewriteRule ^line/([0-9]+)/?$ line/index.html?id=$1 [QSA,L]
+    RewriteRule ^sta/([0-9]+)/([^/]+-[^/]+/)+$ sta/index.html?id=$1 [QSA,L]
+    RewriteRule ^linesta/([^/]+-[^/]+/)+$ linesta/ [QSA,L]
+	RewriteRule ^details/([0-9]+)/?$ details/index.html?id=$1 [QSA,L]
+	RewriteRule ^apply/([0-9]+)/(index.html)?$ apply/index.html?recruit_id=$1 [QSA,L]
+	#RewriteRule ^entry/([0-9]+)/(index.html)?$ entry/index.html?id=$1 [QSA,L]
+
+    RewriteRule ^hellowork/search/([^/]+-.+/)+$ hellowork/search/ [QSA,L]
+	RewriteRule ^hellowork/details/([0-9]+)/?$ hellowork/details/index.html?id=$1 [QSA,L]
+    
+#�Z�L���A�w��
+
+
+
+
+</IfModule>

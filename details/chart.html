@@ -1,0 +1,84 @@
+<?php
+require_once dirname($_SERVER['DOCUMENT_ROOT']). '/libs/inc.php';
+
+$_ = array();
+foreach(array(
+"id"                   => "",
+"data"                 => array(),
+"today"                => date("Y-m-d"),
+) as $k => $v){
+    $_[$k] = $v;
+}
+
+$_["id"] = (!empty($_REQUEST["id"]))?$_REQUEST["id"]:"";
+
+if(
+!empty($_SESSION["kaigoi"]["admin"]["recruits"])
+) {
+
+//求人データ取得
+$_["data"] = DataHnRec::recruits(array(
+    'id'=> $_["id"]));
+
+} else {
+
+//求人データ取得
+$_["data"] = DataHnRec::recruits(array(
+    'id'=> $_["id"],
+    'w_status'=> array('OPEN','CLOSED'),
+    'w_startdate'=> $_["today"]));
+}
+
+if(
+!empty($_SESSION["kaigoi"]["admin"]["recruits"])
+){
+   $_["data"] = $_SESSION["kaigoi"]["admin"]["recruits"];
+   foreach($_["data"] as $k => $v){
+       if(is_array($v)){
+           $_["data"][$k] = implode(",",$v);
+       }
+   }
+}
+
+
+
+for($i=1;$i<=5;$i++){
+    if(empty($_["data"]["chart{$i}"])){
+        $_["data"]["chart{$i}"] = "0";
+    }
+}
+
+?>
+<!DOCTYPE HTML>
+<html>
+  <head>
+  </head>
+  <body>
+    <canvas id="chart" height="350" width="500"></canvas>
+    <script>
+var radarChartData = {
+  labels : ["スキルアップ度","仲間が出来る度","仕事の覚えやすさ","キャリアアップ度","体力がつく度"],
+  datasets : [
+    {
+      fillColor : "rgba(32,185,218,0.5)",
+      strokeColor : "rgba(151,187,205,1)",
+      pointColor : "rgba(151,187,205,1)",
+      pointStrokeColor : "#fff",
+      data : [<?php echo h($_["data"]["chart1"]);?>,<?php echo h($_["data"]["chart2"]);?>,<?php echo h($_["data"]["chart3"]);?>,<?php echo h($_["data"]["chart4"]);?>,<?php echo h($_["data"]["chart5"]);?>]
+    }
+  ]  
+}
+
+var options = {
+   pointLabelFontSize : 15,
+   pointLabelFontColor : "#000",
+   pointLabelFontFamily : '"ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif',
+   pointDotRadius : 4,
+//   pointLabelFontStyle : "bold",
+//   angleLineWidth : 2,
+//   scaleLineWidth : 2, 
+}
+var myRadar = new Chart(document.getElementById("chart").getContext("2d")).Radar(radarChartData, options);
+    </script>
+  </body>
+</html>

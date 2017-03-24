@@ -1,0 +1,94 @@
+<!-- #Header -->
+<header id="hd_short">
+	<div class="headin det">
+		<div class="headct clearfix">
+			<div class="logo">
+				<h1><?php echo h($GLOBALS["PAGEH1"]); ?></h1>
+				<p class="summary com_sp">セントメディアのコールセンター求人情報</p>
+				<p><a href="/callcenter/">コールセンター求人ナビ</a></p>
+			</div>
+			<ul class="ent com_pc">
+				<li><a href="/callcenter/entry/"><img src="/callcenter/images/header_btn_entry_off.png" alt="スタッフ登録会WEB応募"></a></li>
+				<li><img src="/callcenter/images/header_tel.png" alt="0120-106-914" ></li>
+			</ul>
+			<?php
+			if(
+			preg_match ("/^\/callcenter\/apply\/.+$/u", $_SERVER["SCRIPT_NAME"]) or
+			preg_match ("/^\/callcenter\/entry\/.+$/u", $_SERVER["SCRIPT_NAME"])
+			){
+			echo '<p class="com_sp tel"><a href="tel:0120106914"><img src="/callcenter/images/icn_tel_sp.png" alt="tel"><span>電話応募</span></a></p>';
+			} else {
+			echo '<p class="com_sp menu"><a href="#"><img src="/callcenter/images/btn_header_menu.png" alt="menu"></a></p>';
+			}
+			?>
+		</div>
+	</div>
+	<div class="nav">
+		<ul class="com_sp">
+			<li><a href="/callcenter/areab/"><span>エリアから探す</span></a></li>
+			<li><a href="/callcenter/lineb/"><span>駅・路線から探す</span></a></li>
+			<li><a href="/callcenter/searchdet/"><span>条件を指定して探す</span></a></li>
+			<li><a href="/callcenter/step/"><span>就業までの流れ</span></a></li>
+			<li><a href="/callcenter/place/"><span>登録会場</span></a></li>
+			<li><a href="/callcenter/faq/"><span> よくあるQ&amp;A</span></a></li>
+			<li><a href="/callcenter/report/"><span>体験談・コラム</span></a></li>
+			<li><a href="/callcenter/scrap/"><span>検討中BOX</span></a></li>
+		</ul>
+	</div>
+	<nav>
+		<ul class="clearfix">
+            <?php
+            if(
+            preg_match ("/^\/callcenter\/areab\/.+$/u", $_SERVER["SCRIPT_NAME"]) or
+            preg_match ("/^\/callcenter\/area\/.+$/u", $_SERVER["SCRIPT_NAME"])
+            ){
+               $target = "on";
+            } else {
+               $target = "off";
+            }
+            ?><li><a href="/callcenter/areab/"><img src="/callcenter/images/btn_gnav_area_<?php echo $target;?>.png" alt="エリアから探す"></a></li>
+            <?php
+            if(
+            preg_match ("/^\/callcenter\/lineb\/$/u", $_SERVER["REQUEST_URI"]) or
+            preg_match ("/^\/callcenter\/line\/.+$/u", $_SERVER["REQUEST_URI"]) or
+            preg_match ("/^\/callcenter\/sta\/.+$/u", $_SERVER["REQUEST_URI"])
+            ){
+               $target = "on";
+            } else {
+               $target = "off";
+            }
+            ?><li><a href="/callcenter/lineb/"><img src="/callcenter/images/btn_gnav_station_<?php echo $target;?>.png" alt="駅・路線から探す"></a></li>
+			<li><?php
+            if(preg_match ("/^\/callcenter\/searchdet\/.+$/u", $_SERVER["SCRIPT_NAME"])){
+               $target = "on";
+            } else {
+               $target = "off";
+            }
+            ?><a href="/callcenter/searchdet/"><img src="/callcenter/images/btn_gnav_detsrc_<?php echo $target;?>.png" alt="特徴から探す"></a></li>
+			<li><?php
+            if(preg_match ("/^\/callcenter\/place\/.+$/u", $_SERVER["SCRIPT_NAME"])){
+               $target = "on";
+            } else {
+               $target = "off";
+            }
+            ?><a href="/callcenter/place/"><img src="/callcenter/images/btn_gnav_place_<?php echo $target;?>.png" alt="登録会場"></a></li>
+			<?php
+            if(preg_match ("/^\/callcenter\/faq\/.+$/u", $_SERVER["SCRIPT_NAME"])){
+               $target = "on";
+            } else {
+               $target = "off";
+            }
+            ?><li><a href="/callcenter/faq/"><img src="/callcenter/images/btn_gnav_faqn_<?php echo $target;?>.png" alt="よくあるQ&A"></a></li>
+			<?php
+            if(
+            preg_match ("/^\/callcenter\/report\/.+$/u", $_SERVER["REQUEST_URI"]) or
+            preg_match ("/^\/callcenter\/report\/$/u", $_SERVER["REQUEST_URI"])
+            ){
+               $target = "on";
+            } else {
+               $target = "off";
+            }
+            ?><li><a href="/callcenter/report/"><img src="/callcenter/images/btn_gnav_columnt_<?php echo $target;?>.png" alt="体験談・コラム"></a></li>
+		</ul>
+	</nav>
+</header>

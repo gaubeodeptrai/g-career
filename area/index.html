@@ -1,0 +1,217 @@
+<?php
+require_once dirname($_SERVER['DOCUMENT_ROOT']). '/libs/inc.php';
+
+$_ = array();
+foreach(array(
+"jobIndustries"           => array(),
+"jobIndustriesStr"        => array(),
+
+"error"                   => "0",
+"prefCode"                => array(),
+"prefData"                => array(),
+"cityData"                => array(),
+"prefRec"                 => array(),
+"cityRec"                 => array(),
+"cityIndRec"              => array(),
+"cityIndRec2"             => array(),
+"today"                   => date("Y-m-d"),
+) as $k => $v){
+    $_[$k] = $v;
+}
+
+
+if(!empty($_REQUEST["id"])){
+   $_["prefCode"][] = $_REQUEST["id"];
+} else {
+   $_["error"] = 1;
+}
+
+//都道府県
+$_["prefData"] = Data::prefectures(array('ids'=>$_["prefCode"],'s'=>'1','w_status'=>'1'));
+
+//市区町村
+$_["cityData"] = Data::cities(array('w_pref'=>$_["prefData"][$_["prefCode"][0]]["name"]));
+
+//業種
+$_["jobIndustries"] = Data::jobIndustry_CC(array('s'=>'1','w_status'=>'1'));
+
+foreach($_["jobIndustries"] as $k=>$v){
+    $_["jobIndustriesStr"][$v["name"]] = $v["id"];
+}
+
+//求人
+foreach(DataCcRec::recruits(array('s'=> '1','w_status'=> 'OPEN','w_startdate'=> $_["today"])) as $v){
+    $_["cityRec"][$v["city_code"]][] = $v["id"];
+    $_["prefRec"][$v["pref_code"]][] = $v["id"];
+
+    $v["industry_code"] =  explode(",", $v["industry_code"]);
+    $_["indStr"] = array();
+    foreach($v["industry_code"] as $r){
+        $_["indStr"][] = $_["jobIndustries"][$r][name];
+    }
+    
+    /*
+    //携帯ショップ
+    if(!empty($v["industry_code"]) and "携帯ショップ"==$_["indStr"][0]){
+        $_["cityIndRec"][$v["city_code"]][] = $v["id"];
+    }
+
+    //家電量販店
+    if(!empty($v["industry_code"]) and "家電量販店"==$_["indStr"][0]){
+        $_["cityIndRec2"][$v["city_code"]][] = $v["id"];
+    }
+    */
+    
+}
+
+if(count($_["prefRec"][$_["prefCode"][0]])==0){
+//   $_["error"] = 1;
+}
+
+
+if(!empty($_["error"])){
+    header("Location: /callcenter/search/");
+    exit;
+}
+
+$GLOBALS["PAGEH1"] = $_["prefData"][$_["prefCode"][0]]["name"]."｜".$GLOBALS["PAGEH1"];
+
+?><!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title><?php echo h($_["prefData"][$_["prefCode"][0]]["name"]);?>｜<?php echo h($GLOBALS["PAGETITLE"]);?></title>
+<meta name="description" content="<?php echo h($_["prefData"][$_["prefCode"][0]]["name"]);?>のコールセンター求人はこちら。<?php echo h($GLOBALS["PAGDESCRIPTION"]);?>">
+<meta name="keywords" content="<?php echo h($_["prefData"][$_["prefCode"][0]]["name"]);?>,<?php echo h($GLOBALS["PAGEKEYWORDS"]);?>">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/head.html'; ?>
+<script type="text/javascript" src="/callcenter/common/js/prefecture.js"></script>
+</head>
+<body>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/header.html'; ?>
+<article id="Contents">
+	<section class="com_pnkzbox m_b10">
+		<ul class="clearfix" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+			<li><a href="<?php echo h($GLOBALS["PNKZURL"]);?>" itemprop="url"><span itemprop="title"><?php echo h($GLOBALS["PNKZTITLE"]);?></span></a></li>
+			<li itemprop="title"><span class="clr_gr">&gt;</span>&nbsp;&nbsp;<?php echo h($_["prefData"][$_["prefCode"][0]]["name"]);?>から探す</li>
+		</ul>
+	</section>
+	<section id="SRCBX">
+		<section id="Clmbox" class="com_wid clearfix">
+			<section id="Mainbox">
+				<div class="searchbox">
+					<div class="srclistbox">
+						<div class="ttlbox area">
+							<h2 class="com_sp"><span><?php echo h($_["prefData"][$_["prefCode"][0]]["name"]);?></span>から探す</h2>
+						</div>
+						<h2 class="com_tlx area"><span><?php echo h($_["prefData"][$_["prefCode"][0]]["name"]);?></span>から探す</h2>
+<?php
+if(count($_["prefRec"][$_["prefCode"][0]])!=0){
+?>
+						<div class="areabox">
+							<form method="post" action="">
+								<div class="areain">
+									<div class="ttlbx">
+										<h4 class="ckno"><input type="hidden" id="a_1" name="pref" value="<?php echo h($_["prefCode"][0]);?>"><label class="chk" for="a_1"><a href="/callcenter/search/pref-<?php echo h($_["prefCode"][0]);?>/"><?php echo h($_["prefData"][$_["prefCode"][0]]["name"]);?>(<?php echo h(count($_["prefRec"][$_["prefCode"][0]]));?>)</a></label></h4>
+									</div>
+									<div class="areact">
+										<ul class="clearfix">
+											<?php
+											foreach($_["cityData"] as $v){
+											    if(!empty($_["cityRec"][$v["id"]])){
+											        echo '<li><input type="checkbox" id="b_'.h($v["id"]).'" name="city[]" value="'.h($v["id"]).'"><label class="chk" for="b_'.h($v["id"]).'"><a href="/callcenter/search/pref-'.h($_["prefCode"][0]).'/city-'.h($v["id"]).'/">'.h($v["city"]).'</a> ('.h(count($_["cityRec"][$v["id"]])).')</label></li>';
+											    }
+											}
+											?>
+										</ul>
+									
+									</div>
+								</div>
+
+								<div class="btnbox">
+									<p class="pc"><a href="#" class="formSubmitBtn"><img src="/callcenter/images/btn_src_line_off.png" alt="この条件で求人検索"></a></p>
+									<p class="sp"><a href="#" class="formSubmitBtn"><span>この条件で求人検索</span></a></p>
+								</div>
+										
+							</form>
+						</div>
+            	         <?php
+            	         /*
+            	         if(!empty($_["cityIndRec"])){
+            	         ?>
+						<div class="cateltbox">
+						    <section class="lt kt">
+						    <h3><a href="/callcenter/search/pref-<?php echo h($_["prefCode"][0]);?>/ind-<?php echo h($_["jobIndustriesStr"]["携帯ショップ"]);?>/">携帯ショップスタッフなどから探す</a></h3>
+						    <div class="in">
+						    <p>ドコモショップ・ソフトバンクショップ・auショップなど<br>
+						    大手企業の携帯販売や受付の求人を多数用意しています&#9835;<br>
+						    正社員になるチャンスも・・！</p>
+						    <ul>
+								<?php
+								foreach($_["cityData"] as $v){
+								    if(!empty($_["cityIndRec"][$v["id"]])){
+								        echo '<li><a href="/callcenter/search/pref-'.h($_["prefCode"][0]).'/city-'.h($v["id"]).'/ind-'.h($_["jobIndustriesStr"]["携帯ショップ"]).'/">'.h($v["city"]).'の求人</a></li>';
+								    }
+								}
+								?>
+						    </ul>
+						    </div>
+						    </section>
+						</div>
+						<?php
+						}
+						*/
+						?>
+            	         <?php
+            	         /*
+            	         if(!empty($_["cityIndRec2"])){
+            	         ?>
+						<div class="cateltbox">
+						    <section class="lt">
+						    <h3><a href="/callcenter/search/pref-<?php echo h($_["prefCode"][0]);?>/ind-<?php echo h($_["jobIndustriesStr"]["家電量販店"]);?>/">家電量販店のラウンダーなど</a></h3>
+						    <div class="in">
+						    <p>ビックカメラ・ヨドバシカメラ・ヤマダ電機など大手家電販売店にて、<br>
+						    エアコン販売・カメラ販売・ラウンダー等の求人を高時給で多数用意しています！！</p>
+						    <ul>
+								<?php
+								foreach($_["cityData"] as $v){
+								    if(!empty($_["cityIndRec2"][$v["id"]])){
+								        echo '<li><a href="/callcenter/search/pref-'.h($_["prefCode"][0]).'/city-'.h($v["id"]).'/ind-'.h($_["jobIndustriesStr"]["家電量販店"]).'/">'.h($v["city"]).'の求人</a></li>';
+								    }
+								}
+								?>
+						    </ul>
+						    </div>
+						    </section>
+						</div>
+						<?php
+						}
+						*/
+						?>
+<?php
+} else {
+?>
+            <p class="com_lyajst m_b20">申し訳ありません。<br>現在このエリアにはご案内できる求人案件がございません。お近くのエリアをお探しください。</p>
+						<div class="areabox">
+								<div class="btnbox">
+									<p class="pc"><a href="/callcenter/"><img src="/callcenter/images/btn_topbk_off.png" alt="TOPへ戻る"></a></p>
+									<p class="sp"><a class="icno" href="/callcenter/">TOPへ戻る</a></p>
+								</div>
+						</div>
+<?php
+}
+?>
+					</div>
+				</div>
+			</section>
+			<section id="Sidebox">
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/sidebox.html'; ?>
+			</section>
+		</section>
+		<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/sp_bottom.html'; ?>
+	</section>
+</article>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/footer.html'; ?>
+</body>
+</html>

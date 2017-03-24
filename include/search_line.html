@@ -1,0 +1,224 @@
+				<?php
+                foreach(array(
+                "stcmpRec"                => array(),
+                "lineRec"                 => array(),
+                "stationStcmpData"        => array(),
+                "stationRec"              => array(),
+                "stationLineData"         => array(),
+                "stationGpDate"           => array(),
+                "stationGpDatePt"         => array(),
+                "lineData"                => array(),
+                "stationData"             => array(),
+
+                "pmsLinePop"                => array(),
+                "pmsCmpPop"                => array(),
+                "pmsPrefPop"                => array(),
+                "pmsStaPop"                => array(),
+                "pmsStaPop2"                => array(),
+                ) as $k => $v){
+                    $_[$k] = $v;
+                }
+
+                if(!empty($_["pmsPref"])){
+                    $_["pmsPrefPop"] = $_["pmsPref"];
+                }
+                if(!empty($_REQUEST["pref"])){
+                    $_["pmsPrefPop"] = $_REQUEST["pref"];
+                }
+                if(!empty($_REQUEST["cmp"])){
+                    $_["pmsCmpPop"] = explode("-",$_REQUEST["cmp"]);
+                }
+
+                if(!empty($_REQUEST["line"])){
+                    $_["pmsLinePop"] =explode("-",$_REQUEST["line"]);
+                }
+                if(!empty($_["pmsLines"])){
+                    $_["pmsLinePop"] = $_["pmsLines"];
+
+     				//駅
+     				foreach(Data::stations(array('w_pref'=>$_["pmsPrefPop"],'lineids'=>$_["pmsLinePop"])) as $v){
+
+                         $_["stationData"][$v["id"]] = $v["name"];
+                         $_["stationData"][$v["idg"]] = $v["name"];
+                         
+                         $_["pmsCmpPop"][] = $v["cmp_id"];
+                         $_["pmsLinePop"][] = $v["line_id"];
+                         $_["pmsStaPop2"][] = $v["id"];
+                         $_["pmsStaPop2"][] = $v["idg"];
+     				}
+     				
+                }
+                if(!empty($_["pmsStas"])){
+                    $_["pmsStaPop"] = $_["pmsStas"];
+     				
+     				//駅
+     				foreach(Data::stations(array('w_pref'=>$_["pmsPrefPop"],'ids'=>$_["pmsStaPop"])) as $v){
+
+                         $_["stationData"][$v["id"]] = $v["name"];
+                         $_["stationData"][$v["idg"]] = $v["name"];
+                         
+                         $_["pmsCmpPop"][] = $v["cmp_id"];
+                         $_["pmsLinePop"][] = $v["line_id"];
+     				}
+                }
+                if(!empty($_["pmsStaPop2"])){
+                    $_["pmsStaPop"] = array_merge($_["pmsStaPop"],$_["pmsStaPop2"]);
+                }
+                
+                
+                if(empty($_["pmsLines"]) and empty($_["pmsStas"])){
+     				
+     				//駅
+     				foreach(Data::stations(array('w_pref'=>$_["pmsPrefPop"],'lineids'=>$_["pmsLinePop"],'ids'=>$_["pmsStaPop"])) as $v){
+
+                         $_["stationData"][$v["id"]] = $v["name"];
+                         $_["stationData"][$v["idg"]] = $v["name"];
+                         
+                         if(!empty($_["pmsStaPop"])){
+                             $_["pmsCmpPop"][] = $v["cmp_id"];
+                             $_["pmsLinePop"][] = $v["line_id"];
+                         }
+     				}
+				}
+
+				//路線
+				foreach(Data::stations(array('w_pref'=>$_["pmsPrefPop"])) as $v){
+				    $_["stcmpData"][$v["cmp_id"]] = $v["cmp_name"];
+                    $_["stationStcmpData"][$v["id"]][$v["cmp_id"]] = $v["cmp_id"];
+                    $_["stationStcmpData"][$v["idg"]][$v["cmp_id"]] = $v["cmp_id"];
+
+                    $_["stationGpDate"][$v["id"]][] = $v["idg"];
+				}
+				
+				//沿線
+				foreach(Data::stations(array('w_pref'=>$_["pmsPrefPop"],'cmpids'=>$_["pmsCmpPop"])) as $v){
+                    $_["lineData"][$v["cmp_id"]][$v["line_id"]] = $v["line_name"];
+                    $_["stationLineData"][$v["id"]][$v["cmp_id"]][$v["line_id"]] = $v["line_id"];
+                    $_["stationLineData"][$v["idg"]][$v["cmp_id"]][$v["line_id"]] = $v["line_id"];
+                    
+                    if(!empty($_["pmsLines"]) and empty($_REQUEST["cmp"])){
+                        foreach($_["pmsLines"] as $linval){
+                            if(!empty($_["lineData"][$v["cmp_id"]][$linval])){
+                                $_["pmsCmpPop"][] = $v["cmp_id"];
+                            }
+                        }
+                    }
+
+				}
+
+				
+                foreach(DataCcRec::recruits(array('s'=> '1','w_status'=> 'OPEN','w_startdate'=> $_["today"],'w_pref'=> $_["pmsPrefPop"])) as $v){
+
+                    for($i=1;$i<=5;$i++){
+                        if(!empty($_["stationGpDate"][$v["st{$i}_code"]])){
+                            $_["stationGpDatePt"][$v["id"]] = $_["stationGpDate"][$v["st{$i}_code"]];
+                        }
+                    }
+
+                    if(!empty($_["stationGpDatePt"][$v["id"]])){
+                        
+                        foreach($_["stationGpDatePt"][$v["id"]] as $v2){
+                        
+
+                            if(!empty($_["stationStcmpData"][$v2])){
+                                foreach($_["stationStcmpData"][$v2] as $st){
+                                    $_["stcmpRec"][$st][] = $st;
+                                }
+                            }
+
+                            if(!empty($_["stationLineData"][$v2])){
+                                foreach($_["stationLineData"][$v2] as $st){
+                                    foreach($st as $st2){
+                                    $_["lineRec"][$st2][] = $st2;
+                                    }
+                                }
+                            }
+
+                            if(!empty($v2)){
+                                $_["stationRec"][$v2][] = $v2;
+                            }
+
+                        }
+                    }
+
+
+                    $_["prefRec"][$v["pref_code"]][] = $v["id"];
+                }
+                
+				if(!empty($_["pmsPrefPop"])){
+				?><div class="sltin">
+					<p class="tlb">沿線</p>
+					<p class="all"><input type="checkbox" name="all" value="" <?php echo (!empty($_REQUEST["stcmp_all"]))?" checked":"";?> id="pop_stcmp_all"><label for="pop_stcmp_all">全てを選択</label></p>
+					<ul class="clearfix">
+					<?php
+						$n=0;
+						foreach($_["stcmpData"] as $k => $v){
+					        if(!empty($_["stcmpRec"][$k])){
+						        echo ($n!=0 and $n%4==0)?'</ul><ul class="clearfix">':'';
+						        echo '<li><input type="checkbox"  name="cmp[]" id="pop_stacmp'.h($k).'" ';
+						        echo (!empty($_["pmsCmpPop"]) and in_array("$k",$_["pmsCmpPop"]))?" checked":"";
+						        echo ' value="'.h($k).'"><label class="chk" for="pop_stacmp'.h($k).'"><span>'.h($v).'</span></label></li>';
+						        $n++;
+					        }
+						}
+					?>
+					</ul>
+				</div>
+				<?php
+				}
+				if(!empty($_["pmsCmpPop"])){
+				?>
+				<div class="sltin">
+					<p class="tlb">路線</p>
+					<p class="all"><input type="checkbox" name="all" value="" <?php echo (!empty($_REQUEST["line_all"]))?" checked":"";?> id="pop_line_all"><label for="pop_line_all">全てを選択</label></p>
+					<ul class="clearfix">
+					<?php
+						$n=0;
+						foreach($_["stcmpData"] as $k => $v){
+					    if(!empty($_["stcmpRec"][$k])){
+					    	
+						if(!empty($_["lineData"][$k])){
+							foreach($_["lineData"][$k] as $k2 => $v2){
+							    if(!empty($_["lineRec"][$k2])){
+    						        echo ($n!=0 and $n%4==0)?'</ul><ul class="clearfix">':'';
+    						        echo '<li><input type="checkbox"  name="line[]" id="a_'.h($k2).'" ';
+						            echo (!empty($_["pmsLinePop"]) and in_array("$k2",$_["pmsLinePop"]))?" checked":"";
+    						        echo ' value="'.h($k2).'"><label class="chk" for="a_'.h($k2).'"><span>'.h($v2).'</span></label></li>';
+    						        $n++;
+        					     }
+        					 }
+						}
+						
+						}
+						}
+					?>
+					</ul>
+				</div>
+				<?php
+				}
+				if(!empty($_["pmsLinePop"])){
+				?>
+				<div class="sltin sta">
+					<p class="tlb">駅</p>
+					<p class="all"><input type="checkbox" name="all" value="" id="pop_sta_all"><label for="pop_sta_all">全てを選択</label></p>
+					<ul class="clearfix">
+					<?php
+						$n=0;
+						if(!empty($_["stationData"])){
+							foreach($_["stationData"] as $k3 => $v3){
+							    if(!empty($_["stationRec"][$k3])){
+    						        echo ($n!=0 and $n%4==0)?'</ul><ul class="clearfix">':'';
+    						        echo '<li><input type="checkbox"  name="sta[]" id="a_'.h($k3).'" ';
+    						        echo (!empty($_["pmsStaPop"]) and in_array("$k3",$_["pmsStaPop"]))?" checked":"";
+    						        echo ' value="'.h($k3).'"><label class="chk" for="a_'.h($k3).'"><span>'.h($v3).'</span></label></li>';
+    						        $n++;
+				                }
+				            }
+				        }
+					?>
+					</ul>
+				</div>
+				<?php
+				}
+				?>
+				

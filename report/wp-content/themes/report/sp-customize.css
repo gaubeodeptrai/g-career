@@ -1,0 +1,102 @@
+@charset "UTF-8";
+
+/********************************
+ sp-customize.css
+ last update:20160318
+*********************************/
+
+@media screen and (max-width: 700px) {
+
+
+#contentainer {
+	padding:116px 0 0 0;
+	background:#fff;
+}
+
+/********************************
+com
+*********************************/
+/*com_tlx*/
+.com_tlx {
+	display: none;
+}
+
+/*com_tlxs*/
+.com_tlxs {
+  border-top: 2px solid #c2d3ca;
+  border-bottom: 2px solid #c2d3ca;
+  border-left:0;
+  margin: 0 0 0 0;
+  padding:10px;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 1.3;
+  background: #eaf4ef;
+  text-align:center;
+}
+
+/*com_stx*/
+.com_stx {
+  margin:10px;
+  line-height:1.5;
+}
+
+/*com_wid*/
+.com_wid {
+  margin: 0 auto;
+  width: auto;
+}
+
+/*com_spbnr*/
+.com_spbnr{
+	display: block;
+	width:300px;
+	margin:0 auto;
+}
+
+/*com_pcblk*/
+.com_pcblk{
+	display:block;
+}
+
+/*com_pc*/
+.com_pc{
+	display:none;
+}
+
+/*com_sp*/
+.com_sp{
+	display:block;
+}
+
+.com_ttl.non{
+	display:none;
+}
+
+/*com_spbtn*/
+.com_spbtn {
+	border:1px solid #f77d8b;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	display:block;
+	text-align:center;
+	margin:0 15px 15px 15px;
+}
+.com_spbtn a {
+	color:#f77d8b;
+	text-decoration:none;
+	padding:10px;
+	display:block;
+}
+.com_spbtn a span {
+	background:url(/callcenter/images/sp_rp_dec_lnk.png) no-repeat right 50%;
+	background-size:8px auto;
+	-moz-background-size:8px auto;
+	-webkit-background-size:8px auto;
+	padding:0 20px 0 0;
+	font-size:15px;
+}
+
+
+}

@@ -1,0 +1,153 @@
+<?php
+require_once dirname($_SERVER['DOCUMENT_ROOT']). '/libs/inc.php';
+
+?><!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>登録会場のご案内：関西一覧｜<?php echo h($GLOBALS["PAGETITLE"]);?></title>
+<meta name="description" content="登録会場のご案内：関西一覧のページです。<?php echo h($GLOBALS["PAGDESCRIPTION"]);?>">
+<meta name="keywords" content="関西,<?php echo h($GLOBALS["PAGEKEYWORDS"]);?>">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/head.html'; ?>
+</head>
+<body>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/header.html'; ?>
+<article id="Contents">
+	<section class="com_pnkzbox m_b10">
+		<ul class="clearfix" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+			<li><a href="<?php echo h($GLOBALS["PNKZURL"]);?>" itemprop="url"><span itemprop="title"><?php echo h($GLOBALS["PNKZTITLE"]);?></span></a></li>
+			<li itemprop="title"><span class="clr_gr">&gt;</span>&nbsp;&nbsp;登録会場のご案内：関西一覧</li>
+		</ul>
+	</section>
+	<section id="LSTBX">
+		<section id="Clmbox" class="com_wid clearfix">
+			<section id="Mainbox">
+				<div class="areabox">
+					<div class="tabbox">
+						<ul class="clearfix">
+							<li><a href="hokkaido_tohoku.html">北海道・東北</a></li>
+							<li><a href="index.html">関東・甲信越</a></li>
+							<li><a href="hokuriku_tokai.html">北陸・東海</a></li>
+							<li><a class="on" href="kansai.html">関西</a></li>
+							<li><a href="chugoku_shikoku.html">中国・四国</a></li>
+							<li><a href="kyushu_okinawa.html">九州・沖縄</a></li>
+						</ul>
+					</div>
+					<h2 class="com_tlx plc"><img src="/callcenter/images/title_place.png" alt="登録会場のご案内" >[関西]</h2>
+					<h2 class="com_spttl"><img src="/callcenter/images/sp_ttl_place.png" alt="登録会場のご案内" height="26"></h2>
+					<p class="com_stx">日本全国にセントメディアの登録会場がございますので、最寄の登録会場でスタッフ登録を行ってください。</p>
+					<div class="sp_linkbox clearfix">
+						<p class="ttl">関西</p>
+						<div class="selbx">
+							<form>
+								<select onchange="location.href = this.options[this.selectedIndex].value;">
+									<option seleced value="#"selected>地域を変更する</option>
+									<option value="hokkaido_tohoku.html" >北海道・東北</option>
+									<option value="index.html">関東・甲信越</option>
+									<option value="hokuriku_tokai.html">北陸・東海</option>
+									<option value="kansai.html">関西</option>
+									<option value="chugoku_shikoku.html">中国・四国</option>
+									<option value="kyushu_okinawa.html">九州・沖縄</option>
+								</select>
+							</form>
+						</div>
+					</div>
+					<div class="areain">
+						<div class="areact">
+							<h3 class="ttlbx">大阪登録会場</h3>
+							<div class="area clearfix">
+								<dl>
+									<dt>大阪府大阪市北区茶屋町19番19号<br>
+                                    アプローズタワー22階</dt>
+									<dd>【交通】<br>JR大阪駅　御堂筋出口　徒歩10分<br>
+									地下鉄御堂筋線　中津駅3番出口　徒歩5分<br>
+									阪急梅田駅　茶屋町出口　徒歩6分</dd>
+								</dl>
+								<p class="btn pc"><a href="#pop" onclick="window.open('http://www.saintmedia.co.jp/stmparts/map/osaka_umeda/','pop','width=740,height=770,scrollbars=yes,resizable=yes,location=yes,toolbar=yes,left=0,top=0')" id="bigmap_link"><img src="/callcenter/images/btn_maplk_off.png" alt="地図を見る"></a></p>
+								<p class="btn sp"><a href="http://www.saintmedia.co.jp/stmparts/map/osaka_umeda/" target="_blank">地図を見る</a></p>
+							</div>
+						</div>
+                        
+						<div class="areact">
+							<h3 class="ttlbx">神戸登録会場</h3>
+							<div class="area clearfix">
+								<dl>
+									<dt>兵庫県神戸市中央区三宮町一丁目1番2号<br>
+									三宮セントラルビル10階</dt>
+									<dd>【交通】<br>三宮・花時計前 C1出ロ 徒歩2分<br>
+									三宮 A5(さんちか)出ロ 徒歩3分<br>
+									旧居留地・大丸前 B5出ロ 徒歩4分</dd>
+								</dl>
+								<p class="btn pc"><a href="#pop" onclick="window.open('http://www.saintmedia.co.jp/stmparts/map/kobe/','pop','width=740,height=770,scrollbars=yes,resizable=yes,location=yes,toolbar=yes,left=0,top=0')" id="bigmap_link"><img src="/callcenter/images/btn_maplk_off.png" alt="地図を見る"></a></p>
+								<p class="btn sp"><a href="http://www.saintmedia.co.jp/stmparts/map/kobe/" target="_blank">地図を見る</a></p>
+							</div>
+						</div>
+						
+                        <!--
+						<?php
+						/*
+						<div class="areact">
+							<h3 class="ttlbx">天王寺登録会場</h3>
+							<div class="area clearfix">
+								<dl>
+									<dt>大阪府大阪市阿倍野区旭町1丁目2番7号<br>
+あべのメディックス2階</dt>
+									<dd>【交通】<br>JR天王寺駅 南口 徒歩5分<br>
+地下鉄御堂筋線・谷町線 天王寺駅 14番出口 徒歩2分<br>
+近鉄南大阪線 大阪阿部野橋駅 南口 徒歩6分<br>
+阪堺電軌上町線  天王寺駅前 徒歩5分</dd>
+								</dl>
+								<p class="btn pc"><a href="#pop" onclick="window.open('http://www.saintmedia.co.jp/stmparts/map/tennoji/','pop','width=740,height=770,scrollbars=yes,resizable=yes,location=yes,toolbar=yes,left=0,top=0')" id="bigmap_link"><img src="/callcenter/images/btn_maplk_off.png" alt="地図を見る"></a></p>
+								<p class="btn sp"><a href="http://www.saintmedia.co.jp/stmparts/map/tennoji/" target="_blank">地図を見る</a></p>
+							</div>
+						</div>
+						<div class="areact">
+							<h3 class="ttlbx">神戸登録会場</h3>
+							<div class="area clearfix">
+								<dl>
+									<dt>兵庫県神戸市中央区三宮町一丁目1番2号<br>
+                                    三宮セントラルビル10階</dt>
+									<dd>【交通】<br>
+									三宮・花時計前 C1出ロ 徒歩2分<br>
+									三宮 A5（さんちか）出ロ 徒歩3分<br>
+									旧居留地・大丸前 B5出ロ 徒歩4分</dd>
+								</dl>
+								<p class="btn pc"><a href="#pop" onclick="window.open('http://www.saintmedia.co.jp/stmparts/map/kobe/','pop','width=740,height=770,scrollbars=yes,resizable=yes,location=yes,toolbar=yes,left=0,top=0')" id="bigmap_link"><img src="/callcenter/images/btn_maplk_off.png" alt="地図を見る"></a></p>
+								<p class="btn sp"><a href="http://www.saintmedia.co.jp/stmparts/map/kobe/" target="_blank">地図を見る</a></p>
+							</div>
+						</div>
+						<div class="areact">
+							<h3 class="ttlbx">京都登録会場</h3>
+							<div class="area clearfix">
+								<dl>
+									<dt>京都府京都市下京区四条通麩屋町西入立売東町1<br>
+                                    京都フコク生命四条柳馬場ビル10階</dt>
+									<dd>【交通】<br>
+									阪急電鉄京都線 河原町駅 徒歩3分<br>
+市営地下鉄烏丸線 四条駅 徒歩5分<br>
+阪急電鉄京都線 烏丸駅 徒歩5分</dd>
+								</dl>
+								<p class="btn pc"><a href="#pop" onclick="window.open('http://www.saintmedia.co.jp/stmparts/map/kyoto/','pop','width=740,height=770,scrollbars=yes,resizable=yes,location=yes,toolbar=yes,left=0,top=0')" id="bigmap_link"><img src="/callcenter/images/btn_maplk_off.png" alt="地図を見る"></a></p>
+								<p class="btn sp"><a href="http://www.saintmedia.co.jp/stmparts/map/kyoto/" target="_blank">地図を見る</a></p>
+							</div>
+						</div>
+						*/
+						?>
+                        -->
+                        
+                        
+					</div>
+				</div>
+			</section>
+			<section id="Sidebox">
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/sidebox.html'; ?>
+			</section>
+		</section>
+		<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/sp_bottom.html'; ?>
+	</section>
+</article>
+<?php require_once $_SERVER['DOCUMENT_ROOT'].'/callcenter/include/footer.html'; ?>
+</body>
+</html>
